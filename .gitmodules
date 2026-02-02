@@ -1,0 +1,3 @@
+[submodule "psrrefs"]
+	path = psrrefs
+	url = git://git.code.sf.net/p/psrrefs/bib
