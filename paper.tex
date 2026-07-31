@@ -6040,7 +6040,7 @@ $\partial\PM{R} \approx \PM{I} - \partial\theta \PM{J}_j$, where $(\PM{J}_j)_k^l
 Next, consider an operator $V_k$ that satisfies the commutation relation, $[J_j, V_k] = - \epsilon_{jkl} V_l$.
 (Note that the dimension of the operator is irrelevant; therefore, the boldface and underlining conventions
 adopted for matrices are not used.)
-After a similarity transformation by the infinitesimal rotation operator, $\partial R = \exp(\partial\theta J_j) \approx I + \partial\theta J_j$,
+After a similarity transformation by the infinitesimal rotation operator, $\partial R \approx I + \partial\theta J_j$,
 \begin{equation}
 \begin{split}
     V_k' &= \partial R \, V_k \ \, \partial R^{-1} \\
@@ -6072,10 +6072,10 @@ Its rate of change, $d\Pv{v}(\theta) = \hat{e}_j \times \Pv{v}(\theta) d\theta$,
 \begin{equation} \label{eqn:ode_vec}
     \frac{d}{d\theta} v_k(\theta) = -\epsilon_{jkl} v_l(\theta)
 \end{equation}
-Comparing \Eqns{ode_op}{and}{ode_vec}, the operator components $V_k(\theta)$ and the vector 
+Comparing \Eqns{ode_op}{and}{ode_vec}, the operator $V_k(\theta)$ and the vector 
 components $v_k(\theta)$ satisfy identical systems of first-order linear differential equations
 with identical initial conditions at $\theta = 0$ (namely $V_k(0) = V_k$ and $v_k(0) = v_k$). 
-
+%
 By the existence and uniqueness theorem for linear systems of ODEs, $V_k(\theta)$ must evolve identically to $v_k(\theta)$ for all finite angles $\theta$. Therefore, the finite similarity transformation evaluates to
 \begin{equation} \label{eqn:generator_rotation}
     R(\theta) V_k R^{-1}(\theta) = \PM{R}_k^l(\theta) V_l
@@ -6087,8 +6087,8 @@ Finally, consider a finite operator $M$ constructed via the exponential map in a
 \end{equation}
 %
 To compute the similarity transformation, 
-$$M' = R M R^{-1}$$,
-use $R \exp(A) R^{-1} = \exp(R A R^{-1})$.
+$$M' = R M R^{-1},$$
+first note that $R \exp(A) R^{-1} = \exp(R A R^{-1})$.
 
 \begin{proof}
 First prove that $(\JM{R} \JM{A} \JM{R}^{-1})^n = \JM{R} \JM{A}^n \JM{R}^{-1}$ via induction,
