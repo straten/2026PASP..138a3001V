@@ -5887,9 +5887,13 @@ That is,
     \MM{B} = \MM{I} + 2\partial\beta \MM{K}_i,
 \end{equation}
 where $\MM{I}$ is the $4\times4$ identity matrix and 
-\begin{equation}
+%
+%
+\begin{equation} \label{eqn:boost_generator_Mueller_index}
     \left\{ \MM{K}_i \right\}_\irow^\icol = \delta_{0\icol}\delta_{\irow i} + \delta_{i\icol} \delta_{\irow 0}
 \end{equation}
+%
+%
 is the generator of Lorentz boosts along the $S_i$ axis; e.g.
 \begin{align}
 \MM{K}_1 &= \begin{pmatrix} 0 & 1 & 0 & 0 \\ 1 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \end{pmatrix}\\
@@ -5969,9 +5973,13 @@ That is,
     \MM{R} = \MM{I} + 2\partial\phi \MM{J}_j,
 \end{equation}
 where 
-\begin{equation}
+%
+%
+\begin{equation} \label{eqn:rotation_generator_Mueller_index}
     \left\{ \MM{J}_j \right\}_\irow^\icol = \epsilon_{j \irow \icol}
 \end{equation}
+%
+%
 is the generator of rotations about the $S_j$ axis; e.g.
 \begin{align}
 \MM{J}_1 &= \begin{pmatrix} 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 1 \\ 0 & 0 & -1 & 0 \end{pmatrix}\\
@@ -5997,16 +6005,80 @@ is consistent with the small-value approximation of \Eqn{Stokes_rotation}.
 \subsection{Generator Transformation Properties}
 
 The $4 \times 4$ Mueller matrix generators inherit the commutation relations 
-and underlying algebraic structure of the $2 \times 2$ Jones matrix generators.
+and underlying algebraic structure of the $2 \times 2$ Jones matrix generators;
 %
-In particular, the generators of boost and 
-rotation Mueller matrices satisfy the following equations
+that is
 %
 \begin{align}
-\left[\MM{K}_j, \MM{K}_k\right] & = \epsilon_{jkl} \,\MM{J}_l \\
 \left[\MM{J}_j, \MM{K}_k\right] & = -\epsilon_{jkl} \,\MM{K}_l \label{eqn:commutator_Boost} \\
-\left[\MM{J}_j, \MM{J}_k\right] & = -\epsilon_{jkl} \,\MM{J}_l \label{eqn:commutator_Rotation}
+\left[\MM{J}_j, \MM{J}_k\right] & = -\epsilon_{jkl} \,\MM{J}_l \label{eqn:commutator_Rotation} \\
+\left[\MM{K}_j, \MM{K}_k\right] & = \epsilon_{jkl} \,\MM{J}_l  \label{eqn:commutator_mixed} 
 \end{align}
+
+\begin{proof}
+\Eqn{commutator_Boost}, in index notation
+\begin{align*}
+\left[\MM{J}_j, \MM{K}_k\right]_\irow^\icol 
+    & \equiv \left\{ \MM{J}_j \MM{K}_k - \MM{K}_k \MM{J}_j \right\}_\irow^\icol \\
+    & \hspace{-4em} = \left\{\MM{J}_j\right\}_\irow^\kappa \left\{\MM{K}_k\right\}_\kappa^\icol 
+      - \left\{\MM{K}_k\right\}_\irow^\lambda \left\{\MM{J}_j\right\}_\lambda^\icol & \peqn{matrix_product} \\
+    & \hspace{-4em}= \epsilon_{j\irow\kappa} \left( \delta_{0\icol}\delta_{\kappa k} + \delta_{k\icol} \delta_{\kappa 0} \right) 
+        & \peqn{boost_generator_Mueller_index} \\
+    & - \left( \delta_{0\lambda}\delta_{\irow k} + \delta_{k\lambda} \delta_{\irow 0} \right) \epsilon_{j\lambda\icol}
+        & \peqn{rotation_generator_Mueller_index} \\
+   & \hspace{-4em} = \epsilon_{j\irow k} \delta_{0\icol} - \delta_{\irow 0} \epsilon_{jk\icol} \\
+   & \hspace{-4em} = -\epsilon_{jkl} \delta_{0\icol} \delta_{\irow l} - \epsilon_{jkl} \delta_{l \icol} \delta_{\irow 0} \\
+   & \hspace{-4em} = -\epsilon_{jkl} \left\{ \MM{K}_l \right\}_\irow^\icol & \peqn{boost_generator_Mueller_index}
+\end{align*}
+\end{proof}
+
+To prove \Eqns{commutator_Rotation}{and}{commutator_mixed}, requires
+$$ \epsilon_{ijk} \epsilon_{imn} = \delta_{jm}\delta_{kn} - \delta_{jn}\delta_{km}. $$
+
+\begin{proof}
+\Eqn{commutator_Rotation}, in index notation
+\begin{align*}
+\left[\MM{J}_j, \MM{J}_k\right]_\irow^\icol 
+    & \equiv \left\{ \MM{J}_j \MM{J}_k - \MM{J}_k \MM{J}_j \right\}_\irow^\icol \\
+    & \hspace{-4em} = \left\{\MM{J}_j\right\}_\irow^\kappa \left\{\MM{J}_k\right\}_\kappa^\icol 
+      - \left\{\MM{J}_k\right\}_\irow^\lambda \left\{\MM{J}_j\right\}_\lambda^\icol & \peqn{matrix_product} \\
+    & \hspace{-4em} = \epsilon_{j\irow\kappa} \epsilon_{k\kappa\icol} -  \epsilon_{k\irow\lambda} \epsilon_{j\lambda\icol}
+        & \peqn{rotation_generator_Mueller_index} \\
+    %% & \hspace{-4em} = \epsilon_{j\irow\kappa} \epsilon_{\icol k\kappa} - \epsilon_{\irow k\lambda} \epsilon_{j \icol \lambda}
+    %%     & \peqn{rotation_generator_Mueller_index} \\
+    %% & \hspace{-4em} = \delta_{j\icol}\delta_{\irow k} - \delta_{jk}\delta_{\irow\icol}
+    %% - \delta_{\irow j}\delta_{k\icol} + \delta_{\irow\icol}\delta_{kj} \\  
+    & \hspace{-4em} = \delta_{j\icol}\delta_{\irow k} - \delta_{\irow j}\delta_{k\icol}  \\           
+    & \hspace{-4em} = - \epsilon_{jkl}  \epsilon_{l \irow\icol}   \\           
+   & \hspace{-4em} = - \epsilon_{jkl} \left\{ \MM{J}_l \right\}_\irow^\icol & \peqn{rotation_generator_Mueller_index}
+\end{align*}
+\end{proof}
+
+Furthermore, in the following proof, note that $$\delta_{0i}=\delta_{0j}=\delta_{0k}=0.$$
+
+\begin{proof}
+\Eqn{commutator_mixed}, in index notation
+\begin{align*}
+\left[\MM{K}_j, \MM{K}_k\right]_\irow^\icol 
+    & \equiv \left\{ \MM{K}_j \MM{K}_k - \MM{K}_k \MM{K}_j \right\}_\irow^\icol \\
+    & \hspace{-4em} = \left\{\MM{K}_j\right\}_\irow^\kappa \left\{\MM{K}_k\right\}_\kappa^\icol 
+      - \left\{\MM{K}_k\right\}_\irow^\lambda \left\{\MM{K}_j\right\}_\lambda^\icol \\
+    & \hspace{-4em} = \left( \delta_{0\kappa}\delta_{\irow j} + \delta_{j\kappa} \delta_{\irow 0} \right) \left( \delta_{0\icol}\delta_{\kappa k} + \delta_{k\icol} \delta_{\kappa 0} \right) \\
+    & \hspace{-3em} - \left( \delta_{0\lambda}\delta_{\irow k} + \delta_{k\lambda} \delta_{\irow 0} \right) \left( \delta_{0\icol}\delta_{\lambda j} + \delta_{j\icol} \delta_{\lambda 0} \right) \\
+%
+%   & \hspace{-4em} = \left( \delta_{\irow j}\delta_{0\icol}\delta_{0 k} + \delta_{\irow j}\delta_{k\icol}
+%                          + \delta_{jk}\delta_{\irow 0}\delta_{0\icol} + \delta_{j0}\delta_{\irow 0}\delta_{k\icol} \right) \\
+%
+%   & \hspace{-3em} - \left( \delta_{\irow k}\delta_{0\icol}\delta_{0j} + \delta_{\irow k}\delta_{j\icol}
+%                          + \delta_{kj}\delta_{\irow 0}\delta_{0\icol} + \delta_{k0}\delta_{\irow 0}\delta_{j\icol} \right) \\
+%
+%   & \hspace{-4em} =  \delta_{\irow j}\delta_{k\icol} + \delta_{jk}\delta_{\irow 0}\delta_{0\icol} - \delta_{\irow k}\delta_{j\icol} - \delta_{kj}\delta_{\irow 0}\delta_{0\icol}  \\
+%
+    & \hspace{-4em} = \delta_{\irow j}\delta_{k\icol} - \delta_{j\icol}\delta_{\irow k}  \\           
+    & \hspace{-4em} = \epsilon_{jkl}  \epsilon_{l \irow\icol}   \\           
+   & \hspace{-4em} = \epsilon_{jkl} \left\{ \MM{J}_l \right\}_\irow^\icol
+\end{align*}
+\end{proof}
 
 Any ordered triple of generators that satisfy a commutation relation of the form that appears 
 in \Eqns{commutator_Boost}{and}{commutator_Rotation} transforms under similarity transformations 
