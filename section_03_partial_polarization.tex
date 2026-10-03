@@ -1,0 +1,641 @@
+\section{Partial Polarization}
+\label{sec:statistics}
+
+No physical signal is ever strictly monochromatic, and 
+%
+astrophysical signals are typically an incoherent superposition of waves from a large number of emitting sources.  The polarization of such signals cannot be described as in the previous section.
+%
+Furthermore, over most of the spectrum, the electric field fluctuates too rapidly to be directly sampled, and it is generally not possible to determine the geometry of the polarization ellipse directly from measurements of the electric field vector.
+%
+Instead, the polarization state must be inferred by other means.  
+
+For example, the position angles of X-ray photons are determined from the trajectories of ejected photoelectrons.
+%
+The polarization of optical light is typically estimated by measuring pairs of intensities after the radiation is decomposed into oppositely polarized streams.
+(See \App{Stokes_via_intensity_differences} for more detail.)
+%
+At radio frequencies, the electric field is directly sampled; however, the astrophysical signal of interest is typically buried in noise and it is necessary to integrate over time and frequency to increase the signal-to-noise ratio.  Such integration can be performed only after squaring the electric field, after which the information about the instantaneous phase of the signal is lost.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Stokes parameters
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Stokes Parameters}
+\label{sec:Stokes_parameters}
+
+Although polarization state is not measured directly from the electric field, its interpretation remains founded on the geometry of the polarization ellipse owing to the analysis by \cite{sto52}.
+%
+%% He considered the decomposition of partially polarized light into an incoherent sum of oppositely-polarized components, and the conditions under which two independent sources of radiation yield equal component intensities, regardless of the polarizations of the oppositely-polarized components.
+%
+By considering the conditions under which two independent sources of radiation could be considered equivalent, \cite{sto52} arrived at four measurable quantities that completely describe the state of polarization.
+%
+Following refinements by \cite{1942JChPh..10..415P}, the four Stokes parameters are given by
+%
+\begin{equation}
+\label{eqn:stokes_geometric}
+\begin{split}
+  S_0&= I                          \\
+  S_1&= Ip  \cos2\chi  \cos2\psi   \\
+  S_2&= Ip  \cos2\chi  \sin2\psi   \\
+  S_3&= Ip  \sin2\chi
+\end{split}
+\end{equation}
+%
+where $I$ is the intensity of the light, $p$ is the degree of polarization (see \Sec{degree_of_polarization}), and
+$\chi$ and $\psi$ are the ellipticity and orientation angles that define the polarization ellipse.
+%
+
+The four-dimensional vector of Stokes parameters,
+%
+\begin{equation}
+	\underline{\underline{S}} =
+	\left( 
+	\begin{array}{c}
+		S_0 \\
+		S_1 \\
+		S_2 \\
+        %
+		S_3
+	\end{array}
+	\right) =
+	\left( 
+	\begin{array}{c}
+		I \\
+		Q \\
+	 	U \\
+		V
+	\end{array}
+	\right),
+\end{equation}
+%
+is separable into scalar and vector components, $[S_0,\Pv{S}]$, where
+$\Pv{S}=(S_1,S_2,S_3)^T$ is the polarization vector with length $|\Pv{S}|=Ip$ and direction defined by
+$2\psi$ and $2\chi$, as depicted in \Fig{polarization_vector}.
+%
+\begin{figure}
+\centerline{\includegraphics[width=0.7\linewidth]{polarization_sphere.pdf}}
+\caption{
+The spherical coordinates of the polarization vector, $\Pv{S}=(S_1, S_2, S_3)^T=(Q,U,V)^T$, include the vector length $|\Pv{S}|=Ip$, longitude $2\psi$, and latitude $2\chi$.
+%
+% At the top of page 27 of IEEE Std 145-2013:
+%
+% "NOTE 2 — The points of the northern hemisphere of the Poincaré sphere represent 
+% polarizations with a left-hand sense and those of the southern hemisphere represent 
+% polarization with a right-hand sense. The north pole represents left-hand circular 
+% polarization and the south pole represents right-hand circular polarization. The points 
+% of the equator represent all possible linear polarizations."
+%
+Points in the $S_1$--$S_2$ plane ($S_3 = 0$) represent linearly 
+polarized states, points above this plane ($S_3 > 0$) represent left-hand elliptically 
+polarized states and the positive $S_3$ pole represents left-hand circular polarization.
+%
+}
+\label{fig:polarization_vector}
+\end{figure}
+%
+Measurement of $\Pv{S}$ yields the orientation and ellipticity angles that define
+the geometry of the polarization ellipse,
+\begin{eqnarray}
+\label{eqn:orientation}
+\psi &=& \frac{1}{2} \tan^{-1} \frac{S_2}{S_1} \\
+\label{eqn:ellipticity}
+\chi &=& \frac{1}{2} \sin^{-1} \frac{S_3}{|\Pv{S}|}.
+\end{eqnarray}
+%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Degree of Polarization
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Degree of Polarization}
+\label{sec:degree_of_polarization}
+
+The degree of polarization
+%
+\begin{equation}
+\label{eqn:degree_of_polarization}
+p = \frac{|\Pv{S}|}{S_0}
+\end{equation}
+%
+is a measure of the fraction of the total intensity that is polarized.
+%
+When $p=0$, the light is unpolarized, also defined as \emph{common} light \citep{sto52};
+when $p=1$, the light is 100\% polarized, or \emph{purely} polarized;
+for partial polarization, $0 < p < 1$.
+%
+% The Stokes parameters can be expressed as a linear combination $\Sv{S}= \Sv{S}_u + \Sv{S}_p$, where $\Sv{S}_u=[(1-p)I,\Sv{0}]$ is the unpolarized component and $\Sv{S}_p=[Ip,\Pv{S}]$ is purely polarized.
+
+As shown by \eqn{spectral_decomposition_of_coherency_matrix} and the discussion that follows it, unpolarized or partially polarized radiation is equivalent to an incoherent superposition of two orthogonal purely polarized states.
+%
+An unpolarized state can be decomposed into any pair of orthogonal purely polarized states of equal amplitude \citep{sto52}.
+%
+In contrast, a 100\% polarized wave can be described using a single Jones vector, $\Jcol{e}_0$,
+such that
+%
+\begin{equation}
+\label{eqn:pure_poln_e}
+    \Jcol{e}(t) = \Jcol{e}_0 z(t),
+\end{equation} 
+%
+where $z(t)$ is a complex-valued function that describes stochastic fluctuations of amplitude and phase.
+%
+It has a mean of zero and variance of unity; that is, $\langle|z(t)|^2\rangle = 1$, where angular brackets denote an average over time.
+%
+Referring to \eqns{analytic_field}{and}{Jones_vector}, monochromatic light is a special case of \eqn{pure_poln_e} in which $z(t)$ is a pure tone with constant frequency; therefore, strictly monochromatic light is 100\% polarized.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Poincare Sphere
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Poincar\'{e} Sphere}
+\label{sec:Poincare_sphere}
+
+When only the polarization state is of interest, the polarization vector can be normalized by the total intensity, yielding $\Pv{\acute{S}} = \Pv{S}/S_0$, such that $|\Pv{\acute{S}}|=p$.
+%
+When $\Pv{\acute{S}}$ is plotted as in \Fig{polarization_vector}, 
+every possible polarization state corresponds to a point on or inside a sphere of unity-radius known as the Poincar\'{e} sphere.
+%
+In this geometric representation, purely polarized states lie on the surface of the sphere, and the unpolarized state is at its center (the origin).
+%
+Partially polarized states are represented by points within the sphere, and their distance from the center is directly proportional to their degree of polarization.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Monochromatic Light Revisited
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Polarization Ellipse}
+\label{sec:polarization_ellipse}
+
+In this section, the relationship between the measurable Stokes parameters and the inferred geometry of the polarization ellipse described by \eqn{stokes_geometric} is explored using the special case of purely polarized monochromatic light described by \eqn{real_valued_wave}. 
+%
+The connection between the \emph{relative} phases\footnote{The Stokes parameters are independent of the absolute phase, $\phi$, that appears in \eqn{stokes_ellipse}. That is, the measured polarization
+state does not depend on the choice of time origin.} 
+and amplitudes of the components of the electric field vector, the geometry of the ellipse traced by that vector, and the corresponding Stokes parameters
+%
+are demonstrated using six special cases of purely polarized radiation: Stokes $\pm$ Q, $\pm$ U, and $\pm$ V. 
+These cases are depicted in \Fig{polarization_cases}. \\
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Stokes Q
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\noindent
+{\bf Stokes $\mbf{\pm Q}$}: If $a_y=0$ in \eqn{real_valued_wave}, then the radiation is 100\% linearly polarized with
+the electric field vector oscillating along the $x$ axis.
+%
+In this case, $\chi=0$, $\psi=0$, Stokes $Q=S_1=S_0$ is positive, and Stokes $S_2=S_3=0$.
+
+If $a_x=0$, then the radiation is 100\% linearly polarized with
+%
+electric field vector oscillating along the $y$ axis.
+%
+In this case, $\chi=0$, $\psi=\pm\pi/2$, Stokes $Q=S_1=-S_0$ is negative, and Stokes $S_2=S_3=0$.\\
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Stokes U
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\noindent
+{\bf Stokes $\mbf{\pm U}$}: If $a_x=a_y$ and the relative phase difference, $\Delta\phi = \phi_x - \phi_y = 0$, then $\epsilon_x(t) = \epsilon_y(t)$ 
+and the radiation is 100\% linearly polarized with the electric field vector oscillating along 
+the line defined by $y=x$ (i.e., offset by $45\deg$ with respect to the $x$ axis).
+%
+In this case, $\chi=0$, $\psi=\pi/4$, Stokes $U=S_2=S_0$ is positive, and Stokes $S_1=S_3=0$.
+
+If $a_x=a_y$, and $\Delta\phi = \pm \pi$, then $\epsilon_x(t) = - \epsilon_y(t)$ 
+and the radiation is 100\% linearly polarized with the electric field vector oscillating along 
+the line defined by $y=-x$  (i.e., offset by $-45\deg$ with respect to the $x$ axis). 
+%
+In this case, $\chi=0$, $\psi=-\pi/4$, Stokes $U=S_2=-S_0$ is negative, and Stokes $S_1=S_3=0$. \\
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Stokes~V
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\noindent 
+{\bf Stokes $\mbf{\pm V}$}: If $a_x=a_y$ and $\Delta\phi = -\pi/2$, then the phase of $\epsilon_y$ leads that of $\epsilon_x$ by $90\deg$ and the radiation is 100\% circularly polarized with the electric
+field vector tracing a clockwise circle in the x$-$y plane, as seen by an observer looking toward the source;
+this is defined as a left-hand circularly polarized (LCP) wave.
+%
+In this case, $\chi=\pi/4$, $\psi$ is undefined, Stokes $V=S_3=S_0$ is positive, and Stokes $S_1=S_2=0$.
+
+If $a_x=a_y$ and $\Delta\phi = \pi/2$, then the phase of $\epsilon_x$ leads that of $\epsilon_y$ by $90\deg$ and the radiation is 100\% circularly polarized with the electric
+field vector tracing a counter-clockwise circle in the x$-$y plane, as seen by an observer looking toward the source; 
+this is defined as a right-hand circularly polarized (RCP) wave.
+%
+In this case, $\chi=-\pi/4$, $\psi$ is undefined, Stokes $V=S_3=-S_0$ is negative, and Stokes $S_1=S_2=0$.
+
+%
+\begin{figure}
+\centerline{\includegraphics[width=0.7\linewidth]{polarization_cases.pdf}}
+\caption{
+The polarization ellipses inscribed by the electric field vector for the six special cases of monochromatic light described in \Sec{polarization_ellipse}.
+%As in \Fig{polarization_ellipse}, the electromagnetic wave propagates in the positive $z$ direction (out of the page).
+%
+}
+\label{fig:polarization_cases}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Adopted Standard
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Adopted Standard}
+\label{sec:adopted_standard}
+
+Apart from the refinements described in \App{refinements}, the conventions and definitions adopted in this article are consistent with both \cite{sto52} and the Institute of Electrical and Electronics Engineers \citep{ieee145}.
+%
+In the IEEE standard, the right-hand rule is applied with the thumb pointing in the direction of wave propagation; it defines both the angle measured from a reference axis to the major axis of the polarization ellipse, and the direction in which the electric field rotates for right-hand elliptically polarized states.
+
+The IEEE standard also defines the Poincar\'{e} sphere such that left-hand elliptically polarized states occupy the upper hemisphere, where Stokes V is positive in a right-handed basis defined by Stokes Q, U and V.
+%
+As more fully discussed in \citet{hb96} and \citet{vmjr10}, the International Astronomical Union \citep{iau74} defines Stokes $V=-S_3$, which is negative for left-handed circular polarization and opposite to the convention adopted in this article.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Coherency matrix
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Coherency Matrix}
+\label{sec:coherency_matrix}
+
+%
+The polarization state of electromagnetic radiation can also be described by the second-order statistics of $\Jcol{e}(t)$, as represented by the complex-valued
+$2\times2$ coherency matrix \citep{bw80}
+\begin{equation}
+  \label{eqn:coherency}
+  \cohM{\rho}\equiv\langle\Jcol{e}(t) \otimes \Jcol{e}^\dagger(t) \rangle
+=\left( 
+    \begin{array}{cc}
+    \langle e_0 e_0^* \rangle & \langle e_0 e_1^* \rangle \\
+     \langle e_1 e_0^* \rangle & \langle e_1 e_1^* \rangle
+    \end{array}
+\right).
+\end{equation}
+Here, the angular brackets denote an average over time, $\otimes$
+is the tensor product \eqnp{tensor_product}, and $\Jcol{e}^\dagger(t)$ is the Hermitian transpose
+of $\Jcol{e}(t)$ \eqnp{Hermitian_transpose}.  For brevity, explicit dependence on time has been dropped
+in the rightmost expression.  Note that each component of $\Jcol{e}(t)$ is multiplied 
+by the complex conjugate of either itself or the other component,
+a process known as \emph{square law detection}.
+Consequently, as for the Stokes parameters,
+the components of the coherency matrix are independent of the absolute phase of $\Jcol{e}(t)$.
+
+The coherency matrix is self-adjoint, or Hermitian (i.e., $\cohM{\rho}=\cohM{\rho}^\dagger$), and can be written as a linear combination of four Hermitian basis matrices \citep[e.g.,][]{fan57},
+%
+\begin{equation}
+  \cohM{\rho} = \frac{1}{2} \sum_{\irow=0}^{3} S_\irow\,\pauli{\irow},    \label{eqn:combination}
+\end{equation}
+where $S_\irow$ are the four real-valued Stokes parameters
+and the basis matrices consist of the $2\times2$ identity matrix 
+and the Pauli matrices,
+\begin{equation}
+\begingroup
+\setlength\arraycolsep{5pt}
+\begin{array}{ll}
+\pauli{0} = \pauliI
+&
+\pauli{1} = \pauliQ
+\\ [5mm]
+\pauli{2} = \pauliU
+&
+\pauli{3} = \pauliV.
+\end{array}
+\endgroup
+\label{eqn:Pauli}
+\end{equation}
+%
+For brevity in the remainder of this paper, 
+the summation symbol is omitted from equations and
+Einstein notation is used to imply a sum over repeated indeces.
+(See \App{index} for more detail.)
+
+Conversely, the Stokes parameters can be represented as projections of the coherency matrix onto the basis matrices using 
+the tensor double contraction \eqnp{double_contraction},
+%
+\begin{equation}
+S_\irow = \dc{\pauli{\irow}}{\cohM{\rho}}.    \label{eqn:Stokes_contraction}
+\end{equation}
+%
+
+\begin{proof}
+\begin{align*}
+\dc{\pauli{\irow}}{\cohM{\rho}} 
+& = \frac{1}{2} S_\jrow \, \dc{\pauli{\irow}}{\pauli{\jrow}}
+    & \peqn{combination} \\
+&= S_\jrow \delta_{\irow\jrow} & \peqn{basis_orthogonal} \\
+&= S_\irow 
+\end{align*}
+\end{proof}
+
+
+\iffalse
+
+either the trace inner product,
+%
+\begin{equation}
+S_\irow = \trace(\pauli{\irow}\cohM{\rho}).  \label{eqn:Stokes_trace}
+\end{equation}
+%
+or 
+
+These are equivalent to the scalar product,
+%
+\begin{equation}
+S_\irow = \langle \Jcol{e}^\dagger(t) \pauli{\irow} \Jcol{e}(t) \rangle.
+\label{eqn:Stokes_scalar}
+\end{equation}
+
+% \begin{proof}
+% {\bf Proof of \eqn{Stokes_scalar}:} 
+% \begin{align*}
+% S_\irow 
+% & = \trace(\pauli{\irow}\cohM{\rho})
+% 	& \text{\eqn{Stokes_trace}} \\
+% &= \trace(\pauli{\irow} \langle \Jcol{e} \Jcol{e}^\dagger  \rangle)
+% 	& \text{\eqn{coherency}} \\
+% &= \trace( \langle \pauli{\irow} \Jcol{e} \Jcol{e}^\dagger  \rangle)
+% 	& \pauli{\irow}\ \text{is constant} \\
+% &= \langle \trace(  \pauli{\irow} \Jcol{e} \Jcol{e}^\dagger ) \rangle
+% 	& \trace\ \text{is a linear operator} \\
+% &= \langle \trace( \Jcol{e}^\dagger \pauli{\irow} \Jcol{e}  ) \rangle
+% 	& \trace(\JM{A}\JM{B}) = \trace({\bf BA}) \\
+% &= \langle \Jcol{e}^\dagger \pauli{\irow} \Jcol{e} \rangle
+% 	& \Jcol{e}^\dagger \pauli{\irow} \Jcol{e}\ \text{is a scalar}
+% \end{align*}
+% \end{proof}
+
+\begin{proof}
+Where $\Jcol{e}=\Jcol{e}(t)$,
+\begin{align*}
+\langle \Jcol{e}^\dagger \pauli{\irow} \Jcol{e} \rangle
+& = \langle e^{*m} \left\{\pauli{\irow} \Jcol{e}\right\}_m \rangle
+    & \peqn{implicit_scalar_product} \\
+&= \langle e^{*m} \left\{\pauli{\irow}\right\}_m^n e_n \rangle 
+    & \peqn{matrix_times_vector} \\
+&= \left\{\pauli{\irow}\right\}_m^n \langle e_n e^{*m} \rangle
+    & \pauli{\irow}\ \text{is constant} \\
+&= \left\{\pauli{\irow}\right\}_m^n \cohM{\rho}_n^m 
+    & \peqn{coherency} \\
+&= \pauli{\irow} \dcbo \cohM{\rho}
+    & \peqn{double_contraction}
+\end{align*}
+\end{proof}
+
+\fi
+
+Substitution of \eqn{coherency} into \eqn{Stokes_contraction} leads to the following expressions for the Stokes parameters.
+\begin{eqnarray}
+ S_0&=&\langle|e_0(t)|^2\rangle+\langle|e_1(t)|^2\rangle\label{eqn:StokesI} \\
+ S_1&=&\langle|e_0(t)|^2\rangle-\langle|e_1(t)|^2\rangle\label{eqn:StokesQ} \\
+ S_2&=&2\re{\langle e_0^*(t) e_1(t)\rangle}\label{eqn:StokesU} \\
+ S_3&=&2\im{\langle e_0^*(t) e_1(t)\rangle}\label{eqn:StokesV}
+\end{eqnarray}
+
+\begin{tcolorbox}
+{\bf Example:} Consider $\mu = 3$,
+\begin{align*}
+& S_3  = \pauli{3} \dcbo \cohM{\rho} & \peqn{Stokes_contraction} \\
+%
+& = \pauli{3} \dcbo \langle\Jcol{e} \otimes \Jcol{e}^\dagger \rangle & \peqn{coherency} \\
+%
+&= \tr{\pauliV \left( 
+    \begin{array}{cc}
+    \langle e_0 e_0^* \rangle & \langle e_0 e_1^* \rangle \\
+     \langle e_1 e_0^* \rangle & \langle e_1 e_1^* \rangle
+    \end{array}
+\right)} & \peqn{trace_inner_product} \\
+%
+&= -\Ci \langle e_1 e_0^* \rangle + \Ci \langle e_0 e_1^* \rangle \\
+    % &= (e_0^* e_1 - e_1^* e_0) / \Ci \\
+    &= 2\, \imag[\langle e_0^*\, e_1 \rangle].
+%
+\end{align*}
+\end{tcolorbox}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Invariant interval
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Invariant Interval}
+\label{sec:invariant_interval}
+
+As for the Lorentz four-vector in special relativity, the square of the invariant interval of the Stokes parameters is defined by \citep{bar63,bri00}
+%
+\begin{equation}
+|\Sv{S}|^2 = S_0^2 -|\Pv{S}|^2.
+\label{eqn:invariant_interval}
+\end{equation}
+%
+This interval remains invariant (up to scalar multiples) under linear transformations of the electric field; therefore, $|\Sv{S}|$ is linearly proportional to the scalar amplification of the source.
+%
+This property proves useful during numerical analysis and modeling; for example, the invariant can be used to normalize the Stokes parameters and accurately compensate for random scintillation-induced fluctuations of the flux density of the source \citep[as in][]{van04c}.
+%
+In high-precision pulsar timing experiments, use of the invariant interval yields arrival time estimates with significantly reduced instrumental artifacts  \citep[e.g.,][]{vbb+01}.
+
+Through its linear relation to the determinant of the coherency matrix via \eqn{determinant_is_invariant},
+\begin{equation}
+|\cohM{\rho}| = | S_\mu \pauli{\mu} / 2 | 
+    = (S_0^2 -|\Pv{S}|^2) / 4 = |\Sv{S}|^2/4,
+\label{eqn:invariant}
+\end{equation}
+the invariant also helps to define the concept of a valid polarization state.  As a direct consequence of the Cauchy-Schwarz inequality for
+random variables, a valid polarization state must satisfy
+\begin{equation}
+|\cohM{\rho}| \ge 0 \quad\text{and}\quad |\Sv{S}| \ge 0.
+\label{eqn:valid}
+\end{equation}
+
+\begin{proof}
+The Cauchy-Schwarz inequality,
+\begin{equation}
+| \langle e_0 e_1^* \rangle |^2 \le
+\langle |e_0|^2 \rangle \langle |e_1|^2 \rangle \nonumber,
+\end{equation}
+and \eqn{coherency} yield
+\begin{equation}
+|\cohM{\rho}| = \langle |e_0|^2 \rangle \langle |e_1|^2 \rangle - | \langle e_0 e_1^* \rangle |^2 \ge 0 \nonumber
+\end{equation}
+\end{proof}
+%
+\noindent
+Any polarization state that fails to satisfy \eqn{valid} may be called \emph{invalid}, \emph{nonphysical}, and/or \emph{over-polarized}.
+%
+Although nonphysical, over-polarized states can arise during numerical analysis.
+%
+For example, they can be produced through transformation by an impure Mueller matrix (e.g. \Sec{self_consistency}).
+%
+They can also arise when all four Stokes parameters are allowed to vary independently during modeling.
+%
+% {\color{red}As shown in \App{nonlinear}, they can result from taking differences between Stokes parameters when the instrumental response is non-linear.
+%
+% 
+
+For fully polarized light, $S_0 = |\Pv{S}|$ and
+$|\Sv{S}| = |\cohM{\rho}| = 0$.
+%
+The invariant interval and determinant are also zero for the \emph{instantaneous} Stokes parameters,
+\begin{equation}
+\label{eqn:instantaneous_coherency}
+  \tilde{s}_\mu \equiv \pauli{\mu}\dcbo\tilde{\cohM{\rho}}
+\text{ \quad where \quad} 
+    \tilde{\cohM{\rho}} \equiv \Jcol{e} \otimes \Jcol{e}^\dagger,
+\end{equation}
+%
+because $\tilde{\cohM{\rho}}$ is computed from a single instance of the electric field
+and is therefore singular; i.e.,
+%
+\begin{equation}
+ |\tilde{\cohM{\rho}}| = |\Jcol{e} \otimes \Jcol{e}^\dagger| = e_0 e_0^* \, e_1 e_1^* - e_0 e_1^* \, e_1 e_0^* = 0.
+\label{eqn:instantaneous_coherency_determinant}
+\end{equation}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Orthogonal Polarizations
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Orthogonal Polarizations}
+\label{sec:orthogonal_polarization}
+
+%
+% From Stokes (1852): "Let us in the first place examine under what circumstances the intensity of the stream made up of the two components is independent of any retardation which the phase of vibration of one component may have undergone relatively to the phase of vibration of the other previously to the recomposition."
+%
+% synopsis: Consider the intensity of a superposition of two polarized signals, and the conditions under which the intensity of the superposition is independent of the relative delay between those signals.
+%
+
+\cite{sto52} defined oppositely polarized waves by considering the decomposition of a partially polarized signal into two purely polarized components,
+%
+\begin{equation}
+ \Jcol{e}_A(t) = \Jcol{e}_a z_a(t) \quad \text{and} \quad \Jcol{e}_B(t) = \Jcol{e}_b z_b(t),
+\end{equation}
+%
+where $\Jcol{e}_a$ and $\Jcol{e}_b$ are constant Jones vectors that represent the polarizations of the two components,
+and $z_i(t) = \Jcol{e}_i^\dagger \cdot \Jcol{e}(t)$ ($i \in \{a,b\}$)
+are the projections of $\Jcol{e}(t)$ onto these vectors \eqnsp{Hermitian_transpose}{and}{scalar_product}.
+%
+He then considered the superposition of the two components after applying a relative delay  $\tau$ between them,
+%
+\begin{equation}
+    \Jcol{e}'(t) = \Jcol{e}_A(t) + \Jcol{e}_B(t-\tau),
+\end{equation}
+%
+and defined $\Jcol{e}_A$ and $\Jcol{e}_B$ as oppositely polarized if and only if the total intensity of $\Jcol{e}'(t)$ is independent of $\tau$.
+%
+The total intensity is given by \eqnp[see]{StokesI},
+%
+\begin{equation}
+    I = \langle \Jcol{e}^\dagger(t) \cdot \Jcol{e}(t) \rangle 
+        = \langle |e_0(t)|^2 + |e_1(t)|^2 \rangle;
+\end{equation}
+%
+therefore, the total intensity of the superposition
+%
+\begin{equation} \begin{split}
+I' &= \langle \left[\Jcol{e}_A(t) + \Jcol{e}_B(t-\tau)\right]^\dagger \cdot \left[\Jcol{e}_A(t)+ \Jcol{e}_B(t-\tau)\right] \rangle \\
+&= \Jcol{e}_a^\dagger \cdot \Jcol{e}_a \langle |z_a(t)|^2 \rangle 
+ + \Jcol{e}_b^\dagger \cdot \Jcol{e}_b \langle |z_b(t-\tau)|^2 \rangle \\
+& \omit\hfill\ensuremath{ \qquad\qquad\qquad\qquad + 2 \re{\Jcol{e}_a^\dagger \cdot \Jcol{e}_b \, \langle z_a(t) z_b^*(t-\tau) \rangle} }.
+\end{split} \end{equation}
+%
+Assuming that the signal is stationary, at least in the weak sense, $\langle |z_b(t-\tau)|^2 \rangle = \langle |z_b(t)|^2 \rangle$; therefore, $I'$ is independent of $\tau$, and the two components are orthogonal, if and only if $\Jcol{e}_a^\dagger \cdot \Jcol{e}_b = 0$.
+
+To characterize the Stokes parameters of orthogonally polarized states,
+consider the singular coherency matrices of the two purely polarized states,
+%
+$$\tilde{\cohM{\rho}}_a \equiv \Jcol{e}_a \otimes \Jcol{e}_a^\dagger \quad \text{and} \quad
+\tilde{\cohM{\rho}}_b \equiv \Jcol{e}_b \otimes \Jcol{e}_b^\dagger,$$
+%
+and their tensor double contraction,
+%
+\begin{equation}
+\label{eqn:coherency_projection_field}
+\dc{\tilde{\cohM{\rho}}_a}{\tilde{\cohM{\rho}}_b} = | \Jcol{e}_a^\dagger \cdot \Jcol{e}_b |^2.
+\end{equation}
+%
+\begin{proof}
+%
+\begin{align*}
+{\tilde{\cohM{\rho}}_a}&:{\tilde{\cohM{\rho}}_b}
+= \tr{\tilde{\cohM{\rho}}_a \, \tilde{\cohM{\rho}}_b}
+	& \peqn{trace_inner_product} \\
+&= \tr{ {\color{blue}\Jcol{e}_a} \Jcol{e}_a^\dagger \, \Jcol{e}_b \Jcol{e}_b^\dagger }
+	& \peqn{implicit_tensor_product} \\
+&= \tr{ \Jcol{e}_a^\dagger \Jcol{e}_b \Jcol{e}_b^\dagger \, {\color{blue}\Jcol{e}_a} }
+	& \peqn{trace_inner_product} \\
+&= \tr{ (\Jcol{e}_a^\dagger \Jcol{e}_b)  (\Jcol{e}_a^\dagger \Jcol{e}_b)^* } \\
+&= | \Jcol{e}_a^\dagger \Jcol{e}_b |^2
+	& \tr{z} = z
+\end{align*}
+\end{proof}
+%
+\noindent
+Therefore, the coherency matrices of two purely polarized sources are orthogonal
+with respect to the trace inner product \eqnp{trace_inner_product} when the polarizations are orthogonal.
+%
+Given the associated Stokes parameters, 
+%
+$$\tilde{s}_{a,\mu} = \pauli{\mu} \dcbo \tilde{\cohM{\rho}}_a
+\quad \text{and} \quad
+\tilde{s}_{b,\mu} = \pauli{\mu} \dcbo \tilde{\cohM{\rho}}_b,$$
+%
+the tensor double contraction,
+%
+\begin{equation}
+\label{eqn:coherency_projection_Stokes}
+\dc{\tilde{\cohM{\rho}}_a}{\tilde{\cohM{\rho}}_b} = \frac{1}{2} \left( \tilde{s}_{a,0} \tilde{s}_{b,0} + \tilde{\Pv{s}}_a \cdot \tilde{\Pv{s}}_b \right).
+\end{equation}
+%
+\begin{proof}
+%
+\begin{align*}
+{\tilde{\cohM{\rho}}_a}&\dcbo{\tilde{\cohM{\rho}}_b} 
+ =  ( \tilde{s}_{a,\mu} \, \pauli{\mu} / 2 ) \dcbo (\tilde{s}_{b,\nu} \, \pauli{\nu} / 2)  \\
+&= \frac{1}{4}  \tilde{s}_{a,\mu} \, \tilde{s}_{b,\nu} \, \pauli{\mu}  \dcbo \pauli{\nu}  \\
+&= \frac{1}{2} \tilde{s}_{a,\mu} \, \tilde{s}_{b,\nu} \, \delta_{\mu\nu}
+   & \peqn{basis_orthogonal}  \\
+&= \frac{1}{2} \tilde{s}_{a,\mu} \, \tilde{s}_{b,\mu}
+\end{align*}
+\end{proof}
+\noindent
+Equating the right-hand sides of \eqns{coherency_projection_field}{and}{coherency_projection_Stokes},
+noting that $\tilde{s}_0 = |\tilde{\Pv{s}}|$, and rearranging yields
+%
+\begin{equation}
+ \tilde{\Pv{s}}_a \cdot \tilde{\Pv{s}}_b = 2 | \Jcol{e}_a^\dagger \cdot \Jcol{e}_b |^2 - |\tilde{\Pv{s}}_a| |\tilde{\Pv{s}}_b|.
+\end{equation}
+%
+The angle between $\tilde{\Pv{s}}_a$ and $\tilde{\Pv{s}}_b$ is given by
+%
+\begin{equation}
+\cos\Theta = \frac{\tilde{\Pv{s}}_a \cdot \tilde{\Pv{s}}_b}{|\tilde{\Pv{s}}_a| |\tilde{\Pv{s}}_b|} = \frac{2 | \Jcol{e}_a^\dagger \cdot \Jcol{e}_b |^2}{|\tilde{\Pv{s}}_a| |\tilde{\Pv{s}}_b|} - 1.
+\end{equation}
+%
+If $\Jcol{e}_a^\dagger \cdot \Jcol{e}_b = 0$, then $\cos\Theta=-1$ and the angle between $\tilde{\Pv{s}}_a$ and $\tilde{\Pv{s}}_b$ is $180\deg$.  That is, the polarization vectors of orthogonally polarized signals are anti-parallel.
+
+This result is consistent with \citet{sto52}, where it is demonstrated that oppositely polarized waves
+% $\Jcol{\epsilon}_A$ and $\Jcol{\epsilon}_B$, 
+trace ellipses with orthogonal major axes ($\left| \psi_A - \psi_B \right| = \pi/2$) and equal and opposite handedness ($\chi_A = - \chi_B$).
+%
+That is, on the Poincar\'{e} sphere, oppositely polarized waves occupy antipodal points.

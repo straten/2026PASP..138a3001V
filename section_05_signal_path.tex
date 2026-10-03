@@ -1,0 +1,804 @@
+\section{Signal Path}
+\label{sec:signal_path}
+
+In this section, each of the elements in the signal path depicted in \Fig{signal_path} are discussed in more detail, beginning with the phase convention $\mbf\Phi$ and ending with Faraday rotation $\bf F$.
+%
+% Apart from $\mbf\Phi$, the components are described using unitary and Hermitian Jones matrices.
+%
+The receiver gains, \JM{G}, and the deviations from an ideal feed, \JM{D}, are analyzed using the polar decomposition and expressed using the axis-angle representation.
+%
+Apart from $\mbf\Phi$, the remaining  matrices are purely unitary (rotation) matrices.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{ Phase Convention }
+\label{sec:conjugation}
+
+The phase convention of an instrument is defined by the number of
+signal processing steps that result in complex conjugation of the analytic signal, which cannot be represented by a linear transformation of the electric field vector, such as a Jones matrix.
+
+\begin{proof}
+If $f(z)=z^*$ and $c$ and $z$ are two complex numbers, $$f(cz) = (cz)^* = c^*z^* \neq cf(z);$$
+therefore, complex conjugation is not a linear mapping, which must satisfy
+$f(cz)=cf(z)$.
+\end{proof}
+
+Referring to \eqns{StokesQ}{through}{StokesV}, complex conjugation of the electric field vector negates the sign of $S_3$, 
+%
+a transformation represented by the impure Mueller matrix $\MM{\Phi}$ that appears in \eqn{Stokes_chain}.
+%
+Consequently, the measured sign of $S_3$ is impacted by the treatment of the 
+complex phase of the electric field, which depends on
+%
+the phase convention adopted during the design and implementation 
+of instrumentation and signal processing software;
+the method used to down-convert the radio signal; and
+the Nyquist zone that is digitally sampled.
+
+As noted in Section 2 of \cite{vmjr10}, many signal processing textbooks and software packages adopt the convention that the argument of a complex-valued wave increases linearly with time, such that $z(t) \propto \exp(\Ci\omega t)$.
+%
+This convention is adopted in equation~(1) of \citet{sto52} and in the analytic representation of a monochromatic wave presented in \eqn{analytic_field}.
+%
+It is opposite to the convention used in many physics text books \citep[e.g.,][]{bw80},
+where the solution for a plane-propagating monochromatic electromagnetic wave is 
+presented as $\Jcol{e}(x,t) = \Jcol{e}_0\exp(\Ci [kx - \omega t])$.
+
+Choice of phase convention also arises in the implementation of the Discrete Fourier Transform (DFT).
+%
+For example, relative to \eqn{Fourier_transform}, which is consistent with the definition adopted by \citet{bra65} and the implementation of commonly used DFT libraries such as FFTW \citep{fj05},
+%
+equations~(12.1.7) and~(12.1.9) of Numerical Recipes \citep{pftv86} define the DFT and its inverse using the opposite sign for the argument of the complex exponential.
+%
+Application of a DFT that is based on an opposite sign convention is equivalent to negating the frequency, which for a real-valued input signal results in complex conjugation.
+
+The configuration of observatory instrumentation can also negate phase.  
+As shown in \App{downconversion}, both complex conjugation and 
+negation of frequency occur when either
+%\begin{itemize}
+  lower-sideband down-conversion is used; or,
+  during dual-sideband down-conversion, the quadrature component is mixed with a local oscillator that \emph{leads} that of the in-phase component by 90\deg; or
+  an even-numbered Nyquist zone is sampled.
+%\end{itemize}
+%
+Complex conjugation at any stage of analysis negates phase in all subsequent processing stages.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Receiver Gains}
+\label{sec:gain}
+
+A radio receiver converts an electromagnetic wave travelling in free space into two separate signals, each representing an orthogonal component of the electric field vector. These separate signals  propagate along distinct transmission lines and
+are independently processed using components such as amplifiers/attenuators, splitters/couplers, and analog-to-digital converters. 
+%
+Assuming that there is no further cross-coupling between the two signals, the receiver gains matrix
+%
+\begin{equation}
+\label{eqn:receiver_gains}
+    \JM{G} =
+    \left( \begin{array}{cc}
+		G_0 & 0 \\
+		0   & G_1
+	\end{array} \right),
+\end{equation}
+%
+describes the complex-valued gains, $G_k$, of all components used to process the two separate signals.
+
+Intuition might suggest that it would be fruitful to 
+represent the complex-valued gains in polar form, $$G_k = g_k \exp \Ci \phi_k,$$ and decompose \JM{G} into separate amplitude and phase terms,
+%
+\begin{equation}
+\label{eqn:intuitive_receiver_gains}
+    \JM{G} =
+    \left( \begin{array}{cc}
+		g_0 & 0 \\
+		0   & g_1
+	\end{array} \right)
+    \left( \begin{array}{cc}
+    e^{\Ci\phi_0} & 0 \\
+    0   & e^{\Ci\phi_1}
+\end{array} \right).
+\end{equation}
+%
+However, when a promising next step is not obvious, 
+it pays to employ a systematic approach.  The strategy adopted 
+%to the analysis of Jones matrices 
+in this work is based on the polar decomposition \eqnp{polar}, the axis-angle representations of the boost and rotation components \eqnsp{Boost}{and}{Rotation},
+and determination of the boost component via the Gram matrix \eqnp{boost_from_polar}.
+
+The polar decomposition,
+%of \eqn{receiver_gains}, 
+$\JM{G}=G \, \JM{B}_g \JM{R}_g$, includes the absolute gain,
+%
+\begin{equation}
+\label{eqn:absolute_gain}
+G = |\JM{G}|^{1/2} = (G_0 G_1)^{1/2},
+\end{equation}
+%
+a boost component $\JM{B}_g$, and a rotation component $\JM{R}_g$.
+%
+As noted in \Sec{polar_decomposition}, the absolute phase is chosen such that $G$ is real-valued.
+%
+The following sub-sections focus on the axis-angle representations of $\JM{B}_g$ and $\JM{R}_g$,
+where it is shown that $\JM{B}_g$ characterizes the
+ratio of the gain amplitudes, or differential gain, and
+$\JM{R}_g$ describes the differential phase.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Differential Gain}
+\label{sec:differential_gain}
+
+Using \eqn{boost_from_polar}, the boost component of \JM{G}
+%
+can be derived via the Gram matrix of its rows,
+%
+\begin{equation}
+\label{eqn:diff_gain_squared}
+\JM{B}_g^2 = G^{-2} \, \JM{G}\JM{G}^\dagger
+= G^{-2} 
+  	\left( \begin{array}{cc}
+		g_0^2 & 0 \\
+		0   & g_1^2
+	\end{array} \right),
+\end{equation}
+where $g_k = |G_k|$ are the amplitudes of the complex gains, such that $G=(g_0 g_1)^{1/2}$.
+%
+Taking the square root of both sides of \eqn{diff_gain_squared} yields
+\begin{equation}
+\JM{B}_g
+ =
+  \left( \begin{array}{cc}
+    \Gamma & 0 \\
+    0   & \Gamma^{-1}
+  \end{array} \right),
+\label{eqn:boost_decomposed}
+\end{equation}
+where $\Gamma=(g_0/g_1)^\frac{1}{2}$ is the real-valued amplitude ratio that describes the differential gain.
+%
+
+To arrive at the axis-angle representation of $\JM{B}_g$,
+%
+% only $\pauli{2}$ and $\pauli{3}$ contribute to the off-diagonal elements of a Jones matrix.  Furthermore, because 
+%
+note that its off-diagonal elements are zero and
+%
+%there can be no contribution from $\pauli{2}$ and $\pauli{3}$.  
+%
+only $\pauli{0}$ and $\pauli{1}$ contribute to the diagonal elements of 
+the sum in \eqn{Boost}.
+Therefore, $\hat{\Pv{m}}=(1,0,0)^T$ and
+\begin{equation}
+\JM{B}_g = \pauli{0}\cosh\gamma + \pauli{1}\sinh\gamma = \left( \begin{array}{cc}
+		e^\gamma & 0 \\
+		0   & e^{-\gamma}
+	\end{array} \right).
+\label{eqn:diff_gain}
+\end{equation}
+Equating the right hand sides of \eqns{boost_decomposed}{and}{diff_gain} yields 
+% The m-hat unit vector no longer explicitly appears in this section
+% $\hat{\Pv{m}}=(1,0,0)$, and
+\begin{equation}
+	\label{eqn:differential_gain}
+	\gamma = \ln\Gamma = \frac{1}{2} \ln \frac{g_0}{g_1}.
+\end{equation}
+
+Differential gain describes any transformation that subjects opposite polarizations to different levels of amplification, also known as \emph{diattenuation}.
+%
+It can vary as a function of both time and frequency for a variety of reasons.  For example, to keep the signal power within the optimal regime of operation, some experiments will set new attenuation levels at the start of each observation.
+%
+Some instruments employ active attenuators that introduce differential gain fluctuations on short timescales.  
+%
+Furthermore, the mismatched responses of the components in the signal path typically lead to variation of $\beta$ as a function of frequency.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Differential Phase}
+\label{sec:differential_phase}
+
+The axis-angle representation of $\JM{R}_g$ is obtained
+%
+by rearranging the polar decomposition of \JM{G} to arrive at
+$\JM{R}_g = G^{-1} \JM{B}_g^{-1} \JM{G}$.  Both \JM{G} and $\JM{B}_g$ (and their inverses) are diagonal
+and, as a product of diagonal matrices,
+%therefore,
+$\JM{R}_g$ is also diagonal.
+%
+Only $\pauli{0}$ and $\pauli{1}$ contribute to the diagonal elements of 
+the sum in \eqn{Rotation}; therefore, $\hat{\Pv{n}}=(1,0,0)^T$ and
+%
+\begin{equation}
+	\label{eqn:diff_phase}
+	\JM{R}_g = \pauli{0}\cos\phi + i \pauli{1}\sin\phi =
+	\left( \begin{array}{cc}
+		e^{i \phi} & 0 \\
+		0   & e^{-i \phi}
+	\end{array} \right),
+\end{equation}
+where $\phi$ describes the differential phase. Subtracting the (degenerate) absolute phase $\phi_\mathrm{abs}=(\phi_0+\phi_1)/2$ from the phases in \eqn{intuitive_receiver_gains} leaves $\phi=(\phi_0-\phi_1)/2.$
+
+
+Differential phase describes any transformation that subjects opposite polarizations to different delays; it is also known as \emph{retardance} in optics and \emph{cross-hand phase} or delay in interferometry.
+%
+It arises when the opposite polarizations propagate along signal paths of different lengths and/or with different speeds.
+%
+For a given delay $\Delta t$ between $e_0(t)$ and $e_1(t)$, the corresponding differential phase $\phi = \nu \Delta t$ varies linearly with radio frequency.
+%
+Nonlinear spectral variations arise from dispersive effects in the electronics of the receiver, down-conversion system, cables, and other components used to connect observatory instrumentation.
+%
+\Sec{Faraday} discusses the differential phase that arises during propagation through the magnetized plasma in the Earth's ionosphere and the interstellar medium.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Deviations from an Ideal Feed}
+
+In an ideal feed, the receptors have maximal response to orthogonal senses of either linear or circular polarization.
+%
+However, in practice, the receptors are neither perfectly orthogonal nor exactly linearly- or circularly-polarized.
+%
+Let non-ideal receptors be represented by unit row vectors, $\hat{\Jrow{r}}_0$ and $\hat{\Jrow{r}}_1$ ($\hat{\Jrow{r}}_i \hat{\Jrow{r}}_i^\dagger = 1$; note that the gains of the receptors are modeled by $G_0$ and $G_1$ in the previous section).
+%
+Therefore, the deviations from an ideal feed are given by
+%
+\begin{equation}
+        \label{eqn:nonorthogonal_Jones}
+        \JM{D} =
+        \left( \begin{array}{c}
+                \hat{\Jrow{r}}_0 \\
+                \hat{\Jrow{r}}_1
+        \end{array} \right)
+        =
+	\left( \begin{array}{cc}
+		\hat{r}_{00} & \hat{r}_{01} \\
+		\hat{r}_{10} & \hat{r}_{11}
+	\end{array} \right).
+\end{equation}
+%
+Deviations from ideal are also known as \emph{cross-talk}, \emph{leakage}, or simply \emph{D-terms}.
+%
+The polar decomposition, $\JM{D} = G_d \, \JM{B}_d \JM{R}_d$, includes a scalar gain $G_d$, boost $\JM{B}_d$, and rotation $\JM{R}_d$.
+%
+% The scalar gain is effectively absorbed into the absolute gain $G$ and can be neglected. 
+% (BUT then we don't ...)
+%
+Rotation matrices describe only orthonormal pairs of receptors (see \Proof{orthonormal_receptors}); therefore,
+%
+the orthonormal component of \JM{D} is given by $\JM{R}_d$ and
+any non-orthogonality must be described by $\JM{B}_d$,
+as detailed in the following sections.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Non-orthogonal Component}
+\label{sec:nonorthogonality}
+
+Using \eqn{boost_from_polar}, the boost component of \JM{D}
+%
+can be derived via the Gram matrix of its rows,
+%
+\begin{equation}
+\label{eqn:nonorthogonal_receptors}
+\JM{B}_d^2 = G_d^{-2} \JM{D}\JM{D}^\dagger % = \frac{ \JM{J}\JM{J}^\dagger }{ |\det\JM{J}\,| }
+= G_d^{-2} 
+  \left( \begin{array}{cc}
+1 & \hat{\Jrow{r}}_0\cdot\hat{\Jrow{r}}_1^\dagger \\
+\hat{\Jrow{r}}_1 \cdot\hat{\Jrow{r}}_0^\dagger & 1
+  \end{array} \right),
+\end{equation}
+%
+Let $\JM{B}_d^2 = \vBoost(2\beta)$ and note that
+%
+% only $\pauli{2}$ and $\pauli{3}$ contribute to the off-diagonal elements of a Jones matrix.  Furthermore, because 
+%
+the elements on the diagonal of \eqn{nonorthogonal_receptors} are equal to each other; 
+%
+therefore, there can be no contribution from $\pauli{1}$.
+Only $\pauli{2}$ and $\pauli{3}$ contribute to the off-diagonal elements of 
+the sum in \eqn{Boost}; i.e.,
+$\hat{\Pv{m}}=(0,m_2,m_3)^T$, and
+\begin{eqnarray}
+\vBoost(2\beta) &=& \pauli{0}\cosh2\beta + (m_2\pauli{2}+m_3\pauli{3})\sinh2\beta \nonumber \\
+&=& \left( \begin{array}{cc}
+\cosh2\beta & z_m^*\sinh2\beta \\
+z_m\sinh2\beta & \cosh2\beta
+  \end{array} \right),
+\label{eqn:nonorthogonal_boost}
+\end{eqnarray}
+where $z_m = m_2 + \Ci m_3$.
+%
+Equating the diagonal elements of \eqns{nonorthogonal_receptors}{and}{nonorthogonal_boost} 
+yields $G_d^2 = \sech2\beta$; therefore,
+%
+after taking the determinant of both sides of \eqn{boost_from_polar} (noting that $\vBoost(2\beta)$ is unimodular) and rearranging,
+%
+\begin{equation}
+\label{eqn:det_squared_one}
+|\JM{D}\JM{D}^\dagger| = G_d^4 = \sech^2 2\beta = 1 - \tanh^2 2\beta. 
+\end{equation}
+%
+Similarly, the determinant of \eqn{nonorthogonal_receptors} leads to
+%
+\begin{equation}
+\label{eqn:det_squared_two}
+|\JM{D}\JM{D}^\dagger| = 1 - |\hat{\Jrow{r}}_0\cdot\hat{\Jrow{r}}_1^\dagger|^2.
+\end{equation}
+%
+Equating the right-hand sides of \eqns{det_squared_one}{and}{det_squared_two} yields
+%
+\begin{equation}
+\label{eqn:nonorthogonal_beta}
+\beta = \frac{1}{2}\tanh^{-1} \left|\hat{\Jrow{r}}_0 \cdot \hat{\Jrow{r}}_1^\dagger \right|.
+\end{equation}
+%
+When the receptors are orthogonal, $\beta$ is zero
+and $\JM{B}_d$ reduces to the identity matrix (no deviations from ideal).
+
+As in Section 4.1 of \cite{van04c}, the 2 dof
+in the non-orthogonal component of \JM{D} may be parameterized by 
+$\Pv{b} = (0, b_2, b_3)^T = \hat{\Pv{m}} \sinh\beta$, such that
+$\sinh^2\beta = \Pv{b}\cdot\Pv{b},$ $\cosh^2\beta=1+\Pv{b}\cdot\Pv{b},$ and
+\begin{equation}
+\label{eqn:nonorthogonal_component}
+\JM{B}_d = \vBoost(\beta) = \pauli{0} (1 + \Pv{b}\cdot\Pv{b})^{1/2} + \Pv{\sigma}\cdot\Pv{b}.
+\end{equation}
+
+To first order, this derivation is consistent with Equation (19) of \cite{bri00},
+which describes non-orthogonal receptors using a product of two separate boosts along 
+the $S_2$ and $S_3$ axes (corresponding to Stokes U and Stokes V, respectively, in a linear basis).
+%
+In general, the result of this product includes a rotation about the $S_1$ (Stokes Q) axis;
+%
+however, if either of these two boosts is small, then this rotation is negligible.
+%
+In contrast, no small-value approximations are made in the derivation of \Eqn{nonorthogonal_component}.
+%
+% and the result is uncorrelated with $\phi$.
+%
+
+The instrumental boost due to non-orthogonal receptors can vary as a function of time and frequency.
+For example, the parallactic rotation of
+the receiver during the transit of the source changes the orientation
+of $\hat{\Pv{m}}$ with respect to the celestial coordinate system.
+%
+Furthermore, electronic cross-coupling between the two receptors can vary with radio frequency.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Orthonormal Component}
+\label{sec:basis_rotation}
+
+In principle, $\JM{R}_d$ can be obtained
+%
+by rearranging the polar decomposition of \JM{D} to arrive at
+$\JM{R}_d = G_d^{-1} \JM{B}_d^{-1} \JM{D}$; however, this proves to
+be algebraically cumbersome.
+%
+Instead, following \cite{bri00}, the transformation is expressed using 
+the spherical coordinates $\psi$ and $\chi$ that define the polarization ellipse.
+
+First, in the ideal basis, consider a 100\% polarized signal $\Jcol{e}(t)$ with Stokes polarization vector
+\eqnp[see]{stokes_geometric}
+%
+\begin{equation}
+\Pv{S} = I \left( \cos2\chi  \cos2\psi, \; \cos2\chi  \sin2\psi, \; \sin2\chi \right)^T.
+\label{eqn:stokes_vector}
+\end{equation}
+%
+Next, consider the transformation from the ideal basis to one in which the first receptor responds
+maximally to $\Jcol{e}(t)$ and the response in the orthogonal receptor is zero.
+%
+In this basis, the measured coherency matrix,
+\begin{equation} \begin{split}
+{\cohM{\rho}}'
+%&= \langle \Jcol{e}'(t) \; \otimes \; \Jcol{e}'^\dagger(t) \rangle \\
+&= \left( 
+	\begin{array}{ccc}
+	I & \; & 0 \\
+	0 & \; & 0
+	\end{array}
+	\right)
+%= \frac{1}{2} \left[ \pauliI + \pauliQ \right] r^2,% \\
+= \left( \pauli{0} + \pauli{1} \right) I / 2
+\end{split} \end{equation}
+%
+and the polarization vector $\Pv{S}'= I (1,0,0)^T$.
+
+With reference to \Fig{polarization_vector}, $\Pv{S}'$ is obtained by rotating $\Pv{S}$ about the $S_3$ axis by $-2\psi$ in the ideal basis, then rotating the result by $2\chi$ about the $S'_2$ axis in the intermediate basis.  The corresponding
+transformation of the electric field, $\Jcol{e}'(t) = \JM{R}_d \, \Jcol{e}(t)$, where
+%
+\begin{equation}
+\label{eqn:orthonormal_spherical}
+ \JM{R}_d  = \vRotation[2](-\chi) \vRotation[3](\psi).
+\end{equation}
+%
+This is equivalent to equation~(15) of \citet{bri00}, apart
+from the negation of $\chi$ that associates
+positive values of $\chi$ with $S_3 > 0$.
+
+This is a useful parameterization of the 2 dof in $\JM{R}_d$ because
+it reduces to the identity matrix (no deviations from ideal) when $\chi$ and $\psi$ are zero.
+%
+Furthermore, because differential phase results in a rotation about the $S_1$ axis, 
+it is desirable to describe the deviation from the ideal basis transformation using rotations about the other two axes. Together, the three rotations define the orientation of the basis in a manner similar to the Tait--Bryan angles (yaw, pitch, and roll).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Nominal Feed Configuration}
+\label{sec:nominal_feed}
+
+As in \cite{vmjr10}, the nominal feed configuration is described by three parameters that are summarized in \Tab{parameters}.
+%
+\begin{table*}
+\begin{center}
+\caption{The effects of phase convention and nominal feed configuration parameters in each basis.}
+\label{tab:parameters}
+\begin{tabular}{lcc|c}
+\hline
+
+Parameter           & Range        & \multicolumn{2}{c}{Effect} \\
+                    &              & Linear & Circular          \\
+
+\hline
+
+Phase Convention    & $\pm$ 1      & $\pm$ V     & $\pm$ U   \\
+
+Feed Basis          & LIN or CIRC  & $\Pv{S}=(Q,U,V)^T$ & $\Pv{S}=(V,Q,U)^T$   \\
+
+Feed Hand           & $\pm$ 1      & $\pm$ Q\&V     & $\pm$ U\&V \\
+
+Symmetry Angle      & $-\pi/2<\theta<\pi/2$
+& $\vRotation[z](\theta-\pi/4)$ & $\vRotation[z](\theta)$ \\
+\hline
+\end{tabular}
+\end{center}
+\end{table*}
+%
+The \emph{feed basis} defines the polarizations of the 
+receptors (linear or circular);
+%
+the \emph{feed hand} defines the handedness of the basis (left or right); and
+%
+the \emph{symmetry angle} describes the orientation of the reference frame defined by the receptors.
+%
+The corresponding basis transformation
+%
+\begin{equation}
+    \JM{C} = \JM{R}_h \JM{R}_b \vRotation[z](\Theta)
+\end{equation}
+is the product of feed hand $\JM{R}_h$ and basis $\JM{R}_b$ transformations, and a rotation about the line of sight $\vRotation[z](\Theta)$ defined by the symmetry angle $\Theta$.  These are detailed in the following sections, starting with the feed basis, which defines both the nominal symmetry angle and the effect of the feed hand transformation.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Feed Basis}
+\label{sec:feed_basis}
+
+Typically, the two receptors in a receiver are either linearly or circularly polarized, and
+%
+\Sec{geometry} describes a Cartesian coordinate system defined by linearly polarized receptors.
+%
+As shown in \App{circular_basis},
+the transformation from this Cartesian basis to one defined by a pair of circularly-polarized receptors is described by
+%
+\begin{equation}
+\label{eqn:circular}
+\JM{R}_b = \frac{1}{\sqrt{2i}}
+\left( \begin{array}{cc}
+  1 & -i \\
+  1 & i
+\end{array} \right).
+\end{equation}
+%
+In the basis defined by $\JM{R}_b$, the Stokes polarization vector $\Pv{S}=(S_1, S_2, S_3)^T=(V,Q,U)^T$ and the effects of all subsequent transformations (from \JM{X} to $\MM{\Phi}$) differ from their impact in the original Cartesian basis.
+
+For example, in the circular basis, the rotations around the $S_2$ and $S_3$ axes that define both the polarization ellipse \eqnp{stokes_ellipse} and the orthonormal component of deviation \eqnp{orthonormal_spherical} are better described by pair of polar angles, $\xi$ and $\zeta$, respectively.
+%
+These angles, depicted in \Fig{polarization_vector_circular}, are related to the orientation and ellipticity angles by
+\begin{eqnarray}
+    \tan2\xi &=& \cot2\chi \cos2\psi \\
+    \sin2\zeta &=& \cos2\chi \sin2\psi.
+\end{eqnarray}
+
+In the circular basis, the differential phase $\phi$ describes rotation about the Stokes V axis, which is equivalent to a physical rotation about the line of sight (\Proof{Faraday_rotation}).
+%
+Later sections describe the impacts of the circular basis on the feed hand $\JM{R}_h$ (\Sec{feed_hand}), axis of symmetry $\vRotation[z](\Theta)$ (\Sec{symmetry}), and phase convention $\MM{\Phi}$ (\Sec{calibration_phase_convention}) transformations.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Feed Hand / Basis Reflection}
+\label{sec:feed_hand}
+
+The feed hand is determined by the design and integration of the receiver, such as the sign convention for the voltages
+output by an orthomode transducer, which determines the directions of the $x$ and $y$ axes in \Fig{polarization_ellipse}; or any cable swaps that might occur between the receiver and the backend, which swap the $x$ and $y$ axes.
+%
+Feed hand is also impacted by the total number of reflections in the antenna structure, which depends upon the placement of the feed at the primary or secondary focus, and the number of reflections in any beam waveguide structure \citep[e.g.,][]{gaa+04,pnw+15} or corrective mirrors designed to optimize sensitivity \citep[e.g.,][]{kbh94,gj97}. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \subsubsection{Reflection}
+% \label{sec:reflection}
+
+% When considering only the polarization state of an electromagnetic wave, 
+% Normal reflection (where the angles of incidence and reflection equal zero)
+% from a conducting surface can be directly modeled as a change in the direction of propagation. 
+%
+% The 180$\deg$ phase shift in the electric field vector that occurs on reflection can be 
+% ignored because polarization state is independent of absolute phase. 
+%
+% There are two ways to conceptualize the perspective of an observer looking back toward the 
+% conducting surface to receive the reflected radiation.  Both result in the same mathematical treatment.
+%
+% One way to model the change in direction of propagation is by negating the $z$-axis, which results 
+% in a left-handed coordinate system that is equivalent to swapping $x$ and $y$ axes.
+%
+
+Normal reflection by a conducting surface, such
+that the angles of incidence and reflection equal zero 
+and the incident and reflected rays are anti-parallel, 
+can be conceptualized in two different ways that arrive at the same result.
+%
+One way to model the observation of reflected rays is by turning over the feed horn, which originally points up at the sky, to point down at the reflector.  
+%
+This approach is detailed in \App{yaw_rotation}.
+
+Alternatively, the change in wave direction is modeled by negating the $z$-axis, thereby producing a left-handed coordinate system.
+%
+The handedness of the reference frame is also negated by exchanging the components of the electric field.
+%
+With reference to \eqns{StokesQ}{through}{StokesV},
+%
+swapping $e_x$ and $e_y$ negates Stokes Q and V,
+%
+which is equivalent to a $\pm 180\deg$ rotation about the Stokes~U axis.
+%
+In a basis defined by circularly-polarized receptors, 
+swapping $e_L$ and $e_R$
+reverses the signs of both Stokes U and V,
+%
+which is equivalent to a $\pm 180\deg$ rotation about the Stokes~Q axis.
+%
+In both cases, the rotation is given by $\JM{R}=\pauli{2}$; it negates both the ellipticity 
+$\chi$ \eqnp{ellipticity} and the position angle $\psi$ \eqnp{orientation}.
+
+%
+Although the number of reflections in an antenna can be easily counted, it is generally less feasible to account for voltage negation or cable swapping.
+%
+Therefore, the feed hand is typically determined experimentally with reference to previously published polarization data.
+%
+For example, as both $\chi$ and $\psi$ are negated upon reflection, the feed hand can be unambiguously determined by observing a source with known ellipticity or Faraday rotation measure.
+%
+Given the total number of hand reversals $N$, the feed hand matrix is
+defined by 
+%
+\begin{equation}
+\JM{R}_h = \pauli{2}^N.
+\end{equation}
+
+The negation of the position angle
+% , or azimuth angle,  of linearly polarized radiation that is observed 
+after normal reflection 
+from a metal surface 
+is noted in the context of a more richly detailed treatment of the physics of reflection and refraction by \citet{bw80}.
+%
+However, it appears to be unrecognized in some important works on radio polarimetry, which mention only the negation of Stokes V \cite[e.g.,][]{hbs96,rh21}.
+%
+% https://onlinelibrary.wiley.com/doi/pdf/10.1002/9783527628322.app1
+%
+Appendix A of \cite{cla10} provides a carefully detailed derivation of
+both the linear and circular polarization of radiation that is observed after reflection,
+including a historical account of some confusion that has persisted on this topic.
+%
+%owing to the inconsistent application of sign conventions when interpreting the Fresnel coefficients.
+
+% TO-DO: consider discussion of oblique incidence.
+%
+% For oblique reflection, see the discussion of the The Drude model in section 1.12 Conductors of
+%
+% Electromagnetic Waves and Antennas by Sophocles J. Orfanidis
+%
+% https://www.ece.rutgers.edu/~orfanidi/ewa/
+%
+% Example 1.12.1 shows that the conductivity of copper is independent of frequency (and therefore real-valued) at frequencies below 653 GHz.
+%
+% The conductivity can be related to the dielectric constant of a metal (eq. 7.11.4) and therefore the index of refraction.  This can be used to derive the Frensnel reflection coefficients for the linearly-polarized components parallel and perpendicular to the plane of incidence 
+%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Axis of Symmetry}
+\label{sec:symmetry}
+
+The axis of symmetry in the $x$-$y$ plane depicted in \Fig{polarization_ellipse} is defined as the
+position angle of a linearly-polarized wave that produces equal responses
+in each ideal receptor.
+%
+In a basis defined by linearly-polarized receptors, a linearly-polarized wave that oscillates along 
+$x = y$ (positive Stokes $U$) will produce
+equal and in-phase responses in each receptor; therefore, the symmetry angle has a nominal value of 45\deg.
+%
+In a basis defined by circularly-polarized receptors, a linearly-polarized wave that oscillates along the $x$ axis will produce equal and in-phase responses in each receptor, and the symmetry angle has a nominal value of 0\deg.
+
+The symmetry axis of a receiver on steerable mount describes its rotation about the line of sight with respect to a reference point on the antenna structure.  For a fixed dipole on the ground, the symmetry axis describes its rotation about the zenith.  Once established, the symmetry angle is typically treated as a constant.  Any unintended rotation (either geometric or apparent; e.g.,  owing to cross-coupling of the receptors) must be determined through calibration of the orthonormal component of deviation, which includes an orientation angle $\psi$ \eqnp{orthonormal_spherical}. Other known rotations are
+included in the projection transformation described in \Sec{projection}.
+
+\iffalse
+
+\begin{proof}
+\label{proof:reference_phase}
+Let $\Jcol{e}(t)=(1,0)^T z(t)$, where $z(t)$ is the reference signal.
+In the circular basis defined in \Sec{feed_basis},
+\begin{align*}
+\Jcol{e}'(t) 
+=     \left( \begin{array}{c}
+      e_l(t) \\
+      e_r(t)
+    \end{array} \right) 
+& = \JM{R}_b \, \Jcol{e}(t) \\
+&= \left( \begin{array}{cc}
+      1 & -i \\
+      1 & i
+    \end{array} \right) 
+    \left( \begin{array}{c}
+     1 \\
+     0
+    \end{array} \right) z(t) \\
+%
+&=
+    \left( \begin{array}{c}
+     1 \\
+     1
+    \end{array} \right) z(t)
+\end{align*}
+\end{proof}
+
+\fi
+
+%
+\begin{figure}
+\centerline{\includegraphics[width=0.7\linewidth]{polarization_sphere_circular.pdf}}
+\caption{
+In the circular basis, the direction of the polarization vector, $\Pv{S}=(S_1, S_2, S_3)^T=(V,Q,U)^T$, is defined by the polar angles, $\xi$ and $\zeta$.
+%
+These angles together define a right triangle on the surface of the Poincar\'{e} sphere with hypotenuse equal to the colatitude, $\theta=\pi/2 - 2\chi$, measured with respect to the pole defined by positive $S_1$ (Stokes V). 
+%
+Also depicted is the longitude $2\psi$, measured with respect to positive $S_2$ (Stokes Q) toward positive $S_3$ (Stokes U).
+%
+% As in \Fig{polarization_vector}, points in the $S_2$--$S_3$ plane ($S_1 = 0$) represent linearly polarized states, points above this plane ($S_1 > 0$) represent left-hand elliptically  polarized states and the positive $S_1$ pole represents left-hand circular polarization.
+%
+}
+\label{fig:polarization_vector_circular}
+\end{figure}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Projection onto the Celestial Sphere}
+\label{sec:projection}
+
+For radio astronomical observations, the incident electric field measured in the reference frame of the antenna must be transformed to the celestial reference frame adopted by the IAU.
+%
+In this coordinate system, the electric field vector is described by its projection onto the plane of the sky, with basis vectors $\hat{\mbf x}$ and $\hat{\mbf y}$ pointing North and East, respectively.
+%
+When observing with a fully-steerable antenna, this transformation is described by a rotation about the line of sight through the parallactic angle, which is well determined by geometry.
+%
+In the {\sc psrchive} software \citep{hvm04}, the transformation to celestial coordinates can be computed for a wide variety of antenna mounts,
+or it can optionally be replaced by a user-supplied table of transformations that describe the direction-dependent response of the antenna,
+as in the case of a dipole array \citep[e.g.,][]{2016MNRAS.462.4482A,2017PASA...34...62S}.
+
+Without a detailed electromagnetic model of a fixed dipole, the direction-dependent response
+can be described to first order as a geometric projection of the receptors onto the sky.
+%
+Such a transformation is a product of 
+%\begin{itemize}
+    a rotation about the Stokes V axis that describes parallactic rotation about the line of sight, and 
+    a boost along an axis in the Stokes $Q$ -- $U$ plane that describes the combined effects of differential gain and apparent nonorthogonality due to foreshortening of the projected receptors.
+%\end{itemize}
+%
+The combination of these effects causes the symmetry axis (see \App{symmetry}) of the projection transformation to vary with the direction to the source.
+
+Therefore, for a fixed dipole array,
+there is no fundamental degeneracy as described in \App{degeneracy}, which is a consequence of a single constant axis of symmetry.
+%
+That is, in principle, it is possible to determine 6 dof of the response (all but the absolute gain) by observing a polarized point source with a phased array of fixed dipoles over a wide range of hour angles.
+%
+However, as described in \App{eigenvectors_of_projection}, near multicollinearity may arise when the rapidity of the boost along the Stokes V axis is allowed to vary, causing numerical instability and inflated uncertainty of the rapidity estimate.
+%
+
+The Lorentz boost caused by projection of fixed dipoles onto the celestial sphere converts significant levels of unpolarized flux into linearly-polarized flux.  
+%
+In wide-field interferometric imaging experiments, this can be exploited to fully constrain the instrumental response using the unpolarized sky \citep[e.g.,][]{bmh+22,kvd+25}.
+%
+A similar approach is generally not possible in single-antenna observations owing to a combination of stray radiation \citep[e.g.][]{2002ASPC..278..397L}, radio frequency interference \citep[e.g.][]{2010MNRAS.405..155O}, and the unknown variation of the instrumental response over the beam \eqnp{coherency_integral}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Faraday Rotation}
+\label{sec:Faraday}
+
+During propagation
+through the interstellar medium or the Earth's ionosphere, an astrophysical signal experiences Faraday rotation.
+%
+This phenomenon, also known as circular birefringence, arises because the natural modes of propagation in a magnetized (non-relativsitic and collisionless) plasma are circularly polarized, such that LCP and RCP components of the electric field propagate with different speeds.
+%
+At a given frequency, the resulting differential delay between LCP and RCP components causes the electric field to rotate about the line of sight.
+%
+For example, if 
+the signal propagates in the direction of the magnetic field vector, then LCP is delayed with respect to RCP \citep{man72,2021MNRAS.507.4968F}; the resulting transformation
+is equivalent to rotating the electric field by $\Delta\Psi$ around the line of sight (counter-clockwise as seen by the observer).
+%
+\begin{proof}
+\label{proof:Faraday_rotation}
+In the circular basis \eqnp{circular}, apply differential phase \eqnp{diff_phase}, and return to the original Cartesian basis.  
+\begin{align*}
+\JM{F}&(\Delta\Psi)
+ = \JM{R}_b^{-1} \JM{R}_g \JM{R}_b \\
+&= \frac{1}{2}
+    \left( \begin{array}{cc}
+      1 & 1 \\
+      i & -i
+    \end{array} \right) 
+%
+    \left( \begin{array}{cc}
+      e^{-\Ci \Delta\Psi} & 0 \\
+      0 & e^{\Ci \Delta\Psi}
+    \end{array} \right) 
+%
+    \left( \begin{array}{cc}
+      1 & -i \\
+      1 & i
+    \end{array} \right) \\
+%
+&= \left( \begin{array}{cc}
+      \cos\Delta\Psi & -\sin\Delta\Psi \\
+      \sin\Delta\Psi & \cos\Delta\Psi
+    \end{array} \right) \\
+&= \vRotation[z](-\Delta\Psi)
+\end{align*}
+\end{proof}
+%
+The change in the position angle of the radiation,
+\begin{equation}
+    \label{eqn:Faraday_rotation}
+    \Delta\Psi(\nu) = \mathrm{RM} \, c^2 \nu^{-2},
+\end{equation}
+where RM is the rotation measure, $c$ is the speed of light, and $\nu$ is the frequency of the radiation.
+%
+Note that birefringence is dispersive and the phase shift / rotation is proportional to $\nu^{-2}$; this differs from the differential phase
+due to a path length difference, which is proportional to $\nu$.
+%
+The RM is proportional to the path integral of the density of free electrons, $n_e$, times the strength of the magnetic field, $\Pv{B}$, parallel to the direction of propagation $d\Pv{z}$ \citep[e.g.,][]{hml+06}
+%
+\begin{equation}
+\mathrm{RM} = C \int_0^D n_e \, \Pv{B} \cdot  d\Pv{z},
+\end{equation}
+%
+where $D$ is the distance to the astrophysical source and
+% If distance is measured in pc, particle density in cm$^{-3}$, and magnetic field strength in $\mu$G, then
+%
+\begin{equation}
+C = 0.81 \frac{\mathrm{rad\, m}^{-2}}{ \mathrm{cm}^{-3} \, \mu\mathrm{G \, pc} }.
+\end{equation}
+
+
+If the magnetic or ionic properties of the ionosphere fluctuate rapidly, either on timescales
+shorter than the interval over which the Stokes parameters are integrated or on spatial scales smaller than
+the volume sampled by multipath propagation \cite[e.g.,][]{css16,sc19}, then the signal
+will be depolarized by stochastic Faraday rotation \citep{mm98}, resulting in an impure
+Mueller matrix with no equivalent Jones matrix (see \App{impure}).

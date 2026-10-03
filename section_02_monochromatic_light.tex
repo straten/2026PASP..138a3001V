@@ -1,0 +1,135 @@
+\section{Monochromatic Light}
+\label{sec:geometry}
+
+At radio frequencies, it is both possible to directly sample the electric field, and sufficient to employ a classical description of electromagnetic radiation \citep{Maxwell1865,bw80}.
+%
+At higher frequencies in the electromagnetic spectrum, polarimeters incorporate devices that count photons, such as charge-coupled devices and photomultiplier tubes.
+%
+For a comprehensive introduction to the quantum mechanical treatment of the polarization of light, please see
+the excellent review by \citet{2021AdOP...13....1G}.
+
+In both classical and quantum approaches to the topic, it is useful to develop some intuition for the geometry of polarization by starting with the nonphysical, idealized case of a purely monochromatic, plane-propagating, transverse electromagnetic wave.
+%
+For such a wave, there exist two linearly-independent solutions to Maxwell's equations, representing two oppositely polarized waves.  
+%
+Therefore, to fully describe the vector state of any observed signal, radio receiver systems are designed with a pair of receptors that are ideally sensitive to orthogonal senses of polarization.
+%
+Typically, the receptors are either circularly polarized (e.g.,  left and right circularly polarized)
+or linearly polarized (e.g.,  horizontally and vertically polarized).
+
+The following discussion is based on a Cartesian coordinate system in which the electromagnetic wave propagates in the positive $z$ direction and the electric field is completely described by two orthogonal linearly-polarized components in the $x$-$y$ plane, which is perpendicular to the direction of wave propagation,
+\begin{equation}
+	\Jcol{\epsilon}(t) =
+	\left( 
+	\begin{array}{c}
+		\epsilon_x(t) \\
+		\epsilon_y(t)
+	\end{array}
+	\right) =
+	\left( 
+	\begin{array}{c}
+		a_x \cos (2\pi \nu t + \phi_x) \\
+		a_y \cos (2\pi \nu t + \phi_y)
+	\end{array}
+	\right). \label{eqn:real_valued_wave}
+\end{equation}
+Here, $\epsilon_x$ and $\epsilon_y$ are the real-valued
+projections of $\Jcol{\epsilon}$ onto the $x$ and $y$ axes.
+%
+In the special case of monochromatic light, $\nu$ is the constant frequency of the wave, $a_x$ and $a_y$ are the constant amplitudes of the orthogonal wave components, and $\phi_x$ and $\phi_y$ are the phases of these components at $t=0$.
+
+On each cycle of the wave, the electric field vector traces an ellipse in the $x$--$y$ plane, as shown in \Fig{polarization_ellipse}.
+%
+%
+\begin{figure}
+	\centerline{\includegraphics[width=0.7\linewidth]{polarization_ellipse.pdf}}
+\caption{
+A left-handed ellipse is traced by the electric field vector on each cycle of a monochromatic wave travelling in the positive $z$ direction, as observed when looking toward the source.
+%
+The position angle, $-\pi/2 \le \psi \le \pi/2$, describes the orientation of the semi-major axis of the ellipse with respect to the $x$ axis; it is positive when the $x'$ and $y'$ axes are rotated in a counter-clockwise direction with respect to the $x$ and $y$ axes.
+%
+The tangent of the ellipticity angle, $-\pi/4 \le \chi \le \pi/4$, is equal to the ratio between the semi-minor axis and the semi-major axis; it is positive for a left-hand polarized wave and negative for a right-hand polarized wave.
+%
+The size of the ellipse is defined by $r$, which is equal to the length of the hypotenuse of the right triangle that contains $\chi$.}
+\label{fig:polarization_ellipse}
+\end{figure}
+%
+This figure depicts two angles that describe the geometry of this ellipse: the position angle $\psi$ and the ellipticity angle $\chi$.
+%
+\cite{sto52} first demonstrated the utility of expressing the components of the electric field vector in 
+terms of these angles, starting with
+%
+an intermediate reference frame that is rotated about the 
+$z$-axis by the position angle $\psi$, such that
+\begin{eqnarray}
+	x' &=& x \cos\psi + y\sin\psi \label{eqn:psi_rotation} \\
+    y' &=& -x \sin\psi + y\cos\psi.
+\end{eqnarray}
+%
+In this reference frame, which is depicted with dashed lines
+and open arrow heads in \Fig{polarization_ellipse},
+the electric field is expressed as in equation~(2) of \cite{sto52}
+%
+\begin{equation}
+	\Jcol{\epsilon}'(t) =
+	\left( 
+	\begin{array}{c}
+		\epsilon_x'(t) \\
+		\epsilon_y'(t)
+	\end{array}
+	\right) =
+	\left( 
+	\begin{array}{c}
+		r \cos\chi \sin (2\pi \nu t + \phi) \\
+		r \sin\chi \cos (2\pi \nu t + \phi)
+	\end{array}
+	\right),
+	\label{eqn:stokes_ellipse}
+\end{equation}
+where $r$ defines the size of the ellipse and $\phi$ defines the position of the electric field vector at $t=0$.
+
+When $\chi = 0$, $\epsilon_y' = 0$ and the electric field vector oscillates along a line defined by the $x'$ axis, which
+is oriented with respect to the $x$ axis by $\psi$.
+%
+When $\chi > 0$, 
+%the phase of $\epsilon_y'$ leads that of $\epsilon_x'$ (because the phase of $\cos(2\pi\nu t)$ leads the phase of $\sin(2\pi\nu t)$ by $\pi/2$) and 
+the electric field travels in a clockwise direction about the ellipse, as seen by an observer looking toward the source, which is defined as a left-hand polarized wave \citep{ieee145}.
+%
+% At the top of page 34 of IEEE Std 145-2013:
+%
+% "NOTE — When the plane of polarization is viewed from a specified side, if the extremity of the field vector rotates clockwise [counterclockwise] the sense is right-handed [left-handed]. For a plane wave, the plane of  polarization is viewed looking in the direction of propagation."
+%
+When $\chi < 0$, the counter-clockwise traverse of the electric field vector 
+is defined as right-hand polarization.
+%
+In the special cases of $\chi = \pm \pi/4$, the amplitudes of $\epsilon_x'$ and $\epsilon_y'$ are equal and the electric field traces a circle in the $x$--$y$ plane.
+%
+In general, polarization state depends on both the amplitudes of the electric field components and the relative phase between them.  
+
+To move beyond the nonphysical case of perfectly monochromatic waves, for which amplitude and phase are constant as a function of time, it is necessary to characterize random fluctuations of both amplitude and phase using statistical averages.  This is facilitated by adopting the complex-valued analytic representation of a signal, which directly encodes its instantaneous amplitude and phase (see \App{analytic}).
+%
+% the imaginary part of the analytic signal is derived from the real part and contains no new information; furthermore, the real-part of the analytic signal is simply the original real-valued signal.
+%
+%
+After replacing the real-valued $\epsilon_x(t)$ and $\epsilon_y(t)$ with their associated analytic signals, $e_x(t)$ and $e_y(t)$, the monochromatic wave described by \eqns{real_valued_wave}{through}{stokes_ellipse} is given by the real part of its analytic representation,
+\begin{equation}
+\label{eqn:analytic_field}
+\Jcol{e}(t) =
+	\left( 
+	\begin{array}{c}
+		e_x(t) \\
+		e_y(t)
+	\end{array}
+	\right) = \Jcol{e}_0 \exp(\Ci [2\pi \nu t + \phi - \pi/2]).
+\end{equation}
+%
+Here, the polarization state of the wave is completely described by the complex-valued two-dimensional Jones vector \eqnp{monochromatic_analytic},
+\begin{equation}
+\label{eqn:Jones_vector}
+\Jcol{e}_0=r\left( \begin{array}{c}
+    \cos\psi\cos\chi - \Ci\sin\psi\sin\chi \\
+    \sin\psi\cos\chi + \Ci\cos\psi\sin\chi
+  \end{array} \right).
+\end{equation}
+%
+An interactive notebook\footnote{\nburl} demonstrates the relation between $\Jcol{\epsilon}(t)$ and $\Jcol{e}(t)$ by depicting the ellipses inscribed by these functions as $r$, $\psi$ and $\chi$ are varied.

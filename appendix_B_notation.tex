@@ -1,0 +1,227 @@
+\section{Vector, Matrix, and Tensor Notation}
+\label{app:index}
+
+The following typographical conventions are used to indicate the dimensions of mathematical symbols.  Scalar quantities such as the real value $x$ or the complex value $z$ are typeset in italics.
+%
+All vectors are typeset with a bold italic font.
+%
+Two-dimensional vectors, such as the electric field $\Jcol{e}$, are not underlined.
+%
+Three-dimensional vectors, such as the Stokes polarization vector $\Pv{S}$, have
+a single underline.
+%
+Four-dimensional vectors, such as the Stokes four-vector $\Sv{S}$,
+have a double underline.
+
+All matrices have a bold roman font; 
+%
+$2\times2$ matrices like the Jones matrix $\JM{J}$ are not underlined;
+%
+$3\times3$ matrices like the depolarizer matrix $\PM{M}_\Delta$ are underlined once; and
+%
+$4\times4$ matrices like the Mueller matrix $\MM{M}$ are underlined twice.
+%
+Rank 4 tensors, typeset using a bold calligraphic font, 
+%
+include the two-dimensional polarization transfer tensor $\JT{U}$ and the
+four-dimensional $\MM{\JT{T}}$ in \App{pure_Mueller_matrices}.
+
+Unit vectors, such as a receptor with unity gain
+$\hat{\Jrow{r}}$ or a rotation axis $\hat{\Pv{n}}$, are decorated with a hat.
+%
+A tilde is used to denote both singular matrices and null four-vectors, such as the instantaneous coherency matrix $\tilde{\cohM{\rho}}$ and  Stokes parameters $\tilde{\Sv{s}}$ computed from a single instance of the electric field.
+
+The elements of a column vector are labeled with a sub-script, as in
+the two components of the electric field, 
+% $e_0$ and $e_1$, 
+%
+\begin{equation}
+	\Jcol{e} =
+	\left( 
+	\begin{array}{c}
+		e_x \\
+		e_y
+	\end{array}
+	\right).
+\end{equation}
+%
+and the four components of the Stokes parameters, $S_\mu$.
+%
+To distinguish between Jones vectors that represent the electric field and those that represent receptors, the latter are described using row vectors with a super-scripted index; e.g.
+%
+\begin{equation}
+	\Jrow{r} = \left( r^x, \, r^y \right).
+\end{equation}
+%
+The Hermitian transpose converts a column vector to a row vector (and vice versa) and converts each component to its complex conjugate; e.g.
+\begin{equation}
+	\Jcol{e}^\dagger = \left( e_x^*, \, e_y^* \right).
+	\label{eqn:Hermitian_transpose}
+\end{equation}
+
+The scalar product (or dot product) between
+a row vector and a column vector is given by
+%
+\begin{equation}
+	\Jrow{r} \cdot \Jcol{e} = r^x e_x + r^y e_y = r^i e_i ,
+	\label{eqn:scalar_product}
+\end{equation}
+%
+where the last equality uses the Einstein convention that implies summation over the repeated index $i$.
+%
+A scalar product is implied when a row vector on the left
+is multiplied by a column vector on the right; i.e.,
+%
+\begin{equation}
+	\Jrow{r} \Jcol{e} = \Jrow{r} \cdot \Jcol{e} = r^i e_i .
+	\label{eqn:implicit_scalar_product}
+\end{equation}
+%
+\iffalse
+To compute the scalar product of two column vectors, $\Jcol{e}_0$
+and $\Jcol{e}_1$, it is necessary to first compute the Hermitian
+transpose of the vector that appears on the left of the operator; i.e.,
+%
+\begin{equation}
+\Jcol{e}_0^\dagger \cdot \Jcol{e}_1 
+= \Jcol{e}_0^\dagger \Jcol{e}_1
+= e_{0,x}^* e_{1,x} + e_{0,y}^* e_{1,y} 
+	\label{eqn:complex_scalar_product}
+\end{equation}
+\fi
+
+Using the same index notation, the element in the $\irow^\mathrm{th}$ row and
+$\icol^\mathrm{th}$ column of a matrix \JM{A} is
+%
+\begin{equation}
+	A_\irow^\icol
+\end{equation}
+%
+and the $\irow^\mathrm{th}$ row and
+$\icol^\mathrm{th}$ column of a matrix product is given by the sum
+%
+\begin{equation}
+\left\{ \JM{A} \cdot \JM{B} \right\}_\irow^\icol 
+ = A_\irow^\gamma B_\gamma^\icol.
+	\label{eqn:matrix_product}
+\end{equation}
+%
+Similarly, the $\irow^\mathrm{th}$ row of a matrix times a column vector 
+is given by
+%
+\begin{equation}
+\left\{ \JM{A} \Jcol{x} \right\}_\irow
+ = A_\irow^\gamma x_\gamma.
+	\label{eqn:matrix_times_vector}
+\end{equation}
+
+Vectors and matrices can be seen as rank 1 and rank 2 tensors, respectively, where the rank of a tensor is equal to the number of indeces required to define its elements.  
+%
+% Note that \emph{rank} should be distinguished from \emph{dimension}, which is equal to the number of possible values that an index can take.  For example, all vectors have rank 1, the electric field vector is 2-dimensional and the Stokes~Vector is 4-dimensional.  
+%
+The elements of a rank 4 tensor are described using four indeces; e.g.
+\begin{equation}
+	A_{\irow\jrow}^{\icol\jcol}.
+\end{equation}
+
+Given two tensors, a rank $N$ tensor $A$ and a rank $M$ tensor $B$, the tensor product $A \otimes B$ yields a rank $N+M$ tensor.  
+%
+For example, the tensor product of two matrices (each a rank 2 tensor) yields a rank 4 tensor with elements given by
+%
+\begin{equation}
+\label{eqn:matrix_tensor_product}
+	\left\{ \JM{A} \otimes \JM{B} \right\}_{\irow\jrow}^{\icol\jcol} = A_\irow^\icol B_\jrow^\jcol.
+\end{equation}
+%
+The tensor product of a column vector and a row vector (each a rank 1 tensor) yields a matrix (rank 2 tensor)
+with elements 
+\begin{equation}
+	\left\{ \Jcol{e} \otimes \Jrow{r}\right\}_i^j = e_i r^j.
+	\label{eqn:tensor_product}
+\end{equation}
+%
+A tensor product is implied when a column vector on the left
+is multiplied by a row vector on the right; e.g.
+%
+\begin{equation}
+	\Jcol{e} \Jrow{r} = \Jcol{e} \otimes \Jrow{r}.
+	\label{eqn:implicit_tensor_product}
+\end{equation}
+%
+\iffalse
+To compute the tensor product of two column vectors, $\Jcol{e}_0$
+and $\Jcol{e}_1$, it is necessary to first compute the Hermitian
+transpose of the vector that appears on the right of the operator;
+e.g.
+%
+\begin{equation}
+\Jcol{e}_0 \otimes \Jcol{e}_1^\dagger
+= \Jcol{e}_0 \Jcol{e}_1^\dagger. \label{eqn:complex_tensor_product}
+\end{equation}
+\fi
+%
+A contraction of two tensors, $A\cdot B$, is defined as a tensor product followed by summation over a pair of matching indeces, thereby reducing the rank of the result of the tensor product by two.
+%
+For example, the scalar product of a row vector and column vector is equivalent to a contraction.  Each is a rank 1 tensor and their tensor product yields a rank 2 tensor; summation over their indeces, as in \eqn{scalar_product}, yields a scalar (rank 0 tensor).
+%
+Similarly, the product of two matrices is equivalent to a tensor contraction.  Each is a rank 2 tensor and their tensor product yields a rank 4 tensor; summation over a pair of indeces, as in \eqn{matrix_product}, yields a rank 2 tensor (another matrix).
+
+A double contraction of two tensors, $A \dcbo B$, is defined as a tensor product followed by summation over two pairs of matching indeces, thereby reducing the rank of the result of the tensor product by four.
+%
+For example, the double contraction of a rank 4 tensor $\JT{U}$ with a (rank 2) matrix \JM{C} yields another (rank 2) matrix with elements given by
+%
+\begin{equation}
+	\left\{ \mathcal{U} \dcbo \JM{C} \right\}_\irow^\icol = \mathcal{U}_{\irow\jrow}^{\icol\jcol} C_\jcol^\jrow.
+	\label{eqn:double_contraction}
+\end{equation}
+
+Using the Einstein summation convention, the trace of a matrix \JM{A} is
+\begin{equation}
+	\tr{\JM{A}} = A^\beta_\beta
+	\label{eqn:trace}
+\end{equation}
+and the trace of a matrix product
+\begin{equation}
+\tr{ \JM{A} \JM{B} } = \tr{ \JM{B} \JM{A} } = A_\beta^\gamma B_\gamma^\beta = \JM{A} \dcbo \JM{B} = \JM{B} \dcbo \JM{A}.
+\label{eqn:trace_inner_product}
+\end{equation}
+%
+That is, the trace of a matrix product is equivalent to the double contraction of the matrices, also known as the projection with respect to the trace inner product.
+%
+Like the scalar product of two vectors, this projection is symmetric
+and matrices \JM{A} and \JM{B} are orthogonal with respect to the trace inner product if $\JM{A} \dcbo \JM{B} = 0$. 
+%
+% TO-DO These four matrices can also be shown to form a spanning set by proving that any Hermitian matrix can be written as a linear combination of them.}
+
+\Eqns{outerBilinear}{and}{spinorBilinear} introduce transformation properties exhibited by
+two tensor double contractions.  \Eqn{outerBilinear}
+follows from the definition of the tensor product \eqnsp{indexOuterBilinear}{and}{matrix_tensor_product}.
+
+\begin{proof}
+\label{proof:outerBilinear}
+\begin{align*}
+\left\{ \left( \outerBilinear{\bf A}{\bf B} \right) \dcbo \JM{C} \right\}_\irow^\icol 
+& = \left\{ \outerBilinear{\bf A}{\bf B} \right\}_{\irow\jrow}^{\icol\jcol} C_\jcol^\jrow
+& \peqn{double_contraction} \\
+& = A_\irow^\icol B_\jrow^\jcol C_\jcol^\jrow & \peqn{matrix_tensor_product} \\
+& = A_\irow^\icol (\JM{B} \dcbo \JM{C}) & \peqn{trace_inner_product} \\
+& = \left\{ {\bf A}\left(\dc{\bf B}{\bf C}\right) \right\}_\irow^\icol 
+\end{align*}
+\end{proof}
+
+
+
+%
+Likewise, \Eqn{spinorBilinear}
+follows from the definition of the $\tilde\otimes$ operator \eqnp{indexSpinorBilinear}.
+\begin{proof}
+\label{proof:spinorBilinear}
+\begin{align*}
+\left\{ \left( \spinorBilinear{\bf A}{\bf B} \right) \dcbo \JM{C} \right\}_\irow^\icol 
+& = \left\{ \spinorBilinear{\bf A}{\bf B} \right\}_{\irow\jrow}^{\icol\jcol} C_\jcol^\jrow
+& \peqn{double_contraction} \\
+& = A_\irow^\jcol B_\jrow^\icol C_\jcol^\jrow & \peqn{indexSpinorBilinear} \\
+& = A_\irow^\jcol \left\{ \JM{C} \cdot \JM{B} \right\}_\jcol^\icol  & \peqn{matrix_product} \\
+& = \left\{ {\bf A} \JM{C} \JM{B} \right\}_\irow^\icol & \peqn{matrix_product}
+\end{align*}
+\end{proof}

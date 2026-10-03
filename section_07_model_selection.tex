@@ -1,0 +1,297 @@
+\section{ Polarimeter Model Selection }
+\label{sec:selection}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Accurate polarimetric calibration requires a 
+model of the instrumental response that includes deviations from an ideal feed.
+%
+Several different approaches to decomposing the single-antenna
+instrumental response have been proposed in the published literature.
+%
+Broadly, these models can be divided into those based on Jones matrices and
+those based on Mueller matrices; e.g., 
+the Jones matrix equation~(11) of \citet[][hereafter HBS96]{hbs96};
+the Jones matrix equation~(19) of \citet[][hereafter B2000]{bri00}; and
+the Mueller matrix equation~(22) of \citet[][hereafter H2001]{hpn+01}.
+%
+% A Jones matrix can  describe only linear transformations of the electric field and, in single-antenna polarimetry, has only 7 non-degenerate dof.
+%
+In principle, a Mueller matrix has an additional 9 dof and can describe any linear transformation of the Stokes parameters, including non-linear transformations
+of the electric field such as complex conjugation.  However, these additional dof are not employed in H2001, where the Mueller matrices are derived from Jones matrices.
+
+Regardless of the objects used to represent polarization state and transformations,
+when applied to experimental data analysis, a mathematical model of the 
+instrumental response should be
+%
+\begin{enumerate}
+        \item physically motivated, such that model components describe elements of the signal path;
+	\item surjective, such that the parameter space spans all possible transformations of interest;
+        \item injective, such that each transformation is described by a unique set of parameters;
+	\item self-consistent, such that the assumed properties of the system are preserved; and
+	\item numerically stable, at least in the vicinity of the anticipated solution.
+\end{enumerate}
+
+In the following subsections, these criteria are discussed in the context of
+single-antenna observations of a point source, primarily using the models proposed by 
+HBS96, B2000, and H2001 as examples.
+%
+When referring to the model parameters used in these works, 
+the original mathematical symbols are retained;
+these may conflict with the symbols employed in the previous
+sections of this paper.
+
+\subsection{Physical Motivation}
+
+\citet{ham00} proposed a purely algebraic decomposition of the 
+instrumental response using a single polar decomposition, and this 
+approach is one of the two implemented by \citet{van04c}.
+%
+Although simple and useful, the polar decomposition is not directly amenable to physically meaningful interpretation.  It does not
+model the order in which elements in the signal chain are encountered,
+and it does not permit separation of backend and frontend transformations.
+
+In practice, it proves useful to decompose the instrumental Jones matrix
+into a product of backend and frontend transformations, such as \JM{G} and \JM{D}, respectively, of HBS96.
+%
+The frontend describes the non-ideal cross-coupling between the receptors, and is typically assumed to remain stable over timescales of the order of days.
+%
+Therefore, the frontend can be calibrated less frequently than the backend component, which describes the complex gains applied to the receptors.  
+%
+These gains are typically adjusted at the start of each observation,
+especially if the system equivalent flux density varies strongly with position on the sky.
+%
+HBS96, B2000, and H2001 describe models that reflect the order in 
+which transformations occur, and that can be decomposed into frontend 
+and backend components.
+
+\subsection{Surjectivity}
+
+When considering only linear transformations of the electric field by
+a single antenna, as represented using Jones matrices, a surjective
+model must have 7 independent dof.
+%
+If the absolute gain is treated as a scalar multiplier, then the
+matrix component of the transformation must be described by six parameters.
+%
+In the framework developed by B2000, these 6 dof describe
+three Lorentz boosts that mix the total intensity with Stokes Q, U, and V
+and three Euclidean rotations about the Stokes Q, U, and V axes.
+
+The model developed by H2001 includes only 5 of these 6 dof:
+%
+the differential gain, $\Delta G$ (eq.~20) describes the mixing between Stokes I and Q;
+%
+the symmetric cross-coupling amplitude and phase, $\epsilon$ and $\phi$ (eq.~18) describe the mixing of Stokes I with U and V;
+%
+the differential phase, $\psi$ (eq.~20) describes a rotation about the Stokes Q axis, which mixes Stokes U and V; and
+%
+the ellipticity angle, $\alpha$ (eq.~15) describes a rotation about the Stokes U axis, which mixes Stokes Q and V.
+%
+Missing from this list is the rotation about the Stokes~V axis
+that corresponds to physically rotating the receiver about the line 
+of sight, which mixes Stokes Q and U.
+% Section 3.4 of H2001
+As noted in H2001, this rotation can be constrained only through
+observation of a source with an accurately known position angle.
+%
+The same conclusion is reached in Appendix B of \cite{van04c}.
+
+In HBS96, the product of \JM{G} and \JM{D} has 8 dof (four complex-valued matrix elements: $g_p$, $g_q$, $d_p$, and $d_q$) because the relative phase between each pair of array elements is important when computing the visibility matrix \eqnp{visibility}.  The absolute phase can be eliminated by replacing \JM{G} with its polar decomposition.
+
+\subsection{Injectivity}
+\label{sec:injectivity}
+
+A model that does not injectively map the vector space of its
+parameters to that of the transformations they describe
+leads to ambiguous solutions.  
+%
+For example, for circularly-polarized receptors, both the differential
+phase and the orientation of the receiver about the line of sight correspond to rotations about the Stokes~V axis.  Therefore, it is
+necessary to ensure that the rotation axes in a model of the receiver
+are defined with respect to the ($S_1$, $S_2$, $S_3$) basis and not
+the ($Q$, $U$, $V$) basis.
+
+Section 5.1 of H2001 describes ambiguity in the 
+ellipticity angle, $\alpha$, and differential phase, $\psi$, that arises in the case of linearly-polarized receptors.
+%
+They assert that two possible solutions, 
+$(\alpha_1, \psi_1) = (0, \psi_0)$ and 
+$(\alpha_2, \psi_2) = (\pi/2, \psi_0 + \pi)$,
+%
+% differ by a
+% 180$\deg$ rotation about the Stokes U axis and a 180$\deg$ rotation about the Stokes Q axis.
+% the signs of Stokes Q and Stokes U are reversed, such that the two solutions
+%
+differ by only a 180$\deg$ rotation about the Stokes~V axis, which negates the unknown values of Stokes Q and U of the calibrator source.
+%
+Referring to \App{analytic_polarization_ellipse} and Section~4 of B2000, this ambiguity can be eliminated by restricting the ellipticity angle to the 
+interval $-\pi/4 \le \alpha \le \pi/4$.
+
+\subsection{Self-consistency}
+\label{sec:self_consistency}
+
+Many treatments begin with a description of linear transformations of
+the electric field, as represented by Jones matrices.  In this case,
+the corresponding Mueller matrices should be pure.  However, to simplify the
+manual expansion of products of these Mueller matrices, some authors
+introduce small-value approximations.  These typically result in an 
+impure Mueller matrix that is inconsistent with the assumed linear 
+response to the electric field.
+
+For example, after assuming that the differential gain $\Delta G$ is small,
+H2001 arrive at equation~(20),
+\begin{equation}
+\label{eqn:hpn+01_eqn20}
+{\MM{M}}_A=\left( \begin{array}{cccc}
+1 & \Delta G/2 & 0 & 0 \\
+\Delta G/2 & 1 & 0 & 0 \\
+0 & 0 & \cos\psi & -\sin\psi \\
+0 & 0 & \sin\psi & \cos\psi
+\end{array} \right).
+\end{equation}
+%
+In principle, this Mueller matrix can be shown to be impure
+by computing its associated target coherency matrix and applying
+the test defined by \eqn{pure_target_coherency}.
+%
+In this particular case, it is more instructive and equally valid to show that this Mueller matrix cannot be pure because it can transform a purely polarized state into a nonphysical state that fails to satisfy \eqn{valid}.
+
+Consider the observation of an ideal reference source \eqnp{ideal_noise_diode} with Stokes parameters,
+$\Sv{S}=I[1,0,1,0]^T$.
+%
+The transformed Stokes parameters,
+\begin{equation}
+\Sv{S}'={\MM{M}}_A \Sv{S} = I[1,\Delta G/2,\cos\psi,\sin\psi]^T,
+\end{equation}
+have a degree of polarization,
+%
+\begin{equation}
+p' = \sqrt{1+\frac{\Delta G^2}{4}} > 1.
+\end{equation}
+%
+As no linear transformation of the electric field vector can convert a valid polarization state into an over-polarized state (\Proof{only_valid}), ${\MM{M}}_A$ cannot have an equivalent Jones matrix and therefore must be impure.
+%
+Not all impure Muller matrices result in over-polarization; some impure transformations depolarize a purely polarized state (e.g.\ see \App{impure}), and no linear transformation of the electric field is able to do so (\Proof{no_depolarization}).
+%
+This specific example demonstrates the potential pitfalls of using Mueller matrices and small-value approximations during numerical analysis.
+
+\subsection{Numerical Stability}
+
+Numerical stability of a mathematical model is critical when fitting the model to experimental data.
+%
+The fundamental problems caused by numerical instability impact on any method of model fitting; however, for the purpose of concrete illustration, this section and the analysis in \App{instability} focus on  
+techniques that optimize a merit function by inverting a Hessian matrix that encodes its local curvature.
+%
+In this case, a model is unstable when the Hessian matrix becomes ill-conditioned
+(i.e., prone to large numerical errors during inversion) or singular
+(i.e., non-invertible).
+%
+The Hessian is ill-conditioned when two or more model parameters are highly
+collinear; it is singular when the merit function is effectively independent of one or more
+of its parameters, such that the partial derivatives of the model 
+with respect to its degenerate parameters are zero.
+
+% the partial derivative of the model with respect to $\phi_k$ approaches zero as $\epsilon_k$ approaches zero, 
+
+Three types of numerical instability --
+fundamental, extrinsic, and intrinsic --
+are distinguished as follows.
+%
+Fundamental instability arises when the available data
+do not constrain all of the dof in a surjective model; 
+without any further assumptions or constraints, 
+the degenerate dof will cause numerical methods to fail.
+%
+An extrinsically unstable model provides no means
+of isolating degenerate dof, such that necessary constraining assumptions can be introduced when fundamental instability is encountered.
+%
+A model is intrinsically unstable if it causes numerical methods to fail even when there are sufficient constraints on all dof.
+%
+
+\subsubsection{Fundamental Instability}
+
+Appendix B of \citet{van04c} describes the fundamental instability
+caused by 2 degenerate dof that arise when the only available
+experimental constraints are observations of unknown sources made 
+at multiple parallactic angles.
+%
+In H2001, these degeneracies are avoided by introducing two assumptions. 
+The rotation about the line of sight is assumed to be zero; 
+and the calibrator source is assumed to have zero circular polarization.
+%
+The latter assumption is typically invalid when the calibrator source
+is a pulsar; therefore, additional observations of other sources with
+either known or assumed circular polarization must be incorporated to
+constrain the instrumental mixing between I and V \cite[e.g.,][]{lck+16}.
+
+The analysis of fundamental instability is extended in \App{instability}, which identifies additional degenerate dof in impure Mueller matrices, owing to unknown components of the instrumental response that commute with the matrix argument. It also presents an example of parameter collinearity that arises when an unknown component of the Stokes parameters intrinsic to the observed sources is an eigenvector of the matrix argument.
+%
+Owing to the degenerate sign of Stokes~V identified in \App{degeneracy}, the phase convention of the backend cannot be determined using only unknown sources observed at multiple parallactic angles, regardless of the basis defined by the polarization of the receptors.
+
+Section 5.2 of H2001 identifies this degeneracy only
+for the circular basis, and incorrectly concludes that two solutions, one with $\alpha_1 = -\pi/4$ and the other with $\alpha_2 = \pi/4$, differ only by negation of Stokes Q.
+%
+Stokes~V is also negated by the 180$\deg$ rotation about the Stokes U axis that describes the transformation from $\alpha_1$ to $\alpha_2$.
+%
+H2001 also incorrectly asserts that negating Stokes Q  
+rotates the position angle by $90\deg$. Negating Stokes Q also negates the position angle, such that $\mathrm{P.A.}_1 = \pi/2 - \mathrm{P.A.}_2$.
+
+\subsubsection{Extrinsic Instability}
+
+Extrinsic instability arises when the degenerate dof in a model cannot be isolated from other dof.
+%
+For example, the 4 dof of the frontend transformation must effectively model two Euclidean rotations and two Lorentz boosts.
+%
+When the receptors are linearly polarized, these correspond to a rotation about and a boost along the Stokes U axis, and 2 potentially degenerate dof including a rotation about and a boost along the Stokes~V axis.
+%
+These rotations and boosts are clearly separated in equation~(19) of B2000.
+%
+In H2001, the Stokes~V boost is effectively differentiated from the Stokes U boost by the cross-coupling phase, and the Stokes~V rotation 
+is assumed to be zero.
+%
+In the deviations from an ideal feed \JM{D} employed by HBS96, the 4 dof are inseparably combined in the two complex-valued elements, $d_p$, and $d_q$.
+%
+Consequently, the HBS96 model can be applied to 
+single-antenna observations of point sources only if sufficient observational constraints eliminate the known degeneracies.
+
+\subsubsection{Intrinsic Instability}
+
+Appendix II of \cite{ck69} describes an intrinsically unstable model of undesirable cross coupling between the two receptors of an imperfect feed.
+%
+This model is adapted in equation~(A2) of \cite{scr+84} 
+and equation~(16) of H2001,
+%
+\begin{equation}
+\Jcol{e}'=\left(
+ \begin{array}{cc}
+1 & \epsilon_1 e^{i\phi_1} \\
+\epsilon_2 e^{-i\phi_2} & 1
+\end{array}
+ \right) \Jcol{e}.\label{eqn:hpn+01_eqn16}
+\end{equation}
+%
+The equation is intrinsically unstable in the vicinity of the 
+ideal solution owing to the polar coordinate singularity at the origin,
+where the phase angle $\phi_k$ becomes 
+undetermined as the cross-coupling amplitude $\epsilon_k$ 
+approaches zero.  
+%
+This problem persists in equation~(18) of H2001, where
+$\phi$ is poorly constrained when $\epsilon$ is small. 
+%
+\cite{joh02} addresses this problem by directly modeling the real 
+and imaginary components of all complex-valued quantities,
+instead of their amplitude and phase.
+%
+%of the model arises in the vicinity of a nearly ideal response
+%(i.e., in the neighbourhood of $\epsilon_k=0$).
+%
+In contrast, equation~(15) of B2000 is
+unstable only at the poles, where $\chi = \pm\pi/4$, 
+and the orientation $\theta$ becomes degenerate
+with the differential phase.  When the basis is correctly defined, these poles are well away from the region 
+in which the anticipated solution lies.
+
+% REF 36. Page 21, line 1601: It would be good if the author could add a table summarizing the pros and cons of these three models described here, and when one should use what, and what calibrator observations/ a-priori instrumental model is required.

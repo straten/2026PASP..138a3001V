@@ -6,7 +6,7 @@ FIGS := figures/dsb.pdf figures/usb.pdf figures/lsb.pdf figures/nyquist1.pdf fig
 	figures/polarization_ellipse.pdf figures/polarization_sphere.pdf \
 	figures/polarization_sphere_circular.pdf
 
-paper.pdf: paper.tex local.bib $(FIGS) 
+paper.pdf: paper.tex $(wildcard section_*.tex appendix_*.tex) local.bib $(FIGS) 
 	pdflatex paper
 	BIBINPUTS=psrrefs:.: bibtex paper
 	pdflatex paper

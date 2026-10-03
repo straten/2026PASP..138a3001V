@@ -1,0 +1,21 @@
+\section{Refinements to Existing Definitions}
+\label{app:refinements}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+This article introduces some minor refinements and corrections to existing definitions that enhance their clarity and accuracy.
+%
+First, in \cite{sto52}, the ellipticity angle $\chi$ varies between $-90\deg$ and $90\deg$, as inferred from ``\emph{the numerical value of [$\chi$] being supposed not to lie beyond the limits 0 and 90\deg}'' and ``\emph{polarization is right-handed or left-handed according to the sign of [$\chi$].}''  (The ``numerical value'' is understood to mean the ``absolute value.'')  However, as noted in \Sec{injectivity}, allowing $|\chi| > 45\deg$ leads to model degeneracy; therefore $|\chi| \le 45\deg$ in this work.
+
+The \cite{ieee145} standard defines the axial ratio $r'$ as the ``\emph{ratio
+of the major to minor axes of a polarization ellipse}'' that ``\emph{carries a sign that is
+taken as plus if the sense of polarization is right-handed and minus if it is left-handed.}''
+%
+The caption to \Fig{polarization_ellipse} of this article defines a ratio between semi-minor and semi-major axis $r \equiv \tan\chi = -1/r'$ that is positive for left-handed polarization.
+%
+The sign of $r'$ is negated and, relative to $r$, it is effectively inverted in the \cite{ieee145} definition of the Poincar\'{e} sphere, where ``\emph{the latitude is twice the angle whose cotangent is the negative of the axial ratio of the polarization ellipse.}''  That is, the latitude, $2\chi' = -2\cot^{-1} r' = 2\tan^{-1} r = 2\chi$; therefore, this article and the IEEE standard arrive at mutually consistent definitions of latitude in the Poincar\'{e} sphere.
+%
+However, though only briefly mentioned in this article, the ratio $r$ is preferred because it does not approach infinity for any polarized states and it requires no negation when it is related to latitude in the Poincar\'{e} sphere.
+
+When defining the axis-angle representations of unitary and Hermitian matrices, \cite{bri00} wrote that unitary transformations rotate the Stokes polarization vector about $\hat{\Pv{n}}$ by $2\phi$, and Hermitian transformations boost the Stokes four-vector along $\hat{\Pv{m}}$ by $2\beta$.  These definitions describe the inverses of the transformations defined in this article and verified in \App{example_transformation}.

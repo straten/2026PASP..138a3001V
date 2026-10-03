@@ -1,0 +1,229 @@
+\section{Down-conversion}
+\label{app:downconversion}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+By the Nyquist Theorem, a signal must be discretely sampled at a rate equal to twice its bandwidth in order to completely represent its information content.
+%
+Therefore, subject to the finite recording rate of
+digital observatory equipment, a radio astronomical signal must be constrained to a limited portion of the radio spectrum.
+%
+The intermediate process by which the signal from the receiver is band-limited and made ready for discrete sampling is known as down-conversion.
+
+Consider the incoming radio signal, $x(t)$, and its Fourier transform, $X(\nu)$.  The band-limited signal of interest, $x_b(t)$, is parameterized by its centre frequency, $\nu_0$, and bandwidth, \bw.  
+%
+Baseband down-conversion is the process by which the spectral information originally contained in the range [$\nu_0-\bw/2$, $\nu_0+\bw/2$] is shifted down to [0, \bw]. 
+
+% baseband 1. The original band of frequencies produced by a transducer,
+% such as a microphone, telegraph key, or other signal-initiating
+% device, prior to initial modulation. Note 1: In transmission systems,
+% the baseband signal is usually used to modulate a carrier. Note 2:
+% Demodulation re-creates the baseband signal. Note 3: Baseband
+% describes the signal state prior to modulation, prior to multiplexing,
+% following demultiplexing, and following demodulation. (188) Note 4:
+% Baseband frequencies are usually characterized by being much lower in
+% frequency than the frequencies that result when the baseband signal is
+% used to modulate a carrier or subcarrier. 2. In facsimile, the
+% frequency of a signal equal in bandwidth to that between zero
+% frequency and maximum keying frequency. (188)
+
+The spectral information is shifted to baseband by demodulating or mixing the radio frequencies (RF) with a local oscillator (LO).  This is equivalent to multiplying the signal, $x(t)$, with a pure tone, $l(t)=a\cos(2\pi\nu_l t + \phi)$.  
+%
+By application of the convolution theorem, and with reference to \Tab{fourier}, mixing may also be understood as a convolution with a pair of complex-valued delta
+functions in the frequency domain.  This understanding proves useful in the following sections.
+
+In addition to mixing to lower frequencies, the signal must also be band-limited before analog-to-digital conversion.  Otherwise, power from frequencies higher than the Nyquist frequency will be reflected back into the band of interest, a pollution known as aliasing.  
+%
+The ideal low-pass filter is represented by the rectangle function (see \Tab{fourier}) so that a bandpass filter with centre frequency, $\nu_0$, and bandwidth, \bw, is given by
+\begin{equation}
+\Pi \left( \frac{|\nu|-\nu_0}{\bw} \right).
+\end{equation}
+Note that the absolute value of $\nu$ in the first term of this equation creates a bandpass window at both positive and negative frequency values.
+
+Down-conversion therefore refers to the combined operation of mixing and band-limiting.  The following two subsections describe in detail two commonly used methods of down-conversion: single-sideband (SSB) and
+dual-sideband (DSB).  These are also represented graphically in \Figs{usb}{through}{dsb}.  The process of
+down-conversion is performed separately and (ideally) identically on each of the two orthogonal senses of polarization from the receiver feed.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Single-sideband Down-conversion}
+\label{app:ssb}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+During single-sideband down-conversion (SSB), the
+signal of interest, $x(t)$, is first bandpass filtered, producing
+$x_b(t)$ where \mbox{$X_b(\nu)=X(\nu)\Pi((|\nu|-\nu_0)/\bw)$}.  The
+band-limited signal is then mixed with a LO with frequency, $\nu_1$,
+producing \mbox{$x_m(t)=x_b(t)\cos(2\pi\nu_1t+\theta)$}, where $\nu_1$ is
+set to either 
+$\nu_0-\bw/2$ (upper-sideband, shown in \Fig{usb}), producing $x_u(t)$;
+or
+$\nu_0+\bw/2$ (lower-sideband, shown in \Fig{lsb}), producing $x_l(t)$.
+After another stage of low-pass filtering, either $x_u(t)$ or $x_l(t)$
+is digitally sampled at the Nyquist rate, $2\bw$.
+%
+Compared to $x_u(t)$, the two halves of the spectrum in $x_l(t)$
+are swapped, which is equivalent to negating the direction on the
+frequency axis and taking the complex conjugate of the spectrum.
+
+During playback, the analytic signal associated with $x(t)$ may be
+formed in practice by taking the real-to-complex Fast Fourier
+Transform (FFT), followed by the complex-to-complex inverse
+FFT.  Most real-to-complex FFT implementations automatically omit the
+redundant negative frequencies ($X(-\nu)=X^*(\nu)$) from their output,
+implicitly producing the analytic signal.
+%
+Since many signal processing operations
+(such as phase-coherent dispersion removal)
+are performed in the Fourier domain, the cost of calculating the
+analytic signal is transparent.
+
+\begin{figure}
+\centerline{\includegraphics[width=0.5\linewidth]{usb.pdf}}
+\caption{Upper-sideband down-conversion. From the top, the real-valued signal, $x(t)$
+has a complex-valued spectrum with conjugate symmetry, such that $X(-\nu)=X^*(\nu)$,
+as depicted by $\real[X(\nu)]$ in blue and $\imag[X(\nu)]$ in red.
+The signal is bandpass filtered and the band-limited signal, $X_b(\nu)$, 
+is mixed with a local oscillator with frequency
+$\nu_0-\bw/2$, as depicted by a pair of blue delta functions.
+The resulting signal, $X_m(\nu)$, is low-pass filtered, producing $X_u(\nu)$.
+For each spectrum, the frequency axis is drawn in black, and the real and
+imaginary parts of each complex value are projected along the blue and red
+axes (respectively) depicted at the origin (where $\nu = 0$). }
+\label{fig:usb}
+\end{figure}
+
+\begin{figure}
+\centerline{\includegraphics[width=0.5\linewidth]{lsb.pdf}}
+\caption{Lower-sideband down-conversion.  As for upper-sideband
+except the band-limited signal, $X_b(\nu)$, is mixed with a local
+oscillator with frequency $\nu_0+\bw/2$. The resulting
+signal, $X_m(\nu)$, is low-pass filtered, producing $X_l(\nu)$.}
+\label{fig:lsb}
+\end{figure}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Dual-sideband Down-conversion}
+\label{app:dsb}
+
+During dual-sideband down-conversion (DSB, see \Fig{dsb}), also known
+as quadrature mixing, the voltages from the receiver are split equally
+into two signal paths.  One signal is mixed with a local oscillator,
+producing
+\begin{equation}
+	i(t)=x(t)\cos(2\pi\nu_0t).
+\end{equation}
+The other signal is mixed with the same local oscillator phase-shifted
+by 90\deg,
+\begin{equation}
+q(t)=x(t)\sin(2\pi\nu_0t).
+\label{eqn:quadrature}
+\end{equation}
+Both $i(t)$ and $q(t)$ are low-pass filtered with a cutoff frequency
+of $\nu_c=\bw/2$, producing $i_b(t)=i(t)*\sinc(\pi\bw
+t)$ and $q_b(t)=q(t)*\sinc(\pi\bw t)$.  The low-pass
+filtered signals are then digitally sampled at the Nyquist rate of
+$2\nu_c=\bw$.  The signals, $i_b(t)$ and $q_b(t)$ are known as
+the in-phase and quadrature components, respectively, of $x(t)$ with
+respect to $\nu_0$.
+
+During playback, the analytic signal associated with $x(t)$ is given by
+\begin{align}
+  z_b(t) & =  i_b(t)+\Ci q_b(t) \nonumber \\
+       & =  [x(t)\cos(2\pi\nu_0 t)+\Ci x(t)\sin(2\pi\nu_0 t)] 
+		* \sinc(\pi\bw t) \nonumber \\
+       & =  [x(t)e^{2\pi\Ci\nu_0t}] * \sinc(\pi\bw t).
+\end{align}
+%
+In the Fourier domain,
+\begin{equation}
+	Z_b(\nu)=X(\nu+\nu_0) \Pi(\nu/\bw).
+\end{equation}
+That is, the spectrum of $z_b(t)$ is equivalent to the band-limited
+portion of $x(t)$ centred at $\nu_0$.  The negative frequency
+components, centred at $-\nu_0$, have been suppressed by low-pass
+filtering, forming the analytic signal associated with $x(t)$.
+
+Note that changing the sign of the $90\deg$ phase shift in \eqn{quadrature}
+changes the sign of $q(t)$, which results in complex conjugation of $z_b(t)$.
+This is equivalent to modulating $x(t)$ with a local oscillator that has
+frequency $-\nu_0$, which shifts the negative half of the spectrum of $X(\nu)$
+to baseband.  As in the case of lower-sideband down-conversion, 
+the resulting spectrum is complex conjugated and the frequency axis is negated.
+
+\begin{figure}
+\centerline{\includegraphics[width=\linewidth]{dsb.pdf}}
+\caption{Dual-sideband down-conversion (DSB).  The real-valued
+signal, $X(\nu)$, is split before mixing with a local oscillator with frequency $\nu_0$ (blue delta functions) and a $90\deg$ phase-shifted local oscillator (red delta functions), 
+yielding the in-phase and quadrature components, I$(\nu)$ and Q$(\nu)$, respectively.
+%
+Each of the signals are low-pass filtered, yielding I$_b(\nu)$ and Q$_b(\nu)$ 
+with bandwidth $\bw/2$.  The complex signal,
+Z$_b(\nu)$=I$_b(\nu)$+\Ci Q$_b(\nu)$, is the analytic
+signal associated with $X_u(\nu)$, which is depicted in \Fig{usb}.}
+\label{fig:dsb}
+\end{figure}
+
+During SSB down-conversion, bandpass filtering is performed before mixing, necessitating a filter that is tunable over the range of 
+frequencies of interest.  In contrast, the low-pass filter used for DSB down-conversion remains constant regardless of the desired observing frequency.  
+For this reason, DSB is often the more economical means of down-conversion.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Nyquist Zones}
+\label{app:Nyquist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+In the examples so far, 
+the down-converted signal was placed in the first Nyquist zone, which spans
+from $-\bw$ to $\bw$ in the case of single-sideband down-conversion,
+and from $-\bw/2$ to $\bw/2$ for dual-sideband down-conversion.
+%
+The process of discretely sampling the analog signal $x(t)$ at uniformly-spaced instances
+in time is equivalent to convolving the band-limited spectrum with an infinite
+series of delta functions separated by the sampling frequency.
+%
+An example of sampling an analog signal after upper-sideband down-conversion
+to the first Nyquist zone is depicted in \Fig{first_Nyquist}.
+
+\begin{figure}
+\centerline{\includegraphics[width=0.8\linewidth]{nyquist1.pdf}}
+\caption{Down-conversion to the first Nyquist zone before sampling.
+The band-limited analog signal, $X_{u,1}(\nu)$ is depicted following
+upper-sideband down-conversion, along with five of the infinite
+series of delta functions separated by the sampling frequency.
+The digitized signal $\hat{X}_{u,1}(\nu)$ is the convolution of
+the analog signal and the sampling function.}
+\label{fig:first_Nyquist}
+\end{figure}
+
+It is also possible to place the down-converted and band-limited analog signal in
+a region of spectrum offset from the first Nyquist zone.
+%
+If the spectrum is offset by $N\bw$,
+where $N$ is an integer, then the spectrum is said to be placed in the $(N+1)^\mathrm{th}$
+Nyquist zone, and the digitized signal will have frequencies that either increase or decrease
+linearly across the spectrum.
+%
+An example of sampling an analog signal after upper-sideband down-conversion
+to the second ($N$ = 1) Nyquist zone is depicted in \Fig{second_Nyquist}.
+%
+With respect to the digitized signal depicted in \Fig{first_Nyquist}, the digitized signal
+in \Fig{second_Nyquist} is shifted by $\bw$, which is equivalent to what would
+be obtained by digitizing an analog signal after lower-sideband down-conversion
+to the first Nyquist zone.
+%
+That is, the spectrum is complex conjugated and the frequency axis is negated.
+
+\begin{figure}
+\centerline{\includegraphics[width=0.8\linewidth]{nyquist2.pdf}}
+\caption{Down-conversion to the second Nyquist zone before sampling.
+As for \Fig{first_Nyquist}, except that the analog signal has been
+down-converted to occupy the second Nyquist zone before analog-to-digital conversion. }
+\label{fig:second_Nyquist}
+\end{figure}

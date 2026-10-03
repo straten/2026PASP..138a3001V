@@ -1,0 +1,42 @@
+\section{Stokes Parameters as Intensity Differences}
+\label{app:Stokes_via_intensity_differences}
+
+Currently, at frequencies above the microwave region of the electromagnetic spectrum, it is not possible to directly sample the electric field and therefore not possible to simultaneously compute all four Stokes parameters as in \eqns{StokesI}{through}{StokesV}.
+%
+Rather, only $S_0$ and $S_1$ can be directly measured because they are the sums and differences of the flux densities (or intensities) of the radiation after passing through oppositely polarized filters.
+
+In the basis defined by the Cartesian coordinates introduced in \Sec{geometry}, the Stokes polarization vector $\Pv{S}_q=(Q,U,V)^T$, and \eqn{StokesQ} yields
+%
+\begin{equation}
+\label{eqn:Q_intensity}
+	S_1 = \left| e_x \right|^2 -  \left| e_y \right|^2 = I_x - I_y = Q,
+\end{equation}
+%
+where $I_x$ and $I_y$ are the intensities of the electromagnetic radiation after passing through a linearly polarized filter with its transmission axis oriented along the $x$ and $y$ axes, respectively.
+
+In a basis that is formed by rotating the original basis by $45\deg$ around the line of sight
+(e.g.,  the $x'$ and $y'$ axes of \Sec{geometry} when $\psi=\pi/4$),
+%
+the Stokes polarization vector $\Pv{S}_u=(U,-Q,V)^T$, and \eqn{StokesQ} yields
+%
+\begin{equation}
+\label{eqn:U_intensity}
+	S_1' = \left| e_x' \right|^2 -  \left| e_y' \right|^2 = I_x' - I_y' = U,
+\end{equation}
+%
+where $I_x'$ and $I_y'$ are the intensities measured after passing through a linearly polarized filter with its transmission axis oriented along the $x'$ and $y'$ axes, respectively.
+
+% Some receivers employ waveguide structures (for example, a quarter
+% waveplate) to convert from linear to circular polarization.
+
+In a basis defined by receptors with orthogonal senses of circular
+polarization, as discussed in \Sec{feed_basis}, the Stokes polarization vector $\Pv{S}_v=(V,Q,U)^T$, 
+and \eqn{StokesQ} yields
+%
+\begin{equation}
+\label{eqn:V_intensity}
+	S_1^c = \left| e_l \right|^2 -  \left| e_r \right|^2 = I_l - I_r = V,
+\end{equation}
+where $I_l$ and $I_r$ are the intensities after passing through filters that pass left and right circularly polarized radiation, respectively.
+
+In all three cases, the total intensity $S_0$ is given by the sum of the intensities of the orthogonal polarizations, which is independent of the basis in which it is measured.  By measuring the six intensities that appear in \eqns{Q_intensity}{through}{V_intensity}, which correspond to the six special cases plotted in \Fig{polarization_cases}, all four Stokes parameters can be measured.

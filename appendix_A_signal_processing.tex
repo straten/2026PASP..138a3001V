@@ -1,0 +1,151 @@
+\section{Signal Processing Fundamentals}
+\label{app:foundations}
+
+This section reviews the theoretical basis for using complex numbers to represent signals and Jones matrices to represent linear transformations of the electric field.
+
+\subsection{The Analytic Signal}
+\label{app:analytic}
+
+The voltage signal from each receptor is a real-valued function of
+time, or process, that may be represented by its associated analytic
+signal.
+%
+The analytic signal, also known as Gabor's complex signal, is a
+complex-valued representation of a real-valued process that provides
+its instantaneous amplitude and phase.  
+%
+The analytic signal associated with a process, $x(t)$, is defined by
+\begin{equation}
+  z(t) = x(t) + \Ci\hat x(t),
+\end{equation}
+%
+where $\hat x(t)$ is the Hilbert transform of $x(t)$ \citep{pap65}.
+%
+Following a Fourier transform, defined by
+\begin{equation}
+  X(\nu) = \int_\infty^\infty x(t) \exp(- \Ci 2\pi \nu t) dt,
+  \label{eqn:Fourier_transform}
+\end{equation}
+%
+the Hilbert transform is equivalent to
+\begin{equation}
+\hat{X}(\nu)=H(\nu)X(\nu),    
+\end{equation}
+where
+%
+\begin{equation} H(\nu) = \left\{ \begin{array}{cc}
+                -\Ci  & \nu > 0 \\
+                \Ci & \nu < 0
+                \end{array} \right.
+\end{equation}
+is known as the quadrature filter \citep{pap65}.  
+%
+The quadrature filter can be understood as a
+90\degr\ phase shifter by noting that 
+the Hilbert transform of $\cos(\nu_0t)$ is equal to
+$\sin(\nu_0t)$ (see \Tab{fourier}).  
+%
+Using the quadrature filter, it can also be
+shown that the Fourier transform of the analytic signal, $Z(\nu)$, is
+equal to zero for $\nu < 0$.
+\begin{equation}
+\begin{split}
+ Z(\nu) & =  X(\nu) + \Ci\hat X(\nu) \\
+	& =  X(\nu) + \Ci H(\nu)X(\nu) \\
+	& =  \left \{ \begin{array}{cc} 
+	2X(\nu)  & \nu > 0 \\
+	0 & \nu < 0 
+	\end{array} \right.
+\end{split}
+\end{equation}
+Conversely, the analytic signal associated with $x(t)$ is
+produced
+by suppressing the negative frequencies in $X(\nu)$.
+
+As it is derived from the real-valued process, the analytic signal
+does not contain any additional information.  However, the analytic
+signals associated with two orthogonal senses of polarization, $e_0(t)$ and
+$e_1(t)$, facilitate calculation of the coherency matrix.  
+
+\begin{table}
+\caption
+{Useful Fourier Transform pairs. The left column lists functions of
+time.  In the right column, the corresponding Fourier transform is
+given as a function of oscillation frequency, $\nu$. 
+% The filters, $H(\nu)$ and $\Pi(\nu)$, are known as the quadrature and rectangle functions, respectively.
+}
+\label{tab:fourier}
+\begin{center}
+\begin{tabular}{c|c}
+\hline
+\hline
+$x(t)$ & $X(\nu)$ \\
+\hline \\ [-3mm]
+$\cos(2\pi\nu_0t)$ & $(\delta(\nu+\nu_0)+\delta(\nu-\nu_0)) / 2$ \\ [3mm]
+$\sin(2\pi\nu_0t)$ & $\Ci (\delta(\nu+\nu_0)-\delta(\nu-\nu_0)) / 2$ \\ [2mm]
+%
+\hline
+\multicolumn{2}{c}{Quadrature Filter} \\
+\hline \\ [-3mm]
+%
+$h(t)=(\pi t)^{-1}$ & 
+$H(\nu) =\left\{ \begin{array}{cc}
+            -\Ci & \nu > 0 \\
+            \Ci  & \nu < 0 \end{array} \right.$ \\ [4mm]
+%
+\hline
+\multicolumn{2}{c}{Lowpass Filter} \\
+\hline \\ [-3mm]
+%
+$\pi(t)=\sinc(\pi\bw t)$ & 
+$\Pi(\nu/\bw) = \left\{ \begin{array}{cc}
+            0  & |\nu/\bw| > 1/2 \\
+            1/2& |\nu/\bw| = 1/2 \\
+            1  & |\nu/\bw| < 1/2 \end{array} \right.$  \\ [6mm]
+%
+\hline
+\multicolumn{2}{c}{Shift Theorem} \\
+\hline \\ [-3mm]
+%
+$x'(t)=x(t + \tau)$ & 
+$X'(\nu) = X(\nu) \exp(\Ci \pi \nu \tau)$  \\ [2mm]
+%
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Narrow-band Approximation}
+\label{app:narrow_band_approximation}
+
+Presented with a scalar input signal, $e(t)$, the output of a one-dimensional linear time-invariant system is given by the convolution,
+%
+\begin{equation}
+e'(t)=(j*e)(t) \equiv \int_{-\infty}^{\infty}{x(\tau)j(t-\tau)d\tau}.
+\label{eqn:convolution}
+\end{equation}
+%
+where $j(t)$ is the one-dimensional impulse response function.  In a two-dimensional
+system, each output signal is given by a linear combination of the input
+signals,
+\begin{equation}
+\begin{split}
+e_1'(t)=(j_{00}*e_0)(t) + (j_{01}*e_1)(t), \\
+e_2'(t)=(j_{10}*e_0)(t) + (j_{11}*e_1)(t).
+\end{split}
+\label{eqn:convolution2}
+\end{equation}
+
+Let $e_0(t)$ and $e_1(t)$ be the components of the electric field vector $\Jcol{e}(t)$ and $j_{mn}(t)$ be the elements of the $2\times2$ impulse response matrix, $\JM{j}(t)$.
+%
+By the convolution theorem, \eqn{convolution2} is equivalent to
+\begin{equation}
+\Jcol{E}'(\nu)=\JM{J}(\nu)\Jcol{E}(\nu),
+\label{eqn:convolution_nu}
+\end{equation}
+where $\JM{J}(\nu)$ and $\Jcol{E}(\nu)$ are the Fourier transforms of $\JM{j}(t)$ and $\Jcol{e}(t)$. Under the assumption that $\JM{J}(\nu)$ is
+approximately constant over a sufficiently narrow range of frequencies, convolution reduces to multiplication by a Jones matrix. 

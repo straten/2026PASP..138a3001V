@@ -1,0 +1,85 @@
+\section{Introduction}
+\label{sec:intro}
+
+The polarization of electromagnetic radiation reveals otherwise unattainable details about a wide variety of astrophysical phenomena,
+%
+from high-energy cosmic ray air showers \citep{2014PhRvD..89e2002A,2014JCAP...10..014S}
+% to the plasma and magnetic fields in 
+to solar coronal mass ejections \citep{kmo24}
+%
+and the relativistic precession of neutron stars \citep{dkl+19}.
+%
+On larger scales, radio polarization has been used to study the plasma in the vicinity of a supermassive black hole \citep{2021ApJ...910L..13E},
+%
+and the energy density of gravitational waves generated during inflation \citep{pol85,pla20}.
+%
+
+As a signal from an astrophysical source propagates to its point of reception, its state of polarization is altered, which can be used to study the physical properties of the media through which the signal has traveled.
+%
+For example, observations of the polarized emission from radio pulsars are used to study the Earth's ionosphere \citep{pmh+23} and map the large-scale structure of the Galactic magnetic field \citep{bbm+96,hmvd18}.
+%
+By revealing the strength and orientation of magnetic fields, polarization observations are fundamental to understanding their role in star formation, galaxy evolution, and high-energy phenomena.
+
+% An accurate model of instrumental propagation effects can increase the sensitivity of pulsar timing array experiments to the low-frequency stochastic gravitational wave background \citep[e.g.,][]{gcv+23,rvg+24}.
+
+% Even if you are a dung beetle \citep{2003Natur.424...33D} or one of a wide variety of other species sensitive to the polarization of light \citep[e.g.,][]{2014NatCo...5.4488G}, 
+
+% Solar flares, coronal mass ejections ...
+% Planetary magnetic fields (Earth's protects us) and aurora (on Earth and Jupiter)
+% Magnetic fields in the formation of stars from giant molecular clouds
+% Magnetic fields in the formation of planetary systems
+% magnetars: strongest magnetic fields and vacuum birefringence effects 
+% Schwinger limit: quantum critical field
+% black holes (AGN, accretion disks, etc.)
+% The galactic magnetic field
+% polarized thermal emission of Galactic dust 
+% Cosmic rays
+% Galactic centre: X-rays from Chandra and radio from MeerKAT: evidence of an ongoing magnetic field reconnection event.  
+% Event Horizon Telescope: only theoretical models featuring strongly magnetized matter can explain the observations
+% Galaxy clusters: diffuse synchrotron emission from relativistic electrons and magnetic field filaments between galaxy clusters 
+% great moments: Zeeman splitting (Heiles), Faraday effect (Han, Haverkorn, Mcclure-Griffiths, Gaensler, etc)
+
+Measuring polarization requires purpose-built instrumentation known as a \emph{polarimeter}, and the experimental activities related to measuring polarization are known as \emph{polarimetry}.
+%
+A polarimeter typically distorts the polarization state of the signal in a manner that is unintended and cannot be deduced from theory. This unknown component of the instrumental response to an electromagnetic signal must be 
+determined experimentally and
+calibrated before the polarization intrinsic to the astrophysical source can be interpreted. 
+
+Methods of polarimetric calibration are based on a mathematical model that describes the propagation of a polarized signal along the path between the source and the point of detection.
+%
+Accordingly, the primary aim of this paper is to foster a conceptual understanding of the mathematical foundations of polarimetry.
+%
+The insights gained through this approach facilitate the development of practical guidelines for use when designing an experiment or analyzing observations.
+
+This review focuses on polarimetric observations of point sources made using a single antenna, such as a single dish or a phased array formed by the phase-coherent addition of signals from multiple elements of an interferometric array.
+%
+For a comprehensive introduction to both the theory and practice 
+of radio polarimetry using interferometric arrays, including rigorous treatment of arbitrary brightness distributions and direction-dependent effects, the pioneering series by \citet{smi11a,smi11b,smi11c,smi11d}
+and the lessons learned by \citet{lab+17} are highly recommended reading.
+%
+The formalism employed by Smirnov and the framework presented in this tutorial are both heavily influenced by \cite{ham00}.
+
+Before embarking on this approach,
+\Sec{geometry} of this paper reviews the geometric description of polarization introduced 
+by \cite{sto52}, beginning with an ideal, monochromatic source of electromagnetic radiation.
+%
+In \Sec{statistics}, the Stokes parameters are related to the second-order statistics of 
+the electric field as represented by the coherency matrix.
+%
+This connection is further explored in \Sec{linear_transformations}, where linear transformations of the electric field are related to Euclidean rotations and Lorentz
+boosts of the Stokes parameters.
+%
+In \Sec{signal_path}, these transformations are applied to a decomposition of the signal path that extends the \cite{hbs96} model to include the effects of reflection and down-conversion.
+%
+Inverting such transformations to recover the original polarization state is discussed in \Sec{calibration}, 
+which includes a first-order calibration solution based on the ideal feed assumptions.
+%
+\Sec{selection} introduces some criteria for selecting a more complete model of the instrumental response, and \Sec{conclusion} concludes with some pointers to further reading.
+
+Throughout this article, mathematical expressions are greatly simplified by using complex-valued tensors, such as vectors and matrices, and the various operations that are performed on them.  These are described in the appendix with an introduction to
+% the adopted notation and 
+the fundamentals of multivariate linear algebra.
+%
+The appendix also reviews the basics of signal processing, such as the analytic signal and down-conversion.
+%
+It concludes with some discussion of numerical stability when modeling polarization observations.

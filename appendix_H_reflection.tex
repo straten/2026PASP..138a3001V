@@ -1,0 +1,88 @@
+\section{Reflection as Turning Over the Receiver}
+\label{app:yaw_rotation}
+
+Reflection can also be modeled as turning over the receiver, which is equivalent to rotating the reference frame depicted in \Fig{polarization_ellipse}
+by $180\deg$ about a transverse axis in the $x$-$y$ plane.
+This negates the $z$ axis and results in a two-dimensional reflection in the $x$-$y$ plane 
+through the rotation axis.
+%
+Let $\hat{\Pv{a}}=(\cos\alpha,\sin\alpha,0)^T$ define the three-dimensional 
+rotation axis in the physical space of \Fig{polarization_ellipse}\  
+and use Rodrigues' Rotation Formula to express the $3\times3$ matrix 
+for a 180$\deg$ rotation about $\hat{\Pv{a}}$.
+\begin{equation}
+\left( \begin{array}{ccc}
+2a_x^2 - 1 & 2a_x a_y    & 0 \\
+2a_x a_y   & 2a_x^2 - 1  & 0 \\
+0          & 0           & -1 \\
+  \end{array} \right)
+  \end{equation}
+In the $x$-$y$ plane, this transformation reduces to 
+\begin{equation}
+% W for weerspiegelen
+\JM{W} = \left( \begin{array}{cc}
+\cos2\alpha  & \sin2\alpha  \\
+\sin2\alpha  & -\cos2\alpha 
+  \end{array} \right)
+  = \cos2\alpha\, \pauli{1} + \sin2\alpha\, \pauli{2},
+\end{equation}
+%
+which is a linear combination of the two-dimensional reflection basis matrices 
+defined by the two real-valued Pauli matrices.\footnote{
+%
+Both \pauli{1}\ and \pauli{2}\ 
+satisfy the criteria of a $2\times2$ reflection matrix, which must be orthogonal 
+($\JM{W}\JM{W}^T = \JM{W}^T\JM{W} = \pauli{0}$) and
+have eigenvalues, $\lambda = \pm 1$, and determinant, $|\JM{W}|=-1$.
+%
+}
+A reflection in the $x$-$y$ plane negates the \emph{handedness}\footnote{
+%
+Strictly, handedness is a property of only three-dimensional
+vector spaces; this property is formally known as the orientation of the ordered basis. }
+of the two-dimensional basis, which can also be reversed by swapping the cables 
+used to propagate the orthogonally polarized signals.
+%
+In \citet{vmjr10}, the \emph{feed hand} defines the handedness of the receptor basis
+and the reflection is performed through the axis defined by the \emph{symmetry angle}.
+
+The polar decomposition of a two-dimensional reflection through the
+axis defined by $(\cos\alpha, \sin\alpha)$ yields a unitary matrix parameterized by 
+$\hat{\Pv{n}} = (\cos2\alpha\,\sin2\alpha,0)^T$,
+%
+\begin{equation}
+\JM{W}(\alpha) = -\Ci\, \vRotation(\pm\pi/2).
+\end{equation}
+
+\begin{proof}
+Note that $|\JM{W}|^{1/2}=\pm\Ci$ and
+\begin{align*}
+\JM{W}(\alpha)
+    &= -\Ci \, \vRotation(\pi/2) \\
+    &= -\Ci \left( \pauli{0}\cos\frac{\pi}{2} 
+        + \Ci \, \Pv{n} \cdot \Pv{\sigma} \sin\frac{\pi}{2} \right) \\
+    &= \Pv{n} \cdot \Pv{\sigma} \\
+    &= \cos2\alpha\, \pauli{1} + \sin2\alpha\, \pauli{2}
+\end{align*}
+\end{proof}
+%
+\noindent
+Congruence transformation by $\JM{W}(\alpha)$ rotates $\Pv{S}$ by $180\deg$ about the $\hat{\Pv{n}}$ axis defined by $\alpha$, which negates both the ellipticity angle $\chi$ and the position angle $\psi$.
+
+In a basis defined by linearly-polarized receptors, the nominal axis of symmetry
+has a position angle of $45\deg$.
+The reflection defined by $\JM{W}(\pi/4)=\pauli{2}$ swaps $e_x$ and $e_y$.
+%
+With reference to \eqns{StokesQ}{through}{StokesV}, swapping $e_x$ and $e_y$
+negates Stokes Q and V.
+%
+This negation is equivalent to a $\pm 180\deg$ rotation of the Stokes polarization vector about $\hat{\Pv{n}} = (0,1,0)^T$,
+which is also the result of congruence transformation by $\JM{W}(\pi/4)$.
+
+In the circular basis, the nominal axis of symmetry
+has a position angle of $0\deg$, and $\JM{W}(0)=\pauli{1}$ negates $e_y$.
+%
+Negating either component 
+of the electric field vector reverses the signs of both Stokes U and V, 
+which is equivalent to the $\pm 180\deg$ rotation of the Stokes polarization vector about 
+$\hat{\Pv{n}} = (1,0,0)^T$ under congruence transformation by $\JM{W}(0)$.

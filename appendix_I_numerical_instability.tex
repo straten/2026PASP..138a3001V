@@ -1,0 +1,272 @@
+\section{Fundamental Numerical Instability}
+\label{app:instability}
+
+This section considers two forms of instability that arise when fitting a mathematical model of the instrumental response to experimental data.  
+%
+% The second half of the analysis focuses on methods of model fitting that optimize a merit function by inverting the Hessian matrix that encodes its local curvature.  However, the fundamental problems described here impact on any method of numerical analysis.
+%
+First, model degeneracy arises when there is no unique solution to the measurement equation; in this case, the Hessian matrix is singular and matrix inversion fails.
+%
+Second, when one or more model parameters are highly collinear, the Hessian matrix is ill-conditioned, matrix inversion is numerically unstable, and the uncertainties of the collinear model parameters are inflated.
+
+The model under consideration relates the observed Stokes parameters $\Sv{S}'$ to the unknown Stokes parameters $\Sv{S}$ intrinsic to the source by a Mueller matrix $\MM{M}$ that describes the unknown instrumental response via
+%
+\begin{equation}
+\Sv{S}'(\MM{X}; \mbf{\alpha}) = \MM{M} \, \MM{X} \, \Sv{S}.
+\label{eqn:generic_measurement_equation}
+\end{equation}
+%
+In this measurement equation, $\MM{X}$ is the known constraining transformation, or matrix argument, and $\mbf{\alpha}$ is the set of model parameters that describe both $\MM{M}$ and $\Sv{S}$.
+%
+The matrix argument $\MM{X}$ can be the projection between the receptors and the celestial sphere (\Sec{projection}), which can vary with time owing to the rotation of the Earth or mechanical rotation of the feed horn.
+%
+Faraday rotation (\Sec{Faraday}) may also serve as the matrix argument under the assumption that the intrinsic Stokes parameters do not vary with radio frequency $\nu$, or are a known function of $\nu$ \citep[e.g.,][]{es04}.
+
+
+Both forms of numerical instability arise when solving \eqn{generic_measurement_equation} through variation of $\mbf{\alpha}$. Model degeneracy occurs when unknown components of $\MM{M}$ commute with $\MM{X}$, and parameter collinearity arises when unknown components of $\Sv{S}$ are eigenvectors of $\MM{X}$.
+
+\subsection{Commuting with the Matrix Argument}
+\label{app:degeneracy}
+
+Appendix B of \cite{van04c} proves that no unique solution to the polarization measurement equation can be derived when only unknown sources are observed at multiple parallactic angles.  Here, the proof is repeated and extended to include impure Mueller matrices (\App{impure}).
+%
+Consider  
+\begin{equation}
+\Sv{S}' = \MM{M} \, \MM{R}(\Phi) \Sv{S}
+\label{eqn:parallactic_measurement_equation}
+\end{equation}
+where $\MM{R}(\Phi)$ represents a rotation about the line of sight by the parallactic angle $\Phi$.
+
+Given $\MM{M}$ and $\Sv{S}$ that satisfy this equation for all $\Phi$, 
+it is possible to define a family of solutions, $\MM{M}_u = \MM{M} \, \MM{U}^{-1}$ and $\Sv{S}_u = \MM{U} \, \Sv{S}$,
+where $\MM{U}$ is any matrix that commutes freely with $\MM{R}(\Phi)$ for all values of $\Phi$,
+% ; i.e.,  $\MM{R}(\Phi)\MM{U}=\MM{U} \, \MM{R}(\Phi)$,
+%
+such that
+\begin{equation} \begin{split}
+\Sv{S}' & = \MM{M}_u \, \MM{R}(\Phi) \Sv{S}_u \\
+ & = \MM{M} \, \MM{U}^{-1} \MM{R}(\Phi) \MM{U} \Sv{S}  \\
+ & = \MM{M} \, \MM{U}^{-1}  \MM{U} \, \MM{R}(\Phi) \Sv{S}  \\
+ & = \MM{M} \, \MM{R}(\Phi) \Sv{S}.
+\end{split} \end{equation}
+%
+
+Pure Mueller matrices that commute with $\MM{R}(\Phi)$ include
+rotations about the Stokes~V axis, and 
+Lorentz boosts along the Stokes~V axis.
+%
+Impure Mueller matrices that commute with $\MM{R}(\Phi)$ can be described using
+equation~(46) of \citet[][hereafter LC96]{lc96},
+%
+\begin{equation}
+\begingroup
+\setlength\arraycolsep{5pt}
+\MM{M}_\Delta \equiv
+\begin{pmatrix}
+  1 & \Pv{0}^T \\
+  \Pv{P}_\Delta & \PM{M}_\Delta
+\end{pmatrix},
+\endgroup
+\end{equation}
+%
+where $\Pv{P}_\Delta = \left( P_{1}, P_{2}, P_{3} \right)^T$
+is the polarizance vector that describes 
+the conversion of total intensity to polarized flux, 
+$|\Pv{P}_\Delta| \le 1$,
+$\Pv{0} = (0,0,0)^T$, 
+and $\PM{M}_\Delta$ is the $3\times3$
+symmetric depolarizer matrix.
+This matrix can be diagonalized by a similarity transformation and
+written in the form of equation~(43) of LC96,
+%
+\begin{equation}
+\begingroup
+\setlength\arraycolsep{5pt}
+\PM{M}_\Delta = {\PM{R}}^{-1}
+\begin{pmatrix}
+  a & 0 & 0 \\
+  0 & b & 0 \\
+  0 & 0 & c \\
+\end{pmatrix} {\PM{R}}, 
+\endgroup
+\quad |a|, |b|, |c| \le 1.
+\end{equation}
+%
+where {\PM{R}} is a $3 \times 3$ rotation matrix.  In this form, it 
+can be seen that $\MM{M}_\Delta$ commutes with $\MM{R}(\Phi)$ if
+%
+\begin{itemize}
+\item only Stokes~V is polarized by $\Pv{P}_\Delta$; and/or
+\item ${\PM{R}}$ is a rotation about the Stokes~V axis, and
+\begin{itemize}
+\item Stokes Q and U are equally depolarized by $\MM{M}_\Delta$, and/or
+\item Stokes~V is depolarized by $\MM{M}_\Delta$.
+\end{itemize}
+\end{itemize}
+%
+For linearly-polarized receptors, 
+only Stokes~V is polarized if $\Pv{P}_\Delta = \left(0,0,P_{3}\right)^T$.
+Furthermore, Stokes Q and U are equally depolarized by $\MM{M}_\Delta$ when $a = b$
+(as for the case of stochastic Faraday rotation described in \App{impure}).
+
+Note that depolarization of Stokes~V includes negation ($c = -1$) and,
+%
+as described in \Sec{conjugation}, no linear transformation of the electric field 
+can negate the sign of only Stokes~V.  For example, if the instrumental response is modeled 
+using Jones matrices, then negation of Stokes~V in the unknown $\Sv{S}$
+can be compensated only by rotating the reference frame.  However, a $\pm 180\deg$ 
+rotation that negates Stokes~V must also negate the position angle and derived
+quantities such as the Faraday rotation measure.
+%
+Therefore, the Stokes~V sign ambiguity can be eliminated by observing a source for which 
+the sign of the position angle and/or rotation measure is known.
+
+Owing to commutation, there is no unique solution to \eqn{parallactic_measurement_equation} 
+and other constraints or assumptions must be introduced to constrain
+the degenerate dof.
+%
+Similar degeneracy will arise whenever the experimental constraints
+include only observations of unknown sources of radiation
+as a function of a matrix argument with a fixed axis of symmetry.
+
+When modeling variations of the observed Stokes parameters as a function of a matrix argument with a variable axis of symmetry, it is no longer possible for an unknown component of $\MM{M}$ to commute with all values of $\MM{X}$, and the degeneracy is eliminated.
+%
+However, as described in the following section, even when the axis of symmetry of $\MM{X}$ is variable, unknown model parameters can be highly collinear and cause numerical instability.
+
+\subsection{Eigenvectors of the Matrix Argument}
+\label{app:eigenvectors_of_projection}
+
+In some experiments, the observed Stokes parameters are related to the intrinsic Stokes parameters by a measurement equation that includes a matrix argument with a variable axis of symmetry.
+%
+Such a measurement equation may have no fundamental degeneracy; however, collinearity 
+between model parameters can arise when one or more unknown components of the polarization states used as constraints are eigenvectors of the matrix argument.
+
+
+%
+For example, when observations are made over a wide range of hour angles with a fixed dipole array, the geometric projection transformation,
+%
+\begin{equation}
+\MM{P} \simeq
+\MM{B}_L(l,m) \MM{R}(\Phi),
+\end{equation}
+%
+where $\MM{B}_L(l,m)$ approximates the foreshortening of the projected receptors, 
+%
+a direction-dependent Lorentz boost with variable axis of symmetry in the $Q$--$U$ plane,
+%
+and $\MM{R}(\Phi)$ models the rotation of the observatory about the line of sight by the parallactic angle $\Phi$,
+%
+a rotation with fixed symmetry along the Stokes V axis.
+%
+The projection has a symmetry axis that varies with time and therefore there is no fundamental degeneracy.  
+
+However, the Stokes vector, $\Sv{V}=[0,0,0,V]^T$ has a polarization vector that is parallel to the symmetry axis of $\MM{R}$ and perpendicular to the symmetry axis of $\MM{B}_L$. Therefore, it is
+an eigenvector of $\MM{P}$ with associated eigenvalue $\lambda = 1$; i.e.,
+%
+\begin{equation}
+\MM{P} \, \Sv{V}=\Sv{V}.
+\end{equation}
+%
+Consequently, when the model parameters include unknown circular polarization intrinsic to the sources used as constraints, the Stokes V components
+are highly covariant with the unknown instrumental boost along the Stokes V axis, $\MM{B}_V(\beta)$, causing the Hessian matrix to be ill-conditioned.
+
+To demonstrate this, first consider the typical Gauss–Newton approximation of
+the Hessian matrix ${\bf H}$.  Here, second-order derivative terms are ignored and
+%
+\begin{equation}
+    {\bf H} \simeq 2 {\mbf\Upsilon}^T{\mbf\Upsilon},
+\end{equation}
+%
+where ${\mbf\Upsilon}$ is the Jacobian matrix with elements defined by the partial derivatives
+of the predicted Stokes parameters $S'_j$ with respect to the free model parameters $\alpha_k$,
+\begin{equation}
+    \Upsilon_j^k = \frac{\partial S'_j}{\partial \alpha_k}.
+\end{equation}
+%
+In principle, the row index $j$ covers all observations of all 4 Stokes parameters of all source states included as constraints.  However, for brevity, the observation index will be ignored and $S$ will loop over the four Stokes parameters, such that $j$ indexes only the source state and $S'_j \in \{ I'_j, Q'_j, U'_j, V'_j \}$.
+
+The Hessian is ill-conditioned if there is a high degree of multicollinearity between the unknown model parameters, such that the gradient vector (or column of the Jacobian) for a model parameter is (nearly) proportional to a linear combination of the gradient vectors for a set of other parameters.
+
+To characterize the multicollinearity between model parameters in the approximation of a fixed dipole array, consider a simplified model of the observed Stokes
+parameters in which the unknown instrumental response consists of only a Lorzentz boost along the Stokes V axis.  For the $n^\mathrm{th}$ source used as a constraint,
+%
+\begin{equation}
+    \Sv{S}'_n = \MM{B}_V(\beta) \MM{P} \, \Sv{S}_n.
+\end{equation}
+%
+The set of unknown model parameters include the boost rapidity $\beta$ and the Stokes parameters intrinsic to each source.
+%
+Let the model of the intrinsic Stokes parameters for each source be decomposed as
+\begin{equation}
+    \Sv{S}_n = \Sv{S}_{n,L} + \Sv{S}_{n,V},
+\end{equation}
+where $\Sv{S}_{n,L}=[I_n,Q_n,U_n,0]^T$ and $\Sv{S}_{n,V}=[0,0,0,V_n]^T$,
+such that
+\begin{equation}
+    \Sv{S}'_n = \MM{B}_V(\beta) \left( \MM{P} \,  \Sv{S}_{n,L} +  \Sv{S}_{n,V} \right).
+\end{equation}
+%
+With reference to \eqn{Stokes_boost},
+the partial derivatives of $\Sv{S}'_n$ with respect
+to $\beta$ include only
+%
+\begin{equation}
+\begin{split}
+\frac{\partial I'_j}{\partial\beta} &= 2 \left( I''_j \sinh 2\beta + V_j \cosh 2\beta \right) \\
+\frac{\partial V'_j}{\partial\beta} &= 2 \left( I''_j \cosh 2\beta + V_j \sinh 2\beta \right), \label{eqn:partial_beta}
+\end{split}
+\end{equation}
+where $I''_j$ is the total intensity of the $j^\mathrm{th}$ source after passing through the projection transformation.
+%
+Similarly, the partial derivatives of $\Sv{S}'_j$ with respect
+to $V_n$ include only
+%
+\begin{equation}
+\begin{split}
+\frac{\partial I'_j}{\partial V_n} &= \delta_{jn} \sinh 2\beta  \\
+\frac{\partial V'_j}{\partial V_n} &= \delta_{jn} \cosh 2\beta.
+\end{split}
+\end{equation}
+%
+To first order, the total intensity changes by only a small fraction as the projection transformation varies.  For example, even when the differential gain is as large as 2, $\gamma = \ln(2)/2 \sim 0.35$ \eqnp{differential_gain} and $\cosh\gamma \sim 1.06$.
+%
+Therefore, assume that $I_n''\simeq I_n$ and consider the following linear combination of $V_n$ gradient vectors,
+\begin{equation}
+\mbf{\Upsilon}_V = \sum_n I_n \mbf{\Upsilon}_{V_n},
+\end{equation}
+%
+where $\mbf{\Upsilon}_{V_n}$ is the gradient vector defined by the column of the Jacobian matrix corresponding to $V_n$.  The vector $\mbf{\Upsilon}_V$ has components,
+%
+\begin{equation}
+    \Upsilon_{V,j} = \sum_n I_n \frac{\partial S'_j}{\partial V_n} = I_j \frac{\partial S'_j}{\partial V_j}
+\end{equation}
+and its inner product with the gradient vector for $\beta$,
+\begin{equation} \begin{split}
+\mbf{\Upsilon}_V \cdot \mbf{\Upsilon}_\beta 
+& = \sum_j I_j \frac{\partial S'_j}{\partial V_j} \frac{\partial S'_j}{\partial \beta}. \\
+& \simeq
+2 \sum_j \left[ I_j^2 X(\beta) + I_j V_j Y(\beta) \right]
+\end{split} \end{equation}
+where
+\begin{equation} \begin{split}
+X(\beta)&=\sinh^2 2\beta + \cosh^2 2\beta  \\
+Y(\beta)&=\sinh 2\beta\cosh 2\beta.
+\end{split} \end{equation}
+Similarly,
+\begin{align}
+|\mbf{\Upsilon}_V|^2 & \simeq \sum_j I_j^2 X(\beta)
+\end{align}
+and
+\begin{align}
+|\mbf{\Upsilon}_\beta|^2 & \simeq 4 \sum_j \left[ (I_j^2+V_j^2) X(\beta) + I_jV_j Y(\beta) \right]
+\end{align}
+For small $\beta$, $X(\beta)\simeq 1$ and $Y(\beta) \simeq 2\beta$.
+If $V_j/I_j$ is also small, then (to first order) terms involving $V_j^2$ and $\beta V_j$ can be ignored, and the cosine similarity between 
+$\mbf{\Upsilon}_V$ and $\mbf{\Upsilon}_\beta$,
+\begin{equation*}
+\frac{\mbf{\Upsilon}_V \cdot \mbf{\Upsilon}_\beta}
+     {|\mbf{\Upsilon}_V| |\mbf{\Upsilon}_\beta|} \simeq
+     \frac{2 \sum I_j^2}{ \left(\sum I_j^2\right)^\frac{1}{2} \left(4\sum I_j^2\right)^\frac{1}{2} } = 1  
+\end{equation*}
+%
+Owing to the high multicollinearity between $V_n$ and $\beta$, the Hessian matrix is poorly-conditioned, its inversion is numerically unstable, and the formal uncertainties of $\beta$ and $V_n$ are inflated.

@@ -1,0 +1,496 @@
+\section{Example Transformations}
+\label{app:example_transformation}
+
+This section demonstrates some basic transformations,
+starting with a source described by Stokes parameters
+\begin{equation}
+    \Sv{S}=[S_0,S_1,0,0]^T
+\end{equation}
+and coherency matrix
+\begin{equation}
+    \cohM{\rho}=(S_0 \, \pauli{0} + S_1 \, \pauli{1})/2.
+\end{equation}
+
+\subsection{Example Boost}
+\label{app:example_boost}
+
+\noindent
+Consider a boost along $\hat{\Pv{1}}=(1,0,0)^T$, 
+$$\Boost = \vBoost[1](\beta) =\pauli{0}\cosh\beta+\pauli{1}\sinh\beta,$$ 
+such that
+\begin{equation} \begin{split}
+\cohM{\rho}' &= \Boost \, \cohM{\rho} \, \Boost^\dagger \\
+&= \Boost \left( S_0 \, \pauli{0}+S_1 \, \pauli{1} \right) \Boost / 2 \\
+&= S_0 \Boost \pauli{0} \Boost/2 +S_1 \Boost \pauli{1} \Boost/2.
+\end{split} \end{equation}
+%%
+Using \eqn{boost_power}, the first term of this equation
+includes 
+\begin{equation} \begin{split}
+\vBoost[1](\beta) \; \pauli{0} \; \vBoost[1](\beta)
+&=\vBoost[1]^2(\beta) = \vBoost[1](2\beta)
+\end{split} \end{equation}
+%
+The second term includes
+%
+% the \omit\hfill implements a right flush / align, ragged left
+%
+\begin{equation} \begin{split}
+\vBoost[1]&(\beta) \; \pauli{1} \; \vBoost[1](\beta)  \\
+&= \left( \pauli{0}\cosh\beta + \pauli{1}\sinh\beta \right) \pauli{1} \left( \pauli{0}\cosh\beta + \pauli{1}\sinh\beta \right) \\
+&= \left( \pauli{0}\cosh\beta + \pauli{1}\sinh\beta \right) \left( \pauli{1}\cosh\beta + \pauli{0}\sinh\beta \right) \\
+&= \pauli{1}\cosh^2\beta + \pauli{0}\cosh\beta\sinh\beta \\
+& \omit\hfill\ensuremath{ + \pauli{0}\sinh\beta\cosh\beta + \pauli{1}\sin^2\beta } \\
+&= \pauli{1} \left(\cosh^2\beta + \sinh^2\beta\right) + \pauli{0} \left( 2 \sinh\beta\cosh\beta \right) \\
+&= \pauli{1} \cosh 2\beta + \pauli{0} \sinh 2\beta.
+\end{split} \end{equation}
+%
+Therefore,
+%
+\begin{equation} \begin{split}
+\cohM{\rho}' &= S_0 \vBoost[1](2\beta)/2 + S_1 \Boost \pauli{1} \Boost/2 \\
+&= S_0 \left(  \pauli{0} \cosh 2\beta + \pauli{1} \sinh 2\beta \right)/2 \\
+& \omit \quad \quad \quad \quad \ensuremath{+ S_1 \left( \pauli{1} \cosh 2\beta + \pauli{0} \sinh 2\beta \right)/2} \\
+&= \pauli{0} \left( S_0 \cosh 2\beta + S_1 \sinh 2\beta \right)/2\\
+& \omit \quad \quad \quad \quad \ensuremath{+ \pauli{1} \left( S_0 \sinh 2\beta + S_1 \cosh 2\beta \right)/2}
+\end{split} \end{equation}
+and
+\begin{equation}
+\begin{split}
+S_0' &= \pauli{0} \dcbo \cohM{\rho}' = S_0 \cosh 2\beta + S_1 \sinh 2\beta \\
+S_1' &= \pauli{1} \dcbo \cohM{\rho}' = S_0 \sinh 2\beta + S_1 \cosh 2\beta. \label{eqn:Stokes_boost}
+\end{split}
+\end{equation}
+That is, the Stokes parameters are boosted along the $\hat{\Pv{1}}$
+axis with rapidity $-2\beta$ and Lorentz factor $\gamma = \cosh 2\beta.$
+
+\subsection{Example Rotation}
+\label{app:example_rotation}
+
+\noindent
+Consider a rotation about $\hat{\Pv{2}}=(0,1,0)^T$, 
+$$\Rotation = \vRotation[2](\chi) =\pauli{0}\cos\chi+\Ci\pauli{2}\sin\chi,$$ 
+%
+such that
+\begin{equation} \begin{split}
+\cohM{\rho}' &= \Rotation \, \cohM{\rho} \, \Rotation^\dagger \\
+&= \Rotation \left( S_0 \, \pauli{0}+S_1 \, \pauli{1} \right) \Rotation^\dagger / 2 \\
+&= S_0 \Rotation \pauli{0} \Rotation^\dagger/2 +S_1 \Rotation \pauli{1} \Rotation^\dagger/2.
+\end{split} \end{equation}
+
+\noindent
+For the first term of this equation, note that rotations have no effect on \pauli{0}; e.g.
+\begin{equation} \begin{split}
+\vRotation(\phi) \; \pauli{0} \;\vRotation^\dagger(\phi) 
+& = \vRotation(\phi) \;\vRotation^\dagger(\phi) \\
+& = \vRotation(\phi) \;\vRotation^{-1}(\phi) = \pauli{0}
+\end{split} \end{equation}
+%
+Noting that \eqnp[see]{rotation_power},
+\begin{equation}
+\vRotation^{-1}(\phi) = \vRotation(-\phi),
+\end{equation}
+%
+the second term includes
+%
+% the \omit\hfill implements a right flush / align, ragged left
+%
+\begin{equation}
+\begin{split}
+\vRotation[2]&(\chi) \; \pauli{1} \; \vRotation[2](-\chi) \\
+&= \left( \pauli{0}\cos\chi + \Ci\pauli{2}\sin\chi \right) \pauli{1} \left( \pauli{0}\cos\chi - \Ci\pauli{2}\sin\chi \right) \\
+&= \left( \pauli{0}\cos\chi + \Ci\pauli{2}\sin\chi \right) \left( \pauli{1}\cos\chi + \pauli{3}\sin\chi \right) \\
+&= \pauli{1}\cos^2\chi + \pauli{3}\cos\chi\sin\chi \\
+& \omit\hfill\ensuremath{+ \Ci(-\Ci \pauli{3})\sin\chi\cos\chi + \Ci(\Ci \pauli{1})\sin^2\chi} \\
+&= \pauli{1} \left(\cos^2\chi - \sin^2\chi\right) + 2 \pauli{3} \cos\chi\sin\chi \\ 
+&= \pauli{1} \cos2\chi  + \pauli{3} \sin2\chi \label{eqn:rotate_q_about_u}
+\end{split}
+\end{equation}
+%
+Therefore,
+%
+\begin{equation} \begin{split}
+\cohM{\rho}' &= S_0 \, \pauli{0}/2 + S_1 \left( \pauli{1} \cos2\chi  + \pauli{3} \sin2\chi \right)/2
+\end{split} \end{equation}
+and
+\begin{equation} \begin{split}
+S_0' &= \pauli{0} \dcbo \cohM{\rho}' = S_0 \\
+S_1' &= \pauli{1} \dcbo \cohM{\rho}' = S_1 \cos2\chi \\
+S_3' &= \pauli{3} \dcbo \cohM{\rho}' = S_1 \sin2\chi. \label{eqn:Stokes_rotation}
+\end{split} \end{equation}
+That is, the total intensity is unchanged and the Stokes polarization vector is rotated about the $\hat{\Pv{2}}$
+axis by $-2\chi$.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Complex-valued Polarization Ellipse}
+\label{app:analytic_polarization_ellipse}
+
+This section demonstrates the relationship between the 
+geometry of the polarization ellipse \eqnsp{psi_rotation}{through}{stokes_ellipse}
+and the
+spherical coordinates of the Stokes parameters \eqnp{stokes_geometric}
+%
+by deriving the analytic representation of a monochromatic electromagnetic wave \eqnp{analytic_field}.
+%
+First, consider 
+\begin{equation}
+\Jcol{e}(t) = \hat{\Jcol{e}}_0 r e^{\Ci (2\pi \nu t + \phi')}
+\end{equation}
+% with polarization state defined by the unit Jones vector $\hat{\Jcol{e}}_0$, amplitude $r$, and frequency $\nu$.
+%
+with polarization defined by the unit Jones vector $\hat{\Jcol{e}}_0$,
+and associated Stokes polarization vector \eqnp[see]{stokes_geometric},
+%
+\begin{equation}
+\Pv{S} = r^2 \left( \cos2\chi  \cos2\psi, \; \cos2\chi  \sin2\psi, \; \sin2\chi \right).
+\label{eqn:equivalent_stokes}
+\end{equation}
+%
+As in \Sec{basis_rotation}, consider the transformation from the original basis to one in which the second component of the electric field vector is zero; i.e.,
+%
+\begin{equation}
+	\Jcol{e}''(t) = \JM{R} \Jcol{e}(t) =
+	\left( 
+	\begin{array}{c}
+         1 \\
+		0
+	\end{array}
+	\right) r e^{\Ci (2\pi \nu t + \phi')}.
+\end{equation}
+%
+Invert this using \eqn{orthonormal_spherical}, yielding
+%
+\begin{equation}
+\Jcol{e}(t) = \JM{R}^{-1} \Jcol{e}''(t) = \vRotation[3](-\psi) \vRotation[2](\chi) \Jcol{e}''(t),
+\end{equation}
+%
+and compute the components of $\hat{\Jcol{e}}_0$, starting with
+%
+the transformation of $\Jcol{e}''(t)$ by $\vRotation[2](\chi)$,
+\begin{equation} \begin{split}
+\Jcol{e}'(t)
+&= \vRotation[2](\chi) \Jcol{e}''(t)
+ = \left( \pauli{0}\cos\chi + \Ci\pauli{2}\sin\chi \right) \Jcol{e}''(t) \\
+&= \left[ \pauliI\cos\chi + \Ci\pauliU\sin\chi \right] \Jcol{e}''(t) \\
+&= \left( 
+      \begin{array}{ccc}
+	\cos\chi & \;\; & \Ci\sin\chi \\
+	\Ci\sin\chi & \;\; & \cos\chi
+      \end{array}
+   \right)
+   \left(
+      \begin{array}{c}
+	1 \\
+	0
+      \end{array}
+   \right) r e^{\Ci (2\pi \nu t + \phi')} \\
+&= \left(
+      \begin{array}{c}
+	\cos\chi \\
+	\Ci\sin\chi
+      \end{array}
+   \right) r e^{\Ci (2\pi \nu t + \phi')}.
+\end{split} \end{equation}
+The real part of this analytic signal,
+\begin{equation}
+	\Jcol{\epsilon}'(t)=
+    % \re{\Jcol{e}'(t)}=
+	\left( 
+	\begin{array}{c}
+		r \cos\chi \cos (2\pi \nu t + \phi') \\
+		-r \sin\chi \sin (2\pi \nu t + \phi')
+	\end{array}
+	\right).
+\end{equation}
+The polarization state of the wave is independent of the absolute phase $\phi'$; therefore,
+choose  $\phi'=\phi-\pi/2$ to arrive at \eqn{stokes_ellipse}.
+%
+Then transform $\Jcol{e}'$ by $\vRotation[3](-\psi)$ to arrive at \eqn{analytic_field},
+%
+\begin{eqnarray}
+\Jcol{e}(t)
+&=& \vRotation[3](-\psi) \Jcol{e}'(t) \nonumber \\
+&=& \left( \pauli{0}\cos\psi - \Ci\pauli{3}\sin\psi \right) \Jcol{e}'(t) \nonumber \\
+&=& \left[ \pauliI\cos\psi - \Ci\pauliV\sin\psi \right] \Jcol{e}'(t) \nonumber \\
+&=& \left( 
+      \begin{array}{ccc}
+	\cos\psi & \;\; & -\sin\psi \\
+	\sin\psi & \;\; & \cos\psi
+      \end{array}
+   \right)
+   \left(
+      \begin{array}{c}
+	\cos\chi \\
+	\Ci\sin\chi
+      \end{array}
+   \right) r e^{\Ci (2\pi \nu t + \phi')} \nonumber \\
+&=& \left(
+      \begin{array}{c}
+	\cos\psi\cos\chi -\Ci \sin\psi\sin\chi \\
+	\sin\psi\cos\chi +\Ci \cos\psi\sin\chi
+   \end{array}
+   \right) r e^{\Ci (2\pi \nu t + \phi')} \nonumber \\
+&=& \Jcol{e}_0  e^{\Ci (2\pi \nu t + \phi')},
+\label{eqn:monochromatic_analytic}
+\end{eqnarray}
+%
+where $\Jcol{e}_0 = r \hat{\Jcol{e}}_0$ as in \eqn{Jones_vector}.
+
+This result can be verified by demonstrating that the equivalent congruence transformation of the coherency matrix
+%
+\begin{equation}
+\cohM{\rho}=\vRotation[3](-\psi) \vRotation[2](\chi) \cohM{\rho}'' \vRotation[2](-\chi) \vRotation[3](\psi),
+\label{eqn:double_check}
+\end{equation}
+%
+yields the original polarization vector \Pv{S}.
+%
+Starting with 
+\begin{equation}
+	\cohM{\rho}'' = \left( \pauli{0} + \pauli{1} \right) r^2 / 2,
+\end{equation}
+%
+expand the rotations from the inside outward.  
+%
+Note that rotation of a $S_1$ polarized state about the $S_2$ axis
+has already been derived in \eqn{rotate_q_about_u}, where it is shown that
+%
+\begin{equation}
+\vRotation[2](\chi) \; \pauli{1} \; \vRotation[2](-\chi) = \pauli{1} \cos2\chi  + \pauli{3} \sin2\chi.
+\end{equation}
+%
+% The resulting matrix is a linear combination of $S_1$ and $S_3$ basis matrices.
+
+As detailed in \App{eigen_unitary}, the $\pauli{3}$ basis matrix is a congruence eigenmatrix of any rotation about the $S_3$ axis; therefore, it is 
+%
+necessary to consider only the transformation of the $\pauli{1}$ basis matrix,
+%
+\begin{equation} \begin{split}
+\vRotation[3]&(-\psi)  \; \pauli{1} \;	\vRotation[3](\psi) \\
+&= \left( \pauli{0}\cos\psi - \Ci\pauli{3}\sin\psi \right) \pauli{1} \left( \pauli{0}\cos\psi + \Ci\pauli{3}\sin\psi \right) \\
+&= \left( \pauli{0}\cos\psi - \Ci\pauli{3}\sin\psi \right) \left( \pauli{1}\cos\psi + \Ci(-\Ci\pauli{2})\sin\psi \right) \\
+&=  \pauli{1}\cos^2\psi +  \pauli{2}\cos\psi\sin\psi \\
+& \omit\hfill\ensuremath{- \Ci(\Ci \pauli{2})\sin\psi\cos\psi  - \Ci(-\Ci \pauli{1})\sin^2\psi} \\
+&=  \pauli{1} \left(\cos^2\psi - \sin^2\psi\right) + 2 \pauli{2} \cos\psi\sin\psi \\
+&=  \pauli{1} \cos2\psi  + \pauli{2} \sin2\psi.
+\end{split} \end{equation}
+%
+Finally, expand \eqn{double_check}
+\begin{equation} \begin{split}
+\cohM{\rho}
+&=\vRotation[3](-\psi) \vRotation[2](\chi) \cohM{\rho}'' \vRotation[2](-\chi) \vRotation[3](\psi) \\
+&=\vRotation[3](-\psi) \vRotation[2](\chi) \left(\pauli{0}+\pauli{1} \right) \vRotation[2](-\chi) \vRotation[3](\psi) \; r^2/2\\
+&=\vRotation[3](-\psi)  \left(\pauli{0}+ \pauli{1} \cos2\chi  + \pauli{3} \sin2\chi \right)  \vRotation[3](\psi) \; r^2/2 \\
+&=\frac{r^2}{2} \left[ \pauli{0}+ \left( \pauli{1} \cos2\psi  + \pauli{2} \sin2\psi \right) \cos2\chi  + \pauli{3} \sin2\chi \right]  \\
+&=\frac{r^2}{2} ( \pauli{0}+ \pauli{1} \cos2\chi \cos2\psi \\
+& \omit\hfill\ensuremath{+ \pauli{2} \cos2\chi \sin2\psi  + \pauli{3} \sin2\chi )},
+\end{split} \end{equation}
+which is consistent with the polarization vector defined in \eqn{equivalent_stokes}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Transformation to a Circular Basis}
+\label{app:circular_basis}
+
+\Eqn{circular} is not the only way to represent a pair of orthonormal
+circularly-polarized receptors; however, it is the only unimodular unitary matrix that effects the desired cyclic permutation of $\Pv{S}=(Q,U,V)^T$ into $\Pv{S}'=(V,Q,U)^T$ for all values of $Q$, $U$ and $V$ \citep[assuming the Stokes V sign convention of ][]{ieee145}.
+%
+To see this, consider the following three derivations of \eqn{circular}, each of which provides a slightly different perspective.
+
+\subsubsection{Direct Derivation}
+
+As discussed in \Sec{polarization_ellipse}, for a left-hand circularly polarized (LCP) wave, the phase of $e_y$ leads that of $e_x$ by $90\deg$.
+%
+If the LCP wave is also 100\% polarized, then 
+\begin{equation}e_y(t)=\exp(\Ci \pi/2) e_x(t) = \Ci e_x(t),\end{equation} 
+which can be expressed as in \eqn{pure_poln_e},
+%
+\begin{equation}
+\label{eqn:lucky_left}
+\Jcol{e}_L(t) = 
+\left( \begin{array}{c}1 \\
+i \end{array}\right) z(t).
+\end{equation}
+%
+For RCP, the phase of $e_y$ lags that of $e_x$ by $90\deg$ and
+%
+\begin{equation}
+\label{eqn:lucky_right}
+\Jcol{e}_R(t) = 
+\left( \begin{array}{c}
+1 \\
+-\Ci \end{array}\right) z'(t).
+\end{equation}
+%
+Unit receptors that have maximal response to LCP and RCP are 
+given by the normalized Hermitian transposes of the Jones vectors 
+in \eqns{lucky_left}{and}{lucky_right}; i.e.,
+%
+\begin{equation}
+\label{eqn:lucky_receptor}
+\hat{\Jcol{r}}_L = \frac{1}{\sqrt{2}} \left( 1, \, -\Ci \right)
+\quad\text{and}\quad
+\hat{\Jcol{r}}_R = \frac{1}{\sqrt{2}} \left( 1, \, \Ci \right).
+\end{equation}
+%
+The unitary matrix comprised of these row vectors,
+%
+\begin{equation}
+\JM{J}_C
+= \left( \begin{array}{c}
+    \hat{\Jrow{r}}_L \\
+    \hat{\Jrow{r}}_R
+\end{array} \right)
+= \frac{1}{\sqrt{2}}
+  \left( \begin{array}{cc}
+    1 & -\Ci \\
+    1 & \Ci
+  \end{array} \right),
+\end{equation}
+%
+has a determinant of $\Ci$, and normalizing by $\sqrt{i}$ yields
+the unimodular unitary matrix shown in \eqn{circular}.
+%
+This transformation effects the desired
+cyclic permutation of the Stokes parameters.
+
+\iffalse
+
+via congruence transformation
+of the associated coherency matrix,
+$\mbf{\rho}' &= \JM{J}_C \, \mbf{\rho} \, \JM{J}_C^\dagger$.
+; e.g.
+%
+\begin{align}
+%
+\mbf{\rho}' &= \JM{J}_C \, \mbf{\rho} \, \JM{J}_C^\dagger \nonumber \\
+%
+&= \frac{1}{4}
+  \left( \begin{array}{cc}
+    1 & -\Ci \\
+    1 & \Ci
+  \end{array} \right)
+    \left( \begin{array}{cc}
+    I+Q & U-iV \\
+    U+iV & I-Q
+  \end{array} \right)
+    \left( \begin{array}{cc}
+    1 & 1 \\
+    \Ci & -\Ci
+  \end{array} \right) \nonumber \\
+%
+&= \frac{1}{2}
+    \left( \begin{array}{cc}
+    I+V & Q-iU \\
+    Q+iU & I-V
+  \end{array} \right).
+\end{align}
+
+\fi
+
+\subsubsection{Indirect Derivation}
+
+Either row vector in \Eqn{lucky_receptor} can be multiplied by an arbitrary phase and the pair would continue to be orthonormal.
+%
+For example, it would be equally reasonable to start with a more symmetric pair of equations,
+\begin{equation}\hat{\Jcol{r}}'_L = \hat{\Jcol{r}}_L =  \frac{1}{\sqrt{2}} \left( 1, \, -\Ci \right)\end{equation}
+and
+\begin{equation}\hat{\Jcol{r}}'_R = -\Ci \hat{\Jcol{r}}_R = \frac{1}{\sqrt{2}} \left( -\Ci, \, 1 \right).\end{equation}
+%
+The unitary matrix comprised of these orthonormal row vectors,
+%
+\begin{equation}
+\begin{split}
+\JM{R}_C
+&= \left( \begin{array}{c}
+    \hat{\Jrow{r}}'_L \\
+    \hat{\Jrow{r}}'_R
+\end{array} \right)
+= \frac{1}{\sqrt{2}}
+  \left( \begin{array}{cc}
+    1 & -\Ci \\
+    -\Ci & 1
+  \end{array} \right) \\
+&= \frac{1}{\sqrt{2}} (\pauli{0} - \Ci \pauli{2}) = \vRotation[2](-\pi/4),
+\end{split}
+\end{equation}
+%
+rotates the polarization vector $\Pv{S}=(Q,U,V)^T$ around the $S_2$ axis by $90\deg$, yielding $\Pv{S}'=(V,U,-Q)^T$.
+%
+
+% Although this solution is valid, we seek the basis transformation that results in cyclic permutation of the Stokes parameters, such that $\Pv{S}''=\JM{R}_b\Pv{S}=(V,Q,U)$.
+%
+To arrive at the desired cyclic permutation, note that a $90\deg$ rotation about the $S_1$ axis transforms 
+$(V,U,-Q)^T$ 
+into 
+$(V,Q,U)^T.$
+%
+Therefore,
+%
+\begin{align}
+\JM{R}_b 
+  &= \vRotation[1](-\pi/4) \vRotation[2](-\pi/4) \\
+  &= 
+  \left( \begin{array}{cc}
+    e^{-\Ci\pi/4} & 0 \\
+    0 & e^{\Ci\pi/4}
+  \end{array} \right)
+  \frac{1}{\sqrt{2}}
+  \left( \begin{array}{cc}
+    1 & -\Ci \\
+    -\Ci & 1
+  \end{array} \right) \nonumber \\
+  &=   \frac{\sqrt{-\Ci}}{\sqrt{2}}
+  \left( \begin{array}{cc}
+    1 & 0 \\
+    0 & \Ci
+  \end{array} \right)
+  \left( \begin{array}{cc}
+    1 & -\Ci \\
+    -\Ci & 1
+  \end{array} \right) 
+  =   \frac{1}{\sqrt{2i}}
+  \left( \begin{array}{cc}
+    1 & -\Ci \\
+    1 & \Ci
+  \end{array} \right). \nonumber
+\end{align}
+
+\subsubsection{Geometric Derivation}
+
+Rather than starting with the electric field, consider the three-dimensional rotation of the Stokes polarization vector that effects the desired cyclic permutation.
+% transforming $\Pv{S}=(Q,U,V)$ into $\Pv{S}'=(V,Q,U)$ for all values of $Q$, $U$ and $V$.
+%
+The eigenvectors of this rotation lie on the axis defined by $Q=U=V$; therefore,
+choose $\hat{\Pv{n}}=(1,1,1)^T/\sqrt{3}$ and note that a $120\deg$ rotation about this axis rotates Stokes $V$ into $S'_1$, Stokes $Q$ into $S'_2$, and Stokes $U$ into $S'_3$.
+%
+The equivalent unitary transformation of the electric field,
+%
+\begin{equation}
+\begin{split}
+\JM{R}_b 
+  &= \vRotation[n](-\pi/3) = \frac{1}{2} \left( \pauli{0} - \Ci \sum_{k=1}^3 \pauli{k} \right) \\
+  &= \frac{1}{2}
+  \left( \begin{array}{cc}
+    1-\Ci & -(1+\Ci) \\
+    1-\Ci & 1+\Ci
+  \end{array} \right)\\
+  &= \frac{1}{\sqrt{2}}
+  \left( \begin{array}{cc}
+    e^{-i\pi/4} & -e^{i\pi/4} \\
+    e^{-i\pi/4} & e^{i\pi/4}
+  \end{array} \right)\\
+  &= \frac{1}{\sqrt{2i}}
+  \left( \begin{array}{cc}
+    1 & -i \\
+    1 & i
+  \end{array} \right).
+\end{split}
+\end{equation}
+%
+% This matrix can be written in the form of \eqn{circular} by factoring 
+%\begin{equation} 1-i = \sqrt{2}\exp(-i\pi/4) = \sqrt{2/i} \end{equation} 
+%out of its components.

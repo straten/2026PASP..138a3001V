@@ -1,0 +1,667 @@
+\section{Linear Transformations}
+\label{sec:linear_transformations}
+
+Polarimetric studies require modeling and correcting the manner in which the measurement apparatus alter the incident radiation.
+%
+In radio astronomy, the instrument includes everything from the antenna (including any reflectors involved in focusing and redirecting the radio waves) to the signal processing system used to compute the Stokes parameters.
+%
+It is also necessary to model and correct Faraday rotation, which occurs in the Earth's ionosphere and the interstellar medium.
+%
+In this section, the response of a system is described using linear transformations of the electric field and the equivalent linear transformations of the Stokes parameters.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Jones Matrices}
+
+In the narrow-band (or quasi-monochromatic) approximation of an electromagnetic wave (see \App{narrow_band_approximation}), the response of a single receptor 
+%(e.g.,  one of the two dipoles of a receiver) 
+is defined by a complex-valued row vector, $\Jrow{r} = (r_0, r_1)$, such that the voltage induced in the receptor by the incident electric field $\Jcol{e}(t)$ is given by the scalar product, $v(t)=\Jrow{r} \cdot \Jcol{e}(t)$.
+%
+The intensity of the response, $I=\langle v^2(t) \rangle$, is maximum when the polarization of the incident wave matches that of the receptor, and reduces to zero when the incident wave is orthogonally polarized.
+%
+%The state of polarization to which a receptor maximally responds is completely described by the three components of its associated Stokes polarization vector, $\tilde{s}_k=\Jrow{r}\pauli{k}\Jrow{r}^\dagger$.
+
+The response of a dual-receptor feed 
+% (e.g.,  a pair of orthogonal dipoles) 
+is represented by a $2\times2$ complex-valued
+Jones matrix with rows equal to the receptor vectors,
+\begin{equation}
+\label{eqn:feed}
+\JM{J}=\left( \begin{array}{c}
+	\Jrow{r}_0 \\
+    \Jrow{r}_1
+\end{array} \right)
+=
+  \left( \begin{array}{cc}
+    r_{00} & r_{01} \\
+    r_{10} & r_{11}
+  \end{array} \right),
+\end{equation}
+%
+such that any linear transformation of the electric field vector may be represented by
+%
+\begin{equation}
+\Jcol{e}'(t)=\JM{J}\Jcol{e}(t).
+\label{eqn:field_transformation}
+\end{equation}
+%
+The receptors in an ideal feed are orthogonal, such the scalar product $\Jrow{r}_0 \cdot \Jrow{r}_1^\dagger=0$.
+% and have identical gains
+% (i.e., $\Jrow{r}_0 \cdot \Jrow{r}_0^\dagger=\Jrow{r}_1 \cdot \Jrow{r}_1^\dagger$).
+
+The response of a system that is composed of a series of elements is represented as a product of Jones matrices.
+%
+Matrix multiplication is not commutative, and in general the order in which operations are performed
+must correctly reflect the order in which the elements in the signal path are encountered.
+%
+For example, consider the system response described by equation~(11) of \citet{hbs96},
+%
+\begin{equation}
+\Jcol{e}'(t) = \JM{J} \Jcol{e}(t) = {\bf G\, D\, C\, P\, F}\, \Jcol{e}(t).
+\label{eqn:chain}
+\end{equation}
+%
+From the incident electric field $\Jcol{e}(t)$ on the right to the 
+observed $\Jcol{e}'(t)$ on the left, astrophysical signals are subjected to
+
+\begin{itemize}
+\item Faraday rotation in both the interstellar medium and the ionosphere, \JM{F};
+\item the projection between the celestial reference frame and the receptor basis, \JM{P};
+\item the nominal antenna and feed configuration, \JM{C};
+\item deviations from an ideal feed, \JM{D}; and
+\item complex receiver gains, \JM{G}.
+\end{itemize}
+
+%
+These transformations are depicted in \Fig{signal_path} and defined and discussed in more detail in \Sec{signal_path}.
+Note that \Fig{signal_path} includes an additional phase convention correction $\MM{\Phi}$ that cannot be represented using a Jones matrix and therefore does not appear in \eqn{chain}.  The phase convention correction can be represented by a Mueller matrix and is included in \eqn{Stokes_chain} of \Sec{Mueller}.
+
+\begin{figure*}
+\centerline{\includegraphics[width=0.6\linewidth]{signal_path.pdf}}
+\caption{ The radio wave signal path, from free space propagation on the right to detection on the left.  Also from right to left are
+Faraday rotation \JM{F} due to free electrons permeated by a magnetic field (represented by blue lines with arrows); the
+ coordinate projection \JM{P} between the $x$ and $y$ axes of the receiver and the North and East basis vectors of the celestial reference frame;
+ the nominal configuration \JM{C} of an ideal antenna and feed;
+unintended deviations \JM{D} from that ideal;
+and the gains \JM{G} and phase convention $\MM{\Phi}$ of the down-conversion system and instrumentation used to detect the Stokes parameters.}
+\label{fig:signal_path}
+\end{figure*}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Congruence Transformations}
+
+Substitution of
+$\Jcol{e}'=\JM{J}\Jcol{e}$ into \eqn{coherency} yields the coherency matrix of the transformed electric field, which is described by a congruence transformation,
+%
+\begin{equation}
+{\cohM{\rho}'}=\JM{J}\cohM{\rho}\JM{J}^\dagger.
+\label{eqn:congruence}
+\end{equation}
+
+\begin{proof}
+\begin{align*}
+\cohM{\rho}'
+& = \langle\Jcol{e}' \, \otimes \, \Jcol{e}^{\prime\dagger}\rangle & \peqn{coherency} \\
+& = \langle\left(\JM{J}\Jcol{e}\right) \otimes \left(\JM{J}\Jcol{e} \right)^{\dagger}\rangle \nonumber &\peqn{field_transformation}\\
+& = \langle\JM{J}\Jcol{e} \, \otimes \, \Jcol{e}^{\dagger}\JM{J}^\dagger\rangle & \left(\JM{A}\JM{B} \right)^{\dagger} = \JM{B}^{\dagger}\JM{A}^{\dagger} \\
+& = \JM{J} \langle\Jcol{e} \, \otimes \, \Jcol{e}^{\dagger}\rangle \JM{J}^\dagger & \text{\JM{J} is constant} \\
+& = \JM{J}\cohM{\rho} \, \JM{J}^\dagger\nonumber & \peqn{coherency}
+\end{align*}
+
+\end{proof}
+
+%%
+As discussed in more detail in \Sec{rime}, the congruence transformation is a special case of the more general radio interferometer measurement equation for a single point source \citep{ham00,smi11a}.
+%
+For a single antenna, the coherency matrix is insensitive to the absolute phase of $\JM{J}$.
+
+\begin{proof}
+\label{proof:coherency_matrix_is_detected}
+Consider $\JM{J}' = \JM{J}e^{i\phi}$.
+%
+\begin{align*}
+\cohM{\rho}' 
+&= \JM{J}' \cohM{\rho}\JM{J}^{\prime\dagger} 
+	& \peqn{congruence} \\
+&= \left(\JM{J}e^{i\phi}\right) \cohM{\rho} \left(\JM{J}e^{i\phi} \right)^{\dagger}
+	& \\
+&= e^{i\phi} \JM{J}\cohM{\rho}\JM{J}^\dagger e^{-i\phi} 
+= \JM{J}\cohM{\rho}\JM{J}^\dagger
+\end{align*}
+% The result is independent of $\phi$.
+\end{proof}
+
+Noting that $(\JM{A}\JM{B})^\dagger = \JM{B}^\dagger \JM{A}^\dagger$,
+congruence transformation of the coherency matrix by the 
+Jones matrix defined in \eqn{chain} has the following ``onion'' form.
+%
+\begin{equation}
+{\cohM{\rho}'}=
+\JM{G} \left(
+\JM{D} \left(
+\JM{C} \left(
+\JM{P} \left(
+\JM{F}
+\cohM{\rho} \,
+\JM{F}^\dagger \right)
+\JM{P}^\dagger \right)
+\JM{C}^\dagger \right)
+\JM{D}^\dagger \right)
+\JM{G}^\dagger
+\label{eqn:onion}
+\end{equation}
+%
+(The matrices in this equation are defined and discussed in more detail in \Sec{signal_path}.)
+
+Polarimetric calibration consists of transforming the observed coherency matrix by the inverse of the system response, 
+$\cohM{\rho}={\JM{J}^{-1}}\cohM{\rho}' \JM{J}^{-1\dagger}$, yielding the intrinsic polarization,
+%
+\begin{equation} 
+\cohM{\rho} =
+\cdots
+\JM{C}^{-1} \left(
+\JM{D}^{-1} \left(
+\JM{G}^{-1}
+\cohM{\rho} \,
+\JM{G}^{-1\dagger} \right)
+\JM{D}^{-1\dagger} \right)
+\JM{C}^{-1\dagger}
+\cdots
+\label{eqn:inverse_onion}
+\end{equation}
+%
+Because $(\JM{A}\JM{B})^{-1} = \JM{B}^{-1} \JM{A}^{-1}$, the onion is turned inside out and operations are inverted in reverse order, beginning with the last element of the signal path in the innermost congruence transformation.
+
+A congruence transformation converts any valid 
+polarization state to another valid state.
+%
+\begin{proof}
+\label{proof:only_valid}
+If $|\cohM{\rho}| \ge 0$ \eqnp{valid}, then
+%
+\begin{align*}
+| \cohM{\rho}' |
+&= | \JM{J} \, \cohM{\rho} \, \JM{J}^\dagger |
+	& \peqn{congruence} \\
+&= | \JM{J} | |\cohM{\rho}| | \JM{J}^\dagger |
+	& |\JM{A}\JM{B}| = |\JM{A}||\JM{B}| \\
+&= JJ^* |\cohM{\rho}| & J = | \JM{J} | \\
+& \ge 0    & |\cohM{\rho}| \ge 0 \text{ and } zz^* \ge 0
+\end{align*}
+\end{proof}
+%
+\noindent
+
+No linear transformation of the electric field can alter the degree of polarization of a purely polarized state.  
+%
+\begin{proof}
+\label{proof:no_depolarization}
+If $\cohM{\rho}$ is purely polarized, then
+%
+\begin{align*}
+| \cohM{\rho}' |
+&= | \JM{J} \, \cohM{\rho} \, \JM{J}^\dagger |
+	& \peqn{congruence} \\
+&= | \JM{J} | |\cohM{\rho}| | \JM{J}^\dagger |
+	& |\JM{A}\JM{B}| = |\JM{A}||\JM{B}| \\
+&= 0
+	& |{\cohM{\rho}}| = 0
+\end{align*}
+\end{proof}
+%
+\noindent
+Conversely, only a singular transformation ($|\JM{J}| = 0$) transforms partial polarization into pure polarization.
+%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Mueller Matrices}
+\label{sec:Mueller}
+
+Using \eqns{combination}{and}{Stokes_contraction}, a congruence
+transformation of the coherency matrix can be expressed as an
+equivalent linear transformation of the associated Stokes parameters
+by a real-valued $4\times4$ Mueller matrix \MM{M}, as defined by
+%
+\begin{equation}
+ S_\irow' = M_\irow^\icol S_\icol
+\label{eqn:linear_to_Mueller}
+\end{equation}
+%
+where
+%
+\begin{equation}
+  M_\irow^\icol = \frac{1}{2} \dc{\pauli{\irow}}{\left(\JM{J}\pauli{\icol}\,\JM{J}^\dagger\right)}.
+\label{eqn:Mueller_projection}
+\end{equation}
+
+\begin{proof}
+
+% Use the definition of $S_\irow$ in \eqn{Stokes_contraction} to express the Stokes parameters of the transformed electric field, then substitute \eqn{congruence} followed by \eqn{combination} to yield 
+\begin{align*}
+S_\irow' 
+&= \dc{\pauli{\irow}}{\cohM{\rho}'} & \peqn{Stokes_contraction} \\
+&= \dc{\pauli{\irow}}{\left(\JM{J}\cohM{\rho}\, \JM{J}^\dagger\right)}   & \peqn{congruence} \\
+&= \dc{\pauli{\irow}}{\left(\JM{J}\left[S_\icol\,\pauli{\icol}/2\right]\JM{J}^\dagger\right)} & \peqn{combination} \\
+&= \frac{1}{2}\dc{\pauli{\irow}}{\left(\JM{J}\pauli{\icol}\, \JM{J}^\dagger\right)}S_\icol & \text{$S_\nu$ is a scalar} \\
+&= M_\irow^\icol S_\icol & \peqn{Mueller_projection}
+\end{align*}
+\end{proof}
+
+% Perhaps also show the conversion from Jones to Mueller matrices that involves the Kronecker product and the coherency vector to Stokes vector transformation matrix A; e.g.,  equations 9 and 12 of hbs96
+
+Although there is a unique Mueller matrix for every Jones matrix, the converse is not true.
+%
+This is most directly understood by noting that a $4\times 4$ real-valued matrix has 16 degrees of freedom (dof), and a $2\times 2$ complex-valued matrix has only 8 dof.
+%
+Mueller matrices that do not have an equivalent
+Jones matrix are known as ``impure'' or ``depolarizing'' \citep[e.g.,][and \App{impure}]{hbs96,lc96}.
+%
+The definition of a pure Mueller matrix is derived in \App{pure_Mueller_matrices}.
+
+The signal path described by \cite{vmjr10} extends the \citet{hbs96} model with an impure correction for the complex phase convention, which is described
+in more detail in \Sec{conjugation}.
+%
+Therefore, the \cite{vmjr10} calibration model is best summarized
+using the equivalent transformation of the Stokes parameters
+by a Mueller matrix $\MM{M}$,
+\begin{equation}
+\Sv{S}' = \MM{M} \, \Sv{S} = \MM{\Phi} \, \MM{G} \, \MM{D} \, \MM{C} \, \MM{P} \, \MM{F}\, \Sv{S}.
+\label{eqn:Stokes_chain}
+\end{equation}
+From right to left, $\Sv{S}$ is the column vector with elements equal to the 4 Stokes parameters intrinsic to the astronomical source;
+%
+$\MM{F}$ through $\MM{G}$ are the Mueller matrices derived from the Jones matrices defined in \eqn{chain} and discussed in \Sec{signal_path};
+%
+$\MM{\Phi}$ is the phase convention correction
+(see \Sec{conjugation});
+%
+and $\Sv{S}'$ is the column vector of observed Stokes parameters.
+%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Polarization Transfer Tensors}
+\label{sec:polarization_transfer_tensor}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Linear transformations of polarization state can also be represented 
+as a double contraction \eqnp{double_contraction} with a two-dimensional, rank 4 polarization transfer tensor, $\JT{U}$, such that
+%
+\begin{equation}
+\label{eqn:polarization_transfer_tensor}
+\cohM{\rho}' = \JT{U} \dcbo \cohM{\rho}.
+\end{equation}
+%
+Similar tensors are used in the generalized radio interferometer equation \citep{smi11d} and in descriptions of the propagation of radiation through a magnetized plasma \citep[e.g.,][]{kaw64,zhe68}.  The tensor formalism also simplifies the analysis of the covariances between the Stokes parameters \citep{vt17} and the definition of pure Mueller matrices (\App{pure_Mueller_matrices}).
+
+
+To relate a congruence transformation of the coherency matrix to the equivalent double contraction with
+a polarization transfer tensor, the $\tilde\otimes$ operator is introduced to represent 
+a tensor product followed by a transpose over covariant\footnote{ 
+Covariant tensor indeces are raised in this work; note that \cite{vt17} incorrectly identified this as a transpose over contravariant tensor indeces.} 
+tensor indeces \citep{car91}.
+%
+That is, where {\bf A} and {\bf B} are matrices (rank 2 tensors) and
+%
+\begin{equation}
+\left\{\outerBilinear{\bf A}{\bf B}\right\}_{ik}^{jl}
+ \equiv 
+A_i^j B_k^l  \label{eqn:indexOuterBilinear}
+\end{equation}
+is their tensor product,
+\begin{equation}
+\left\{\spinorBilinear{\bf A}{\bf B}\right\}_{ik}^{jl}
+ \equiv 
+A_i^l B_k^j. \label{eqn:indexSpinorBilinear}
+\end{equation}
+%
+Upon double contraction with a matrix {\bf C}, the rank 4 tensors defined by \eqns{indexOuterBilinear}{and}{indexSpinorBilinear} exhibit the following transformation properties (\Proofs{outerBilinear}{and}{spinorBilinear}).
+%
+\begin{eqnarray}
+\left( \outerBilinear{\bf A}{\bf B} \right) \dcbo {\bf C}
+& = &
+{\bf A}\left(\dc{\bf B}{\bf C}\right) \label{eqn:outerBilinear} \\
+%
+\left( \spinorBilinear{\bf A}{\bf B} \right) \dcbo {\bf C}
+& = &
+{\bf A}{\bf C}{\bf B} \label{eqn:spinorBilinear}
+\end{eqnarray}
+%
+Using \eqns{polarization_transfer_tensor}{and}{spinorBilinear}, a congruence transformation by a Jones matrix \JM{J} can be expressed as a double contraction with
+\begin{equation}
+\label{eqn:Jones_tensor}
+    \JT{U}= \spinorBilinear{\bf J}{\bf J}^\dagger.
+\end{equation}
+
+\begin{proof}
+\begin{align*}
+\cohM{\rho}' &= \JT{U} \dcbo \cohM{\rho} & \peqn{polarization_transfer_tensor} \\
+&= \left( \spinorBilinear{\bf J}{\bf J}^\dagger \right)\dcbo \cohM{\rho} & \peqn{Jones_tensor} \\
+&= \JM{J} \, \cohM{\rho} \, \JM{J}^\dagger. & \peqn{spinorBilinear}
+\end{align*}
+\end{proof}
+
+The polarization transfer tensor can also replace the congruence transformation in \eqn{Mueller_projection}, thereby yielding the
+equivalent Mueller matrix $\MM{M}$,
+%
+\begin{equation}
+M_\irow^\icol
+= \frac{1}{2} \dc{\pauli{\irow}}{\dc{\JT{U}}{\pauli{\icol}}}.
+\label{eqn:tensor_to_Mueller}
+\end{equation}
+%
+The inverse of this mapping is given by
+%
+\begin{equation}
+\JT{U} = \frac{1}{2} M_\irow^\icol \outerBilinear{\pauli{\irow}}{\pauli{\icol}}.
+\label{eqn:Mueller_to_tensor}
+\end{equation}
+
+% \Eqn{outerBilinear} can be used to show that $\outerBilinear{\pauli{\irow}}{\pauli{\icol}}$ form a complete basis.
+\begin{proof}
+\begin{align*}
+\frac{1}{2} & \dc{\pauli{\irow}}{\dc{\JT{U}}{\pauli{\icol}}} & \peqn{tensor_to_Mueller} \\
+& = \frac{1}{2} \dc{\pauli{\irow}}{\dc{ \left( \frac{1}{2} M_\jrow^\jcol \outerBilinear{\pauli{\jrow}}{\pauli{\jcol}} \right)  }{\pauli{\icol}}} & \peqn{Mueller_to_tensor} \\
+& = \frac{1}{4} M_\jrow^\jcol \dc{\pauli{\irow}}{\dc{\left( \outerBilinear{\pauli{\jrow}}{\pauli{\jcol}} \right)}{\pauli{\icol}}} \\
+& = \frac{1}{4} M_\jrow^\jcol \left(\dc{\pauli{\irow}}{\pauli{\jrow}}\right)\left(\dc{\pauli{\jcol}}{\pauli{\icol}} \right) & \peqn{outerBilinear} \\
+& = M_\jrow^\jcol \delta_{\irow\jrow} \delta_{\icol\jcol} & \peqn{basis_orthogonal}  \\
+& = M_\irow^\icol
+\end{align*}
+\end{proof}
+
+%
+\Eqn{tensor_to_Mueller} expresses the components of $\MM{M}$
+as the double projections of \JT{U} onto the Hermitian
+basis matrices.
+%
+\Eqn{Mueller_to_tensor} represents \JT{U} as a linear combination of
+the 16 basis tensors formed by tensor products of the 4
+Hermitian basis matrices.
+
+%
+% Apart from \App{pure_Mueller_matrices}, polarization transfer tensors are not used in the remainder of this tutorial.
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Comparison with Radio Interferometry}
+\label{sec:rime}
+
+As in \cite{smi11a}, the radio interferometer measurement equation for a single point source models the
+visibility matrices formed by the outer products of electric field vectors from pairs of elements in an array.  That is, if $\Jcol{e}_A(t)$ and $\Jcol{e}_B(t)$ are the signals from two array elements, the visibility matrix for this pair
+%
+\begin{equation}
+  \label{eqn:visibility}
+  \cohM{V}_{AB} \equiv\langle\Jcol{e}_A(t) \otimes \Jcol{e}_B^\dagger(t) \rangle.
+\end{equation}
+Furthermore, if $\JM{J}_A$ and $\JM{J}_B$ are the Jones matrices that describe the reception of the incident electric field $\Jcol{e}(t)$ by the two array elements, such that $\Jcol{e}_A(t) = \JM{J}_A \Jcol{e}(t)$ and $\Jcol{e}_B(t) = \JM{J}_B \Jcol{e}(t)$,
+then the observed visibility matrix,
+%
+\begin{equation}
+\cohM{V}_{AB} =
+\JM{J}_A \, \cohM{\rho} \, \JM{J}_B^\dagger.
+\label{eqn:brightness}
+\end{equation}
+In the context of interferometry, the coherency matrix $\cohM{\rho}$ is also known as the brightness matrix \citep{smi11a}.
+%
+\Eqn{brightness} reduces to \eqn{congruence} when observing a single point source with a single antenna.
+%
+In the tensor formalism of the generalized radio interferometer measurement equation \citep{smi11d}, \eqn{brightness} is expressed as
+%
+\begin{equation}
+\cohM{V}_{AB} =
+\dc{\JT{U}_{AB}}{\cohM{\rho}},
+\label{eqn:tensor_rime}
+\end{equation}
+%
+where $\JT{U}_{AB}=\spinorBilinear{\JM{J}_A}{\JM{J}_B^\dagger}$
+is the visibility transfer tensor\footnote{A transpose of covariant tensor indeces also appears in equation~(10)
+of \cite{smi11d}.} \eqnp[cf.]{Jones_tensor}.
+
+
+An extended source is described by a brightness matrix that varies with direction, $\cohM{\rho}(\hat{\Pv{z}})$, such that the visibility matrix is given
+by the integral
+%
+\begin{equation}
+\cohM{V}_{AB} = \iint
+\JM{J}_A(\hat{\Pv{z}}) \, \cohM{\rho}(\hat{\Pv{z}}) \, \JM{J}_B^\dagger(\hat{\Pv{z}}) \, d\Omega,
+\label{eqn:visibility_integral}
+\end{equation}
+where $\JM{J}_{A,B}(\hat{\Pv{z}})$ are the direction-dependent responses of each
+antenna.  For a single-antenna observation of an extended source,
+%
+\begin{equation}
+\cohM{\rho} = \iint
+\JM{J}(\hat{\Pv{z}}) \, \cohM{\rho}(\hat{\Pv{z}}) \, \JM{J}^\dagger(\hat{\Pv{z}}) \, d\Omega.
+\label{eqn:coherency_integral}
+\end{equation}
+
+There are some key differences between single-antenna and interferometric measurements of polarization.  For a single antenna, the coherency matrix is Hermitian and independent of the absolute phase of $\Jcol{e}(t)$.  For an interferometer, the visibility matrix is not Hermitian and depends on the relative phase between $\Jcol{e}_A(t)$ and $\Jcol{e}_B(t)$.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Polar Decomposition}
+\label{sec:polar_decomposition}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%As shown by \cite{bri00} and \cite{ham00}
+
+%
+Any invertible Jones matrix $\JM{J}$ can be decomposed into a unique product known as its left polar decomposition,
+%
+\begin{equation}
+\label{eqn:polar}
+\JM{J} = J \, \JM{B} \JM{R},
+\end{equation}
+where $J=|\JM{J}|^{1/2}$ and $|\JM{J}|$ is the determinant of \JM{J};
+\JM{B} is Hermitian 
+($\JM{B}^\dagger=\JM{B}$);
+\JM{R} is unitary
+($\JM{R}^\dagger = \JM{R}^{-1}$);
+and both \JM{B} and \JM{R} are unimodular ($|\JM{B}| = |\JM{R}| = 1$).
+%
+The requirement for a left polar decomposition\footnote{
+A right polar decomposition,
+$\JM{J}' = J' \, \JM{R}' \, \JM{B}'$, would be used if receptors were column vectors, such that
+% a linear transformation of the electric field,
+$\Jcol{e}'(t)=\JM{J}^{\prime\dagger}\Jcol{e}(t)$ 
+%has the corresponding congruence transformation,
+and
+${\cohM{\rho}'}=\JM{J}^{\prime\dagger}\cohM{\rho}\, \JM{J}'$.  Note that $\JM{J}'=\JM{J}^\dagger = J^* \, \JM{R}^\dagger \JM{B}^\dagger$; therefore,
+$J'=J^*$, $\JM{R}'=\JM{R}^{-1}$, and $\JM{B}'=\JM{B}$.
+} stems from the definition of a Jones matrix as a pair of receptor row vectors \eqnp{feed}.   
+
+
+Polar decomposition into Hermitian and unitary matrices provides a practical framework for classifying and conceptualizing distinct polarization-altering effects, as discussed in more detail in \Sec{axis-angle}.
+%
+Isolating the determinant of the Jones matrix also has practical benefit.
+In single-antenna polarimetry, the coherency matrix is insensitive to the phase of $J$ (\Proof{coherency_matrix_is_detected}); therefore, 
+without any loss of generality, 
+the absolute phase is set to zero
+%
+and $J$ is replaced by the real-valued absolute gain, $G=|J|$, thereby eliminating a degenerate dof.
+
+
+The polar decomposition
+%
+also enables unique determination of the Hermitian component of the instrumental response given only an observation of a source that is known to be completely unpolarized.
+%
+To demonstrate this, first note that the Hermitian component of any Jones matrix \JM{J}
+%
+can be determined via the Gram matrix of its rows,  
+$\JM{J}\JM{J}^\dagger$, such that\footnote{
+If the Jones matrix is defined as a pair of columnn vectors, then the
+Gram matrix of the columns of $\JM{J}'$ would be used to determine its Hermitian component. }
+%
+\begin{equation}
+\label{eqn:boost_from_polar}
+\JM{B}^2 = G^{-2} \JM{J}\JM{J}^\dagger.
+\end{equation}
+%
+\begin{proof}
+\label{proof:self_adjoint_square}
+The Gram matrix of the rows of \JM{J},
+\begin{align*}
+\JM{J}\JM{J}^\dagger
+& = J \, \JM{B} \, \JM{R} \left( J \, \JM{B} \, \JM{R} \right)^\dagger \\
+& = J \, \JM{B} \, \JM{R} \, \JM{R}^\dagger \JM{B}^\dagger J^* \\
+& = |J|^2 \JM{B} \, \JM{R} \, \JM{R}^{-1} \JM{B} \\
+& = G^2 \, \JM{B}^2
+% = G^2 \, \vBoost(2\beta) \qquad \qquad \peqn{boost_power}
+\end{align*}
+\noindent
+\end{proof}
+%
+\noindent
+For an unpolarized source $\cohM{\rho} = I\pauli{0}$; therefore,
+%
+\begin{equation}
+\cohM{\rho}' = \JM{J} \cohM{\rho} \, \JM{J}^\dagger = I \JM{J}\JM{J}^\dagger = I G^2 \JM{B}^2.
+\end{equation}
+The unknown factor of $T=IG^2$ can be eliminated by noting that $|\JM{B}|=1$;
+therefore, $|\cohM{\rho}'| = T^2$
+%normalize the observed coherency matrix by the square root of its determinant, 
+and $\JM{B}= ({\cohM{\rho}}'/T)^{1/2}.$
+%where $\hat\cohM{\rho} = \cohM{\rho}' \left| \cohM{\rho}' \right|^{-1/2}$.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Axis-Angle Representation}
+\label{sec:axis-angle}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+As shown in \App{fundamental_transformations}, \JM{B} and
+\JM{R} can be expressed using axis-angle representation,
+%
+\begin{align}
+\label{eqn:Boost}
+\boost \equiv e^{\beta \hat{\Pvs{m}} \cdot \Pvs{\sigma}} &= \pauli{0}\cosh\beta + \hat{\Pv{m}} \cdot \Pv{\sigma} \sinh\beta \\
+\label{eqn:Rotation}
+\rotat \equiv e^{ \Ci \phi \hat{\Pvs{n}} \cdot \Pvs{\sigma} } &= \pauli{0}\cos\phi + \Ci \hat{\Pv{n}} \cdot \Pv{\sigma} \sin\phi,
+\end{align}
+%
+where $\hat{\Pv{m}}$ and $\hat{\Pv{n}}$ are three-dimensional unit vectors, $\beta$ and $\phi$ are real-valued scalars,
+and
+$\Pv{\sigma}=\left( \pauli{1}, \pauli{2}, \pauli{3} \right)$ is
+a 3-vector whose components are the Pauli spin matrices.
+%
+Each axis-angle representation has 3 dof
+%
+%, including two dof in the components of the unit vector that defines the axis and one dof in the angle.  
+%
+in the vector 
+% (e.g.,  $\beta\hat{\Pv{m}}$) 
+that defines it.
+%
+Combined with the 2 dof in the real and imaginary parts of the complex-valued scalar $J$, \eqn{polar} has 8 dof,
+% (2 from $J$, 3 from \JM{B} and 3 from \JM{R}) 
+as expected for a $2\times2$ matrix with independent real and imaginary parts.
+
+The axes and angles in \eqns{Boost}{and}{Rotation} have geometric interpretations in the four-dimensional space of the Stokes parameters.
+%
+After a congruence transformation by a Hermitian matrix \JM{B}, the associated Stokes four-vector is transformed by a 
+%(proper orthochronous) 
+Lorentz boost along the $\hat{\Pv{m}}$ axis by a hyperbolic angle $-2\beta$ (e.g., \App{example_boost}).
+%%
+A Lorentz transformation of the Stokes four-vector mixes $S_0$ with the polarization vector $\Pv{S}$, thereby altering both the intensity and the degree of polarization.
+%
+Consequently, energy is not conserved.
+%
+Hermititan matrices are equivalent to the \emph{polconversion} defined by \cite{ham00}; they describe the diattenuation of a system \citep{lc96} due to differential gain and non-orthogonality of the receptors.
+
+In contrast, congruence transformation by a unitary matrix
+rotates the Stokes polarization vector $\Pv{S}$ about the $\hat{\Pv{n}}$ axis by
+an angle $-2\phi$, using the right-hand rule for rotation (e.g., \App{example_rotation}).
+%
+This rotation in three-dimensional space leaves the total intensity and the degree of polarization unchanged. % ; therefore, energy is conserved.
+%
+Unitary matrices are equivalent to the \emph{polrotation} defined by \cite{ham00}; they describe the retardance of a system \citep{lc96} due to differential phase and they represent any change of basis by projection onto a pair of orthonormal receptors (see \Proof{orthonormal_receptors}).
+
+The axis-angle representations of \boost\ and \rotat\ exhibit a number of properties that prove useful during analysis.
+%
+Both transformations are unimodular.
+%
+\begin{proof}
+\label{proof:unimodular_boost_and_rotation}
+%
+%Substitute \eqn{Boost} into \eqn{determinant_is_invariant},
+\begin{align*}
+|\boost| 
+&= |\pauli{0}\cosh\beta + {\hat{\Pv{m}}\cdot\Pv{\sigma}}\sinh\beta| & \peqn{Boost} \\
+&= \cosh^2\beta - |\hat{\Pv{m}}|^2 \sinh^2\beta & \peqn{determinant_is_invariant} \\
+	&= 1
+\end{align*}
+Similarly,
+$|\rotat| 
+% &= |\pauli{0}\cos\phi + \Ci{\hat{\Pv{n}}\cdot\Pv{\sigma}}\sin\phi| & \peqn{Rotation} \\
+= \cos^2\phi - |\Ci\hat{\Pv{n}}|^2 \sin^2\phi
+	= 1$
+\end{proof}
+%
+\noindent
+Therefore, congruence transformation by \boost\ or \rotat\ preserves the determinant of the coherency matrix and the invariant interval of the Stokes parameters. % \eqnp{invariant}.
+%
+\begin{proof}
+\label{proof:invariant}
+%
+Let $|\JM{U}|=1$ and
+\begin{align*}
+|{\cohM{\rho}'}| &=|\JM{U}\cohM{\rho}\JM{U}^\dagger| & \peqn{congruence} \\
+&=|\JM{U}||\cohM{\rho}||\JM{U}^\dagger| & |\bf{AB}| = |\bf{A}||\bf{B}| \\
+&=|\cohM{\rho}| & |\JM{U}| = |\JM{U}|^\dagger = 1
+\end{align*}
+\end{proof}
+
+Exponentiation of \boost\ or \rotat\ is equivalent 
+to multiplying the angle by the power,
+%
+\begin{eqnarray}
+\label{eqn:boost_power}
+\vBoost^y(\beta) = \left( e^{\beta \hat{\Pvs{m}} \cdot \Pvs{\sigma}} \right)^y
+= e^{y \beta \hat{\Pvs{m}} \cdot \Pvs{\sigma}} = \vBoost(y\beta) \\
+\vRotation^y(\phi) = \left( e^{ \Ci \phi \hat{\Pvs{n}} \cdot \Pvs{\sigma} } \right)^y
+= e^{ \Ci y \phi \hat{\Pvs{n}} \cdot \Pvs{\sigma} } = \vRotation(y\phi)
+\label{eqn:rotation_power}
+\end{eqnarray}
+%
+which simplifies the  
+derivation of quantities such as the inverse or the Hermitian square root.
+%
+Further conceptual benefits of the axis-angle representation are discussed in more detail in \App{symmetry}.
+
+\iffalse
+
+The axis-angle representation also simplifies calculations required during numerical modeling.  For example, it is sometimes necessary to compute the gradient of an objective function (such as the goodness-of-fit metric that describes the distance between the model and the data) with respect to the model parameters.
+%
+For fixed axes, the partial derivatives of $\boost$ and $\rotat$ with respect to their angles are simply
+%
+\begin{align}
+\label{eqn:dBoost_dbeta}
+\frac{\partial}{\partial\beta}\boost = (\hat{\Pv{m}} \cdot \Pv{\sigma}) \boost \\
+\label{eqn:dRotation_dphi}
+\frac{\partial}{\partial\phi}\rotat = \Ci (\hat{\Pv{n}} \cdot \Pv{\sigma}) \rotat.
+\end{align}
+%
+
+\fi

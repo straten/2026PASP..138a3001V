@@ -1,0 +1,876 @@
+\section{Linear Algebra Fundamentals}
+\label{app:linear_algebra}
+
+This section reviews the elements of linear algebra used
+in this work, beginning with the Hermitian basis matrices.
+%
+The spectral decomposition is used
+to derive the axis-angle representations of rotations and boosts,
+%
+the symmetry properties of which are used to identify
+matrices that commute and the eigenmatrices of a congruence transformation.
+%
+Finally, the symmetry between \eqns{indexOuterBilinear}{and}{indexSpinorBilinear} is used to define a pure Mueller matrix and its associated Jones matrix, and an example of a depolarizing impure Mueller matrix is presented.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Hermitian Basis Matrices}
+\label{app:basis}
+
+The Hermitian basis matrices \eqnp{Pauli} have a number of useful algebraic properties that
+enable meaningful geometric interpretations of the equations used in this work.
+%
+When the basis matrices are indexed with a Greek character, the index is understood
+to span all dimensions including the identity; e.g.,  $\mu \in \{0,1,2,3\}$.  When Latin characters are used,
+the index is understood to span only the Pauli matrces; e.g.,  $m \in \{1,2,3\}$.
+%
+The following identities prove useful in this work.
+\begin{eqnarray}
+    \tr{\pauli{i}}&=&0 \label{eqn:Pauli_trace} \\
+    %
+    |\pauli{i}|&=&-1 \label{eqn:Pauli_determinant} \\
+    %
+    |\pauli{\mu} + \pauli{\nu} | &=& |\pauli{\mu}| + |\pauli{\nu}|; \ensuremath{\quad \mu \ne \nu} \label{eqn:basis_sum_determinant} \\
+    %
+    \pauli{\mu} \dcbo \pauli{\nu} &=& 2 \delta_{\mu\nu} \label{eqn:basis_orthogonal} \\
+    %
+    \pauli{i}\,\pauli{j} &=& \delta_{ij}\,\pauli{0} + i\epsilon_{ijk}\,\pauli{k} \label{eqn:Pauli_product}
+\end{eqnarray}
+%
+In the last identity, $\epsilon_{ijk}$ is the permutation symbol and summation over the index $k$ is implied.
+%
+\Eqn{Pauli_trace} expresses the traceless property of the Pauli matrices.
+%
+\Eqns{Pauli_determinant}{and}{basis_sum_determinant} can be used to show that
+\begin{equation}
+| x_\mu \pauli{\mu} | = x_\mu^2 |\pauli{\mu}| = x_0^2 -x_1^2 -x_2^2 - x_3^2.
+\label{eqn:determinant_is_invariant}
+\end{equation}
+%
+That is, the determinant of a linear combination of the Hermitian
+basis matrices is equal to the invariant interval of the 
+four-vector of the scalar coefficients, $x_\mu$.
+%
+% (Note that, for any $2\times2$ matrix \JM{A} and any scalar $c$, $|cA| = c^2|A|$.)
+%
+\Eqn{basis_orthogonal} states that the Hermitian basis matrices
+are mutually orthogonal with respect to the trace inner product.
+%
+The first term on the right-hand side of \eqn{Pauli_product} identifies
+the Pauli matrices as the square roots of $\pauli{0}$.  
+The second term describes how the Pauli matrices
+behave like the basis vectors of a right-handed coordinate system, 
+where $\hat{\Pv{v}}_i \times \hat{\Pv{v}}_j = \epsilon_{ijk}\,\hat{\Pv{v}}_k$.
+%
+Using this identity, the product of two matrices,
+\begin{equation}
+\begin{split}
+\JM{A}\JM{B} &=
+ (a\,\pauli{0}+\Pv{a}\cdot\Pv{\sigma})(b\,\pauli{0} + \Pv{b}\cdot\Pv{\sigma}) \\
+        &=
+ (ab + \Pv{a}\cdot\Pv{b})\pauli{0} + (a\Pv{b} + b\Pv{a}
+    + \Ci \Pv{a}\times\Pv{b}) \cdot \Pv{\sigma},
+    \label{eqn:multiplication_rule} 
+\end{split}
+\end{equation}
+where $\Pv{\sigma}=\left( \pauli{1},  \pauli{2}, \pauli{3} \right)$ is
+the Pauli vector that appears in \eqns{Boost}{and}{Rotation}.
+
+\subsection{Basis Transformations}
+\label{app:basis_transformations}
+
+A pair of orthonormal receptors, $\hat{\Jrow{r}}_0$ and $\hat{\Jrow{r}}_1$, have unit length and are orthogonal; that is, they satisfy
+%
+\begin{equation}
+\hat{\Jrow{r}}_i \cdot \hat{\Jrow{r}}_j^\dagger = \delta_{i,j}.
+\label{eqn:orthonormality}
+\end{equation}
+%
+The projection of the electric field vector onto a pair of orthonormal receptors defines a basis transformation that is equivalent to a unitary Jones matrix.
+%
+\begin{proof}
+\label{proof:orthonormal_receptors}
+%Orthonormal receptors satisfy
+%$$\hat{\Jrow{r}}_i \cdot \hat{\Jrow{r}}_j^\dagger = \delta_{i,j}$$.
+Let 
+$$\JM{R} = \left( \begin{array}{c}
+		\hat{\Jrow{r}}_0 \\
+		\hat{\Jrow{r}}_1
+	\end{array} \right)$$
+such that 
+\begin{align*}
+\left\{ \JM{R} \JM{R}^\dagger \right\}_i^j 
+& = \left\{ \JM{R} \right\}_i^k \left\{ \JM{R}^\dagger \right\}_k^j
+  & \peqn{matrix_product} \\
+& = \left\{ \hat{\Jrow{r}}_i \right\}^k \left\{ \hat{\Jrow{r}}_j^\dagger \right\}_k  \\
+& = \hat{\Jrow{r}}_i \cdot \hat{\Jrow{r}}_j^\dagger 
+  & \peqn{scalar_product} \\
+& = \delta_{i,j} 
+  & \peqn{orthonormality}
+\end{align*}
+That is, $\JM{R} \JM{R}^\dagger = \pauli{0}$; 
+% is equal to the identity matrix.
+therefore, $\JM{R}^\dagger=\JM{R}^{-1}$.
+\end{proof}
+%
+In general, a unitary matrix has a determinant equal to $\exp(\Ci\phi)$, and
+multiplication by $\exp(-\Ci\phi/2)$ yields a unimodular matrix
+(with $|\JM{R}|=1$).
+%
+Basis transformations defined by unitary matrices are used extensively throughout both \Sec{signal_path} and the following sections of the appendix.  
+
+\subsection{Spectral Decomposition}
+\label{app:spectral_decomposition}
+
+\iffalse
+\Eqns{Boost}{and}{Rotation} can be derived using the spectral decomposition,
+% of a linear combination of the Pauli matrices,
+which is a special case of the eigendecomposition.
+\fi
+%
+The eigenvalues $\lambda$ and eigenvectors $\Jcol{v}$ of
+a matrix \JM{A} satisfy the following (logically-equivalent) equations,
+%
+\begin{equation}
+    \label{eqn:eigen}
+    \JM{A}\Jcol{v} = \lambda\Jcol{v} \quad \Leftrightarrow \quad
+    \left(\JM{A} - \lambda\JM{I} \right) \Jcol{v} = 0,
+\end{equation}
+where \JM{I} is the identity matrix with the dimensions of \JM{A}.
+%
+\Eqn{eigen} can be expressed simultaneously for all eigenvalue/eigenvector pairs by $\JM{A} \JM{R} = \JM{R} \cohM{\Lambda}$, where the $k^\mathrm{th}$
+column of {\bf{R}} is the unit eigenvector $\hat{\Jcol{v}}_k$, and the diagonal matrix $\cohM{\Lambda}$ is defined by $\Lambda_k^j = \delta_{j,k} \lambda_k$.
+%
+This can be rearranged to yield the eigendecomposition of \JM{A},
+%
+\begin{equation}
+\JM{A} = \JM{R} \cohM{\Lambda} \JM{R}^{-1} \label{eqn:eigendecomposition}.
+\end{equation}
+
+If \JM{A} is normal (i.e., $\JM{A}^\dagger\JM{A}=\JM{A}\JM{A}^\dagger$),
+and $\Jcol{v}$ is an eigenvector of \JM{A} with associated eigenvalue $\lambda$, 
+then $\Jcol{v}$ is also an eigenvector of $\JM{A}^\dagger$ with associated eigenvalue $\lambda^*$.
+
+\begin{proof}
+\label{proof:normal_eigenvalue}
+Define $\JM{L}=\JM{A} - \lambda\JM{I}$ and consider
+\begin{align*}
+|\JM{L}^\dagger \Jcol{v}|^2
+  &= \left( \JM{L}^\dagger \Jcol{v} \right)^\dagger \left( \JM{L}^\dagger \Jcol{v} \right) \\
+  &= \Jcol{v}^\dagger \JM{L} \JM{L}^\dagger \Jcol{v} \\
+  &= \Jcol{v}^\dagger \JM{L}^\dagger \JM{L} \Jcol{v} & \text{\JM{L} is normal} \\
+  &= \left( \JM{L}\Jcol{v} \right)^\dagger \JM{L} \Jcol{v} \\
+  &= |\JM{L} \Jcol{v}|^2 \\
+  &= |\left(\JM{A} - \lambda\JM{I} \right) \Jcol{v}|^2 = 0 & \peqn{eigen}
+\end{align*}
+Therefore $\JM{L}^\dagger \Jcol{v} = \left(\JM{A}^\dagger - \lambda^*\JM{I} \right) \Jcol{v} = 0.$
+\end{proof}
+\noindent
+Furthermore, if \JM{A} is normal, then \eqn{eigendecomposition} is equivalent to a
+congruence transformation by a unitary matrix known as its spectral decomposition,
+%
+\begin{equation}
+\label{eqn:congruence_eigendecomposition}
+\JM{A} = \JM{R} \cohM{\Lambda} \JM{R}^\dagger.
+\end{equation}
+%
+
+\begin{proof}
+\label{proof:spectral_decomposition}
+If \JM{A} is normal, then
+\begin{align*}
+( \JM{A}^\dagger \hat{\Jcol{v}}_i )^\dagger \hat{\Jcol{v}}_j
+&= \hat{\Jcol{v}}_i^\dagger \JM{A} \hat{\Jcol{v}}_j  \\
+%
+%
+( \lambda_i^* \hat{\Jcol{v}}_i)^\dagger \cdot \hat{\Jcol{v}}_j
+&= \hat{\Jcol{v}}_i^\dagger \cdot ( \lambda_j \hat{\Jcol{v}}_j)
+ & \text{\Proof{normal_eigenvalue}} \\
+%
+%
+\lambda_i \hat{\Jcol{v}}_i^\dagger \cdot \hat{\Jcol{v}}_j
+&= \lambda_j \hat{\Jcol{v}}_i^\dagger \cdot \hat{\Jcol{v}}_j \\
+%
+%
+(\lambda_i-\lambda_j) \hat{\Jcol{v}}_i^\dagger \cdot \hat{\Jcol{v}}_j &= 0
+\end{align*}
+If $\lambda_i \ne \lambda_j$, then
+$\hat{\Jcol{v}}_i^\dagger \cdot \hat{\Jcol{v}}_j = 0$ and
+\begin{align*}
+\left\{ \JM{R}^\dagger \JM{R} \right\}_i^j 
+& = \left\{ \JM{R}^\dagger \right\}_i^k \left\{ \JM{R} \right\}_k^j \\
+& = \left\{ \hat{\Jcol{v}}_i^\dagger \right\}^k \left\{ \hat{\Jcol{v}}_j \right\}_k 
+  = \hat{\Jcol{v}}_i^\dagger \cdot \hat{\Jcol{v}}_j = \delta_{i,j}
+\end{align*}
+That is, $\JM{R}^\dagger \JM{R} = \JM{I}$; therefore, $\JM{R}^\dagger=\JM{R}^{-1}.$
+\end{proof}
+
+In the natural basis defined by ${\bf{R}}^\dagger$, the matrix $\JM{A}$ becomes the diagonal matrix,
+%
+\begin{equation}
+\label{eqn:diagonal_decomposition}
+\cohM{\Lambda} = \JM{R}^\dagger \JM{A} \JM{R}.
+\end{equation}
+%
+Both Hermitian and unitary matrices are normal, and each takes
+diagonal form in the natural basis defined by its eigenvectors.  Consequently, any Hermitian matrix can be diagonalized such that it is equivalent to a differential gain transformation (see \Sec{differential_gain}) in its natural basis.
+%
+Similarly, any unitary matrix is equivalent to differential phase (see \Sec{differential_phase}) in its natural basis.
+% (e.g., see \Proof{Faraday}).
+%
+This is applied in \Proof{Faraday_rotation}, where rotation about the line of sight is shown to be equivalent to differential phase between the circularly-polarized natural modes of a magnetized cold plasma.
+
+
+
+The spectral decomposition can also be written as a linear combination of outer products,
+\begin{equation}
+\JM{A} = \lambda_k\, \hat{\Jcol{v}}_k \otimes \hat{\Jcol{v}}_k^\dagger.
+\label{eqn:spectral_decomposition}
+\end{equation}
+
+\begin{proof}
+
+\begin{align*}
+A_i^j
+&= \left\{ {\bf{R}} \cohM{\Lambda} {\bf{R}}^\dagger \right\}_i^j 
+    & \peqn{congruence_eigendecomposition} \\
+&=  \left\{ {\bf{R}} \right\}_i^k
+    \left\{ \cohM{\Lambda} \right\}_k^l
+    \left\{ {\bf{R}}^\dagger \right\}_l^j 
+    & \peqn{matrix_product} \\
+&= \left\{ \hat{\Jcol{e}}_k \right\}_i \; \delta_{k,l} \; \lambda_k \left\{ \hat{\Jcol{e}}_l^\dagger \right\}^j \\
+&= \lambda_k \;\left\{ \hat{\Jcol{e}}_k \right\}_i \left\{ \hat{\Jcol{e}}_k^\dagger \right\}^j \\
+&= \lambda_k \; \left\{ \hat{\Jcol{e}}_k \otimes \hat{\Jcol{e}}_k^\dagger \right\}_i^j
+    & \peqn{implicit_tensor_product}
+\label{eqn:eigen_sum}
+\end{align*}
+%
+\end{proof}
+\noindent
+If the eigenvalues are distinct, then
+\begin{equation}
+\label{eqn:projection}
+\JM{P}_k=\hat{\Jcol{v}}_k \otimes \hat{\Jcol{v}}_k^\dagger
+\end{equation}
+form a complete set of mutually orthogonal projection matrices; i.e.,
+\begin{equation}
+\label{eqn:idempotent_orthogonal}
+\JM{P}_i \JM{P}_j = \delta_{i,j} \JM{P}_j
+\end{equation}
+and
+\begin{equation}
+\sum_i \JM{P}_i = \JM{I}
+\label{eqn:projection_complete}
+\end{equation}
+%
+\begin{proof}
+\label{proof:orthogonal_idempotent}
+$\JM{P}_k$ are orthogonal and idempotent.
+\begin{align*}
+\JM{P}_i \JM{P}_j &= 
+(\hat{\Jcol{v}}_i  \hat{\Jcol{v}}_i^\dagger)
+(\hat{\Jcol{v}}_j  \hat{\Jcol{v}}_j^\dagger) 
+    & \peqn{implicit_tensor_product} \\
+&= \hat{\Jcol{v}}_i ( \hat{\Jcol{v}}_i^\dagger
+\hat{\Jcol{v}}_j ) \hat{\Jcol{v}}_j^\dagger
+    & \text{Associativity} \\
+&= \delta_{i,j} \hat{\Jcol{v}}_i \hat{\Jcol{v}}_j^\dagger
+   & \hat{\Jcol{v}}_i^\dagger \hat{\Jcol{v}}_j = \delta_{i,j} \\
+&= \delta_{i,j} \JM{P}_j & \peqn{projection}
+\end{align*}
+\end{proof}
+%
+\begin{proof}
+$\JM{P}_k$ form a complete set.
+
+Let $\Jcol{w} = c_j \hat{\Jcol{v}}_j$ and consider
+\begin{align*}
+\sum_i \JM{P}_i \Jcol{w} 
+&= \left( \hat{\Jcol{v}}_i \hat{\Jcol{v}}_i^\dagger \right)
+\left( c_j \hat{\Jcol{v}}_j \right) 
+  & \peqn{projection} \\
+&= c_j \hat{\Jcol{v}}_i \hat{\Jcol{v}}_i^\dagger \hat{\Jcol{v}}_j 
+  & \text{Commutativity} \\
+&= c_j \hat{\Jcol{v}}_i \delta_{i,j} 
+  & \hat{\Jcol{v}}_i^\dagger \hat{\Jcol{v}}_j = \delta_{i,j} \\
+& = c_j \hat{\Jcol{v}}_j \\
+& = \Jcol{w}
+\end{align*}
+\end{proof}
+
+
+
+The $2 \times 2$ Hermitian coherency matrix has two eigenvalues, $\lambda_k = (S_0 \pm |\Pv{S}|)/2$, and
+can be expressed as a spectral decomposition,
+\begin{equation}
+\begin{split}
+\label{eqn:spectral_decomposition_of_coherency_matrix}
+\cohM{\rho} 
+&=  \lambda_0\, \hat{\Jcol{e}}_0 \otimes \hat{\Jcol{e}}_0^\dagger
+    + \lambda_1\, \hat{\Jcol{e}}_1 \otimes \hat{\Jcol{e}}_1^\dagger \\
+&=  \lambda_0\,\tilde{\cohM{\rho}}_0 + \lambda_1\,\tilde{\cohM{\rho}}_1,
+\end{split}
+\end{equation}
+where $\tilde{\cohM{\rho}}_k = \hat{\Jcol{e}}_k \otimes \hat{\Jcol{e}}_k^\dagger$ correspond to purely polarized states,
+as in \eqn{instantaneous_coherency}.
+%
+That is, any partially polarized state can be represented as an incoherent superposition of a pair of purely polarized states
+that are orthogonally polarized ($\hat{\Jcol{e}}_0^\dagger\hat{\Jcol{e}}_1 = 0$ and $\tilde{\cohM{\rho}}_0 \tilde{\cohM{\rho}}_1 = 0$).
+%
+If the signal is unpolarized, then the eigenvalues are equal and
+any non-zero vector is an eigenvector.
+%
+If $\cohM{\rho}$ is purely polarized, then one of the eigenvalues equals zero, and the polarization state is completely described by the Jones vector associated with the non-zero eigenvalue.
+
+In the natural basis defined by ${\bf{R}}^\dagger$, the eigenvalues
+$\lambda_m$ are equal to the variances of two uncorrelated signals
+received by orthogonally polarized receptors described by
+the Hermitian transposes of the eigenvectors.  In this basis,
+%
+the total intensity, $S_0=\lambda_0+\lambda_1$; the
+polarized intensity, $S_1=|\Pv{S}|=\lambda_0-\lambda_1$; and
+$S_2=S_3=0$.
+%
+That is, ${\bf{R}}^\dagger$ rotates the basis such that the
+polarization vector points along $S_1$.  In this basis, it is clear that the degree of polarization
+%
+\begin{equation}
+\label{eqn:degree_of_polarization_eigen}
+p = \frac{|\Pv{S}|}{S_0} = \frac{|\lambda_0-\lambda_1|}{\lambda_0+\lambda_1},
+\end{equation}
+%
+is equal to zero when the intensities of the orthogonal modes are equal ($\lambda_0 = \lambda_1$);
+in contrast, $p=1$ when the signal consists of a single purely polarized mode (one of the eigenvalues is zero).
+
+\subsection{Axis-angle Representation}
+\label{app:fundamental_transformations}
+
+\Eqns{Boost}{and}{Rotation} are defined using the matrix exponential, which is given by the power series,
+%
+\begin{equation}
+    \exp(\JM{A}) \equiv \sum_{k=0}^\infty \frac{\JM{A}^k}{k!}.
+    \label{eqn:matrix_exponential}
+\end{equation}
+%
+Here, $\JM{A}^k$ is the $k^\mathrm{th}$ power of $\JM{A}$; 
+$\JM{A}^0 = \JM{I}$, where \JM{I} is the identity matrix with the dimensions of \JM{A};
+and $k!$ is the factorial of $k$.
+%
+%
+If \JM{A} is normal, then its spectral decomposition
+% the powers of \JM{A} can be expressed using its spectral decomposition 
+\eqnsp{spectral_decomposition}{and}{projection},
+\begin{equation}
+    \JM{A} = \lambda_k \JM{P}_k,
+\end{equation}
+such that
+\begin{equation}
+    \JM{A}^n = (\lambda_k)^n \JM{P}_k.
+    \label{eqn:matrix_power}
+\end{equation}
+
+\begin{proof}
+Using induction, start with the base case and apply \eqn{projection_complete} to yield
+\begin{align*}
+\JM{A}^0 = (\lambda_k)^0 \JM{P}_k = \sum_k \JM{P}_k = \JM{I}
+\end{align*}
+If $\JM{A}^n = (\lambda_k)^n \JM{P}_k$, then
+\begin{align*}
+\JM{A}^{n+1} &= \JM{A}\JM{A}^n \\
+&= \left( \lambda_j \JM{P}_j \right) \left( (\lambda_k)^n \JM{P}_k \right)  \\
+&= \lambda_j (\lambda_k)^n \JM{P}_j \JM{P}_k   \\
+&= \lambda_j (\lambda_k)^n \delta_{jk} \JM{P}_k & \peqn{idempotent_orthogonal} \\
+&= (\lambda_k)^{n+1} \JM{P}_k. & \hfill \square
+\end{align*}
+%
+\end{proof}
+
+\noindent
+Substitute \eqn{matrix_power} into \eqn{matrix_exponential} to yield
+\begin{align}
+\exp(\JM{A}) 
+% & = \sum_{k=0}^\infty \frac{1}{k!} \left( (\lambda_j)^n \JM{P}_j \right) \\
+& = \left( \sum_{k=0}^\infty \frac{(\lambda_j)^n}{k!} \right) \JM{P}_j 
+  = \exp(\lambda_j) \JM{P}_j.
+\end{align}
+
+To arrive at \eqns{Boost}{and}{Rotation}, consider the eigenvalues of 
+$\JM{A} = \Pv{a}\cdot\Pv{\sigma}$, which must satisfy
+%
+% \eqnp[via ]{determinant_is_invariant}
+\begin{equation}
+    |\JM{A} - \lambda \JM{I}| = \left|\Pv{a}\cdot\Pv{\sigma} - \lambda \pauli{0} \right| = \lambda^2 - |\Pv{a}|^2 = 0.
+\end{equation}
+That is, there are two eigenvalues given by $\lambda = \pm |\Pv{a}|$.
+%
+Let $a=|\Pv{a}|$ and $\hat{\Pv{a}}=\Pv{a}/a$, and use the spectral decomposition,
+\begin{equation}
+\JM{A} = a\JM{P}_0 -a\JM{P}_1,
+\end{equation}
+to show that
+\begin{equation}
+\JM{P}_0 + \JM{P}_1 = \pauli{0} \quad \text{and} \quad
+\JM{P}_0 - \JM{P}_1 = \hat{\Pv{a}}\cdot\Pv{\sigma};
+\end{equation}
+therefore
+\begin{align}
+e^{\Pvs{a}\cdot\Pvs{\sigma}}
+&= \exp(a) \JM{P}_0 + \exp(-a) \JM{P}_1 \nonumber \\
+&= \cosh(a) (\JM{P}_0 + \JM{P}_1) 
++ \sinh(a)(\JM{P}_0 - \JM{P}_1) \label{eqn:Pauli_exponential} \\
+&= \cosh(a) \pauli{0}
++ \sinh(a) \hat{\Pv{a}}\cdot\Pv{\sigma}. \nonumber
+\end{align}
+%
+Setting $\Pv{a} = \beta \hat{\Pv{m}}$ in \eqn{Pauli_exponential} 
+yields the axis-angle representation of Hermitian matrices \eqnp{Boost};
+likewise, setting $\Pv{a} = \Ci \phi \hat{\Pv{n}}$ yields the axis-angle representation of unitary matrices \eqnp{Rotation}.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Congruence Eigenmatrices}
+\label{app:symmetry}
+
+The unit vector in the axis-angle representation of a matrix defines an axis of symmetry in the three-dimensional space of the Stokes polarization vector.
+%
+This symmetry axis can be exploited to rearrange and simplify matrix equations and identify degenerate systems of equations \citep[as in Appendix B of][and \App{degeneracy} of this paper]{van04c}.
+%
+For example, two matrices 
+% \JM{A} and \JM{B} 
+commute when their symmetry axes are collinear (parallel or anti-parallel).
+%
+\begin{proof}
+Given $$\JM{A} = a\,\pauli{0} + \Pv{a} \cdot \Pv{\sigma} \quad\text{and}\quad
+\JM{B} = b\,\pauli{0} + \Pv{b} \cdot \Pv{\sigma},$$
+ \eqn{multiplication_rule} shows that $\JM{A}\JM{B} = \JM{B}\JM{A}$ if and only if $\Pv{a} \times \Pv{b} = 0$.
+\end{proof}
+%
+\iffalse
+\noindent
+Furthermore, the axis of symmetry of the product of two matrices that commute
+is collinear with the symmetry axes of both matrix factors;
+e.g.,  
+\begin{equation}
+    (\JM{A}\JM{B})\JM{A} = \JM{A}(\JM{A}\JM{B}) \quad \text{and} \quad (\JM{A}\JM{B})\JM{B} = \JM{B}(\JM{A}\JM{B}).
+    \label{eqn:collinear_product}
+\end{equation}
+\fi
+Furthermore, if \JM{A} and \JM{B} commute, then they have common eigenvectors.
+\begin{proof}
+\label{proof:common_eigenvalue}
+If $\JM{A}\JM{B} = \JM{B}\JM{A}$ and $\JM{A}\Jcol{v} = \lambda \Jcol{v}$,
+then
+\begin{align*}
+\JM{A}\JM{B}\Jcol{v} &= \JM{B}\JM{A}\Jcol{v} = \lambda \JM{B}\Jcol{v}.
+\end{align*}
+That is, $\JM{B}\Jcol{v}$ is an eigenvector of \JM{A} with the same eigenvalue $\lambda$;
+therefore, $\JM{B}\Jcol{v}=\mu\Jcol{v}$.
+\end{proof}
+
+
+The coherency matrix has an axis of symmetry defined by its associated Stokes polarization vector, which facilitates the identification of the eigenmatrices of a congruence transformation.
+%
+A matrix $\cohM{\rho}$ is a congruence eigenmatrix of an invertible matrix $\JM{J}$ with real-valued congruence eigenvalue $\kappa$ if it satisfies the relation
+%
+\begin{equation}
+\JM{J}\cohM{\rho}\JM{J}^\dagger = \kappa \cohM{\rho}.
+\end{equation}
+%
+The eigenvectors of a Jones matrix define the singular congruence eigenmatrices of that Jones matrix.
+%
+\begin{proof}
+\label{proof:eigenvector_to_eigenmatrix}
+If $\JM{J} \Jcol{e} = \lambda \Jcol{e}$, where $\lambda \in \mathbb{C}$, then
+\begin{align*}
+\JM{J}\tilde{\cohM{\rho}}\,\JM{J}^\dagger
+&= \JM{J} \Jcol{e} \otimes \Jcol{e}^\dagger \JM{J}^\dagger
+    & \peqn{instantaneous_coherency} \\
+&= \JM{J} \Jcol{e} \otimes  (\JM{J}\Jcol{e})^\dagger 
+    & (\JM{A}\JM{B})^\dagger = \JM{B}^\dagger \JM{A}^\dagger \\
+&= \lambda \, \Jcol{e} \otimes \lambda^* \Jcol{e}^\dagger \\
+&= |\lambda|^2 \tilde{\cohM{\rho}} & \tilde{\cohM{\rho}} \equiv \Jcol{e} \otimes \Jcol{e}^\dagger \\
+&= \kappa \tilde{\cohM{\rho}} & \kappa \equiv |\lambda|^2 \in \mathbb{R}
+\end{align*}
+\end{proof}
+%
+\noindent
+Accordingly, a Jones matrix has two congruence eigenmatrices.\footnote{
+%
+Although the Mueller matrix associated with \JM{J}
+has four eigenvectors, only two of these
+describe physical polarization states.
+%
+For example, two of the eigenvectors of a rotation are complex-valued.  
+%
+Two of the eigenvectors of a Lorentz boost have polarization vectors that lie 
+in the plane that is normal to the boost axis; however, these have $S_0 = 0$, which is not physical.   }
+%
+% e.g.,  https://physics.stackexchange.com/questions/108520/what-are-the-eigenvalues-of-the-lorentz-matrix
+%
+% Is it possible to prove this?  For example, by treating linear operators as rank 4 tensors and showing that only 2 of the 4 eigenmatrices can have positive determinant?
+%
+% The two \emph{physical} eigenmatrices of a congruence transformation correspond to the purely polarized eigenvectors of the Jones matrix.
+%
+Conversely, if a singular coherency matrix
+%
+$\hat{\cohM{\rho}}=\Jcol{e} \otimes \Jcol{e}^\dagger$ 
+%
+is a congruence eigenmatrix of \JM{J}, then $\Jcol{e}$
+is an eigenvector of \JM{J}.
+%
+\begin{proof}
+%
+\label{proof:eigenmatrix_to_eigenvector}
+%
+If $\hat{\cohM{\rho}}=\Jcol{e} \otimes \Jcol{e}^\dagger$ and $\JM{J}\hat{\cohM{\rho}}\JM{J}^\dagger = \kappa \hat{\cohM{\rho}}$, then
+%
+$$ \JM{J} \left( \Jcol{e} \otimes \Jcol{e}^\dagger \right) \JM{J}^\dagger
+=
+\JM{J} \Jcol{e} \otimes  (\JM{J}\Jcol{e})^\dagger 
+=
+\kappa \Jcol{e} \otimes \Jcol{e}^\dagger, $$
+and $\JM{J} \Jcol{e}$ and $\Jcol{e}$ must be collinear; i.e.,
+$\JM{J} \Jcol{e} = \lambda \Jcol{e}$, where $|\lambda|^2 = \kappa$.
+\end{proof}
+%
+\noindent
+Furthermore, if
+%
+$\hat{\cohM{\rho}}=\Jcol{e} \otimes \Jcol{e}^\dagger$ 
+%
+commutes with \JM{J}, then $\hat{\cohM{\rho}}$
+is a congruence eigenmatrix of $\JM{J}$.
+%
+\begin{proof}
+\label{proof:if_commutes_then_eigen}
+If $\JM{J} \tilde{\cohM{\rho}} = \tilde{\cohM{\rho}} \JM{J}$, then 
+$\tilde{\cohM{\rho}}$ and $\JM{J}$ have a common eigenvector (\Proof{common_eigenvalue}).
+Therefore,
+$$\JM{J} \Jcol{e} = \lambda \, \Jcol{e}$$
+%
+where $\Jcol{e}$ is the only eigenvector of $\tilde{\cohM{\rho}}=\Jcol{e} \otimes \Jcol{e}^\dagger$, and
+%
+(via \Proof{eigenvector_to_eigenmatrix})
+%
+$$\JM{J} \tilde{\cohM{\rho}}\, \JM{J}^\dagger = \kappa\tilde{\cohM{\rho}},$$
+where $\kappa=|\lambda|^2$.
+\end{proof}
+%
+
+\noindent
+Finally, if 
+$\JM{J}$ is a normal matrix
+and 
+$\hat{\cohM{\rho}}$ is a congruence eigenmatrix of $\JM{J}$,
+then 
+$\hat{\cohM{\rho}}$ commutes with $\JM{J}$.
+
+\begin{proof}
+\label{proof:if_eigen_then_commutes}
+If $\JM{J}$ is normal,
+$\hat{\cohM{\rho}}=\Jcol{e} \otimes \Jcol{e}^\dagger$ 
+and
+$\JM{J} \tilde{\cohM{\rho}}\, \JM{J}^\dagger = \kappa\tilde{\cohM{\rho}},$
+then 
+$\JM{J} \Jcol{e} = \lambda \Jcol{e}$ (\Proof{eigenmatrix_to_eigenvector})
+and
+$$\JM{J} \tilde{\cohM{\rho}} 
+  = \JM{J} \Jcol{e} \otimes \Jcol{e}^\dagger 
+  = \lambda \, \Jcol{e} \otimes \Jcol{e}^\dagger 
+  = \lambda \tilde{\cohM{\rho}}. $$
+
+Also
+\begin{align*}
+ \tilde{\cohM{\rho}} \JM{J}
+  &=  \Jcol{e} \otimes \Jcol{e}^\dagger \JM{J} \\
+  &= \Jcol{e} \otimes \left( \JM{J}^\dagger \Jcol{e} \right)^\dagger  \\
+  &= \Jcol{e} \otimes \left( \lambda^* \Jcol{e} \right)^\dagger & \text{\Proof{normal_eigenvalue}} \\
+  &= \lambda \, \Jcol{e} \otimes  \Jcol{e}^\dagger \\
+  &= \lambda \tilde{\cohM{\rho}}
+\end{align*}
+Therefore, $\JM{J} \tilde{\cohM{\rho}} = \tilde{\cohM{\rho}} \JM{J}.$
+\end{proof}
+
+\noindent
+%
+In conclusion, if $\JM{J}$ is normal,  then $\hat{\cohM{\rho}}$ is a congruence eigenmatrix of $\JM{J}$ if and only if $\hat{\cohM{\rho}}$ commutes with $\JM{J}$.
+%
+Both unitary and Hermitian matrices are normal and their congruence eigenmatrices are explored in the following sections.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{ Unitary Matrices}
+\label{app:eigen_unitary}
+
+If $\cohM{\rho}$ commutes with \rotat, then
+\begin{equation}
+\rotat \, \cohM{\rho} \, \vRotation^\dagger(\phi)
+= \cohM{\rho}  \rotat \vRotation^\dagger(\phi) 
+= \cohM{\rho};
+\end{equation}
+that is, $\cohM{\rho}$ is a congruence eigenmatrix of \rotat\ with associated congruence eigenvalue equal to unity.
+% 
+Conversely, if $\cohM{\rho}$ is a congruence eigenmatrix of \rotat, then
+\begin{equation}
+\begin{split}
+\rotat \, \cohM{\rho} \, \vRotation^\dagger(\phi) & = \kappa \cohM{\rho}  \\
+\rotat \, \cohM{\rho} \, \vRotation^\dagger(\phi)\, \rotat & = \kappa \cohM{\rho} \, \rotat \\
+\rotat \, \cohM{\rho} & = \kappa \cohM{\rho} \, \rotat
+\end{split}
+\end{equation}
+and $\cohM{\rho}$ commutes with \rotat\ if $\kappa = 1$.
+\noindent
+The congruence eigenmatrices of a unitary matrix share a single 
+degenerate congruence eigenvalue, $\kappa=1$; therefore, any linear combination of the congruence eigenmatrices
+is also a congruence eigenmatrix of the transformation.
+%
+Considering the equivalent three-dimensional rotation of the Stokes polarization vector $\Pv{S}$;
+any vector that lies along the axis of rotation remains unchanged by that rotation, including $\Pv{S}=0$ (unpolarized radiation).
+%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{ Hermitian Matrices }
+\label{app:eigen_self_adjoint}
+
+Define $b=\cosh\beta$ and $\Pv{b}=\hat{\Pv{m}}\sinh\beta$ such that 
+\begin{equation}
+    \boost = b\,\pauli{0} + \Pv{b}\cdot\Pv{\sigma}.
+\end{equation}
+%
+Furthermore, define 
+$\tilde{\cohM{\rho}} = \left(\tilde{s}_0\,\pauli{0} + \tilde{\Pv{s}}\cdot \Pv{\sigma}\right)/2$,
+and note that $|\tilde{\Pv{s}}| = \tilde{s}_0$ because $\tilde{\cohM{\rho}}$ is singular / purely polarized. 
+%
+If $\tilde{\cohM{\rho}}$ and \boost\ commute, then their axes of
+symmetry are collinear; i.e.,
+\begin{equation}
+\begin{split}
+\hat{\Pv{m}} \times \tilde{\Pv{s}} &= 0, \\
+\hat{\Pv{m}} \cdot \tilde{\Pv{s}} &= \pm|\tilde{\Pv{s}}| = \pm\tilde{s}_0, \\
+\hat{\Pv{m}} &= \pm \, \tilde{\Pv{s}} / \tilde{s}_0.
+\end{split}
+\end{equation}
+%
+Using \eqn{multiplication_rule},
+\begin{equation} \begin{split}
+\boost \tilde{\cohM{\rho}} 
+&= (b \tilde{s}_0 + \Pv{b} \cdot \tilde{\Pv{s}})\pauli{0}/2 + (b\tilde{\Pv{s}} + \tilde{s}_0\Pv{b})\cdot\Pv{\sigma}/2 \\
+&= (b \tilde{s}_0 \pm |\Pv{b}| \tilde{s}_0)\pauli{0}/2 + (b\tilde{\Pv{s}} \pm |\Pv{b}| \tilde{\Pv{s}})\cdot\Pv{\sigma}/2 \\
+&= (b \pm |\Pv{b}|) \tilde{s}_0  \pauli{0}/2 + (b \pm |\Pv{b}|) \tilde{\Pv{s}}\cdot\Pv{\sigma}/2 \\
+&= (b \pm |\Pv{b}|) \tilde{\cohM{\rho}} \\
+&= (\cosh\beta \pm \sinh\beta) \tilde{\cohM{\rho}} \\
+&= e^{\pm\beta} \tilde{\cohM{\rho}}.
+\end{split} \end{equation}
+Therefore,
+\begin{equation} \begin{split}
+\boost \, \tilde{\cohM{\rho}} \, \vBoost^\dagger(\beta)
+&= \boost \, \tilde{\cohM{\rho}} \, \boost \\
+&= \vBoost^2(\beta) \tilde{\cohM{\rho}} \\
+&= e^{\pm2\beta} \tilde{\cohM{\rho}}.
+\end{split} \end{equation}
+%
+Hermitian matrices have two distinct congruence eigenvalues; 
+$\kappa=e^{2\beta}$ when the polarization vector $\tilde{\Pv{s}}$
+is parallel to the boost axis $\hat{\Pv{m}}$,
+and
+$\kappa=e^{-2\beta}$ when $\tilde{\Pv{s}}$
+is anti-parallel to $\hat{\Pv{m}}$.
+%
+Therefore, only these two purely polarized states are congruence eigenmatrices of the transformation.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{ Pure Mueller Matrices }
+\label{app:pure_Mueller_matrices}
+%
+Various authors \cite[e.g.,][]{barakat81,sim82,clo86} have considered the necessary and sufficient conditions that must be satisfied by the elements of a Mueller matrix for it to have an equivalent Jones matrix representation.
+%
+\cite{sim82} and \cite{clo86} present the most intuitive geometric constraints on 
+a pure Mueller matrix based on its equivalent target coherency matrix \citep{clo86}.
+
+For a Jones matrix \JM{J}, the equivalent $4 \times 4$ Hermitian target coherency matrix $\MM{N}$ is defined via the rank 4 tensor $\JT{N}=\outerBilinear{\bf J}{\bf J}^\dagger$, such that
+\eqn{tensor_to_Mueller} yields
+%
+\begin{equation}
+\begin{split}
+\label{eqn:target_coherency_matrix}
+N_\irow^\icol
+& = \frac{1}{2} \dc{\pauli{\irow}}{\dc{\left( \outerBilinear{\bf J}{\bf J}^\dagger \right)}{\pauli{\icol}}} \\
+& = \frac{1}{2} \dc{\pauli{\irow}}{{\bf J}} \left( \dc{\pauli{\icol}}{{\bf J}^\dagger} \right) \\
+& = \frac{1}{2} k_\irow k^*_\icol.
+\end{split}
+\end{equation}
+%
+Here, $k_\irow = \dc{\pauli{\irow}}{{\bf J}}$ are the components of a complex-valued target four-vector $\Sv{k}$ \citep{clo86}.
+%
+\Eqn{target_coherency_matrix} is equivalent to $\MM{N} = \Sv{k} \otimes \Sv{k}^\dagger / 2$ and, as
+noted by \cite{sim82}, \MM{N} is a scalar multiple of a projection matrix, such that
+\begin{equation}
+\MM{N}^2 = \tr{\MM{N}} \MM{N}.
+\label{eqn:pure_target_coherency}
+\end{equation}
+
+\begin{proof}
+Define $\hat{\Sv{k}}=\Sv{k}/|\Sv{k}|$ and the projection $\MM{P} = \hat{\Sv{k}} \otimes \hat{\Sv{k}}^\dagger$ \eqnp{projection}, 
+such that
+\begin{equation*}
+\MM{N}
+ = \frac{1}{2}\Sv{k} \otimes \Sv{k}^\dagger \\
+ = \frac{1}{2}|\Sv{k}|^2 \hat{\Sv{k}} \otimes \hat{\Sv{k}}^\dagger
+ = \frac{1}{2}|\Sv{k}|^2 \MM{P}.
+\end{equation*}
+Note that 
+\begin{equation*}
+|\Sv{k}|^2 = k_\mu k_\mu^* = 2 \tr{\MM{N}}.
+\end{equation*}
+Therefore, $\MM{N} = \tr{\MM{N}} \MM{P}$ and \eqnp[via ]{idempotent_orthogonal}
+\begin{equation*}
+\MM{N}^2 = \tr{\MM{N}}^2 \MM{P}^2 = \tr{\MM{N}}^2 \MM{P}= \tr{\MM{N}} \MM{N}.
+\end{equation*}
+\end{proof}
+
+The mapping between any Mueller matrix $\MM{M}$ and its associated target coherency matrix $\MM{N}$ exploits the symmetry of the transpose used to define the $\tilde\otimes$ operator \eqnp{indexSpinorBilinear}.
+%
+Let $\mathcal{T}$ represent the transpose of covariant tensor indeces, such that
+$\spinorBilinear{\bf A}{\bf B} = \mathcal{T}(\outerBilinear{\bf A}{\bf B})$ and, by symmetry,
+$\outerBilinear{\bf A}{\bf B} = \mathcal{T}(\spinorBilinear{\bf A}{\bf B})$.  Using this operator, the rank 4 tensors associated with \MM{M} and \MM{N} are related by $\JT{U} = \mathcal{T}(\JT{N})$, where $\JT{U}$ is defined by \eqn{Mueller_to_tensor}
+and 
+%
+\begin{equation}
+\begin{split}
+\JT{N} & = \mathcal{T}(\JT{U}) \\
+ & = \mathcal{T}\left( \frac{1}{2} M_\irow^\icol \outerBilinear{\pauli{\irow}}{\pauli{\icol}} \right) \\
+ & = \frac{1}{2} M_\irow^\icol \spinorBilinear{\pauli{\irow}}{\pauli{\icol}},
+\end{split}
+\end{equation}
+such that
+\begin{equation}
+\begin{split}
+\label{eqn:Mueller_to_target_coherency}
+N_\jrow^\jcol & = \frac{1}{2} \dc{\pauli{\jrow}}{\dc{ \JT{N} }{\pauli{\jcol}}} \\
+& = \frac{1}{4} M_\irow^\icol \, \dc{\pauli{\jrow}}{\dc{\left( \spinorBilinear{\pauli{\irow}}{\pauli{\icol}} \right)}{\pauli{\jcol}}} \\
+& = \frac{1}{4} M_\irow^\icol \, \dc{\pauli{\jrow}}{ \pauli{\irow}}{\pauli{\jcol}} {\pauli{\icol}} \\
+& = \frac{1}{4} M_\irow^\icol \, \tr{ \pauli{\jrow} \pauli{\irow} \pauli{\jcol} \pauli{\icol} }. \\
+\end{split}
+\end{equation}
+\Eqn{Mueller_to_target_coherency} can be written
+as $\MM{N} = \MM{\JT{T}} \dcbo \MM{M}$, where $\MM{\JT{T}}$ is the
+four-dimensional rank 4 tensor defined by
+%
+\begin{equation}
+T_{\jrow\icol}^{\jcol\irow} = \frac{1}{4}  \tr{ \pauli{\jrow} \pauli{\irow} \pauli{\jcol} \pauli{\icol} }.
+\end{equation}
+By symmetry, $\MM{M} = \MM{\JT{T}} \dcbo \MM{N}$; that is, $\MM{\JT{T}}$ is an involution.
+%
+As for the target coherency matrix derived from a Jones matrix,
+$\MM{N}$ is Hermitian.
+
+\begin{proof}
+\begin{align*}
+&(N_\jrow^{\jcol})^* = (T_{\jrow\icol}^{\jcol\irow})^* (M_\irow^\icol)^* \\
+&= \frac{1}{4} M_\irow^\icol \, \tr{ \pauli{\jrow} \pauli{\irow} \pauli{\jcol} \pauli{\icol} }^* & M_\irow^\icol\in\mathbb{R} \\
+&= \frac{1}{4} M_\irow^\icol \, \tr{ \left( \pauli{\jrow} \pauli{\irow} \pauli{\jcol} \pauli{\icol} \right)^\dagger } & \tr{\bf A}^* = \tr{{\bf A}^\dagger} \\
+&= \frac{1}{4} M_\irow^\icol \, \tr{ \pauli{\icol}  \pauli{\jcol} \pauli{\irow} \pauli{\jrow}  } & {\bf AB}^\dagger = {\bf B}^\dagger {\bf A}^\dagger \\
+&= \frac{1}{4} M_\irow^\icol \, \tr{ \pauli{\jcol} \pauli{\irow} \pauli{\jrow} \pauli{\icol} } & \tr{\bf AB} = \tr{\bf BA} \\
+&= N_\jcol^\jrow  & \peqn{Mueller_to_target_coherency}
+\end{align*}
+\end{proof}
+
+Just as the coherency matrix formed by the outer product of a single Jones vector
+$\tilde{\cohM{\rho}} = \hat{\Jcol{e}} \otimes \hat{\Jcol{e}}^\dagger$ corresponds to a purely polarized state
+\eqnp[see]{spectral_decomposition_of_coherency_matrix}, the target coherency matrix formed by the outer product of a single target vector $\MM{N} = \Sv{k} \otimes \Sv{k}^\dagger / 2$ corresponds to a pure Mueller matrix.
+%
+Therefore, a Mueller matrix is pure if and only if 
+its target coherency matrix, $\MM{N} = \MM{\JT{T}} \dcbo \MM{M}$ 
+satisfies \eqn{pure_target_coherency}.
+%
+\cite{clo86} expressed this definition with the equivalent constraint that a pure Mueller matrix is associated with a target coherency matrix that has only one non-zero eigenvalue, $\lambda$.
+%
+Combined with its associated eigenvector, $\hat{\Sv{k}}$,
+the target vector $\Sv{k} = \lambda^{1/2} \hat{\Sv{k}}$ can be used to compute (up to arbitrary phase) the Jones matrix associated with a pure Mueller matrix,
+%
+\begin{equation}
+\JM{J} = \frac{1}{2} k_\mu \pauli{\mu}.
+\end{equation}
+
+\subsection{Impure Mueller Matrices}
+\label{app:impure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Some polarimetric transformations are described by impure Mueller matrices that cannot be represented by a linear transformation of the electric field, as described by a Jones matrix.
+For example, temporal or spectral depolarization occurs when the response of a system varies as a function of time or frequency on characteristic scales that are smaller than the duration or bandwidth over which the Stokes parameters are integrated.  In this case, the measured Stokes parameters,
+%
+\begin{equation}
+\Sv{S}'=\langle \MM{M}(t,\nu) \rangle \Sv{S},
+\end{equation}
+where the angle brackets represent integration over time and/or frequency.  
+
+For example, consider stochastic Faraday rotation that causes fluctuations in the position angle $\Delta\Psi$ that are normally distributed with zero mean and standard deviation $\sigma_\Psi$.
+The average Mueller matrix that describes the integrated Stokes parameters at a single radio frequency,
+
+\begin{equation} \begin{split}
+\langle \MM{R}_{\hat{\Pvs v}}(2\Delta\Psi) \rangle 
+&= \left( \begin{array}{cccc}
+1 & 0 & 0 & 0 \\
+0 & \langle\cos2\Delta\Psi\rangle & -\langle\sin2\Delta\Psi\rangle & 0\\
+0 & \langle\sin2\Delta\Psi\rangle & \langle\cos2\Delta\Psi\rangle & 0 \\
+0 & 0 & 0 & 1 
+\end{array} \right) \\
+&= \left( \begin{array}{cccc}
+1 & 0 & 0 & 0 \\
+0 & d & 0 & 0\\
+0 & 0 & d & 0 \\
+0 & 0 & 0 & 1 
+\end{array} \right)
+\end{split} \end{equation}
+where the angle brackets represent integration over time and $d=\exp(-2\sigma_\Psi^2) < 1$ describes the depolarization of Stokes Q and U. Note that this Mueller matrix is able to depolarize a purely polarized state, something that cannot be done by a linear transformation of the electric field (\Proof{only_valid}).
+
+\iffalse
+
+The equivalent linear transformation of the coherency matrix is given by
+%
+\begin{equation}
+\dc{ \langle\spinorBilinear{\JM{J}(t,f)}{\JM{J}^\dagger(t,f)}\rangle }{\cohM{\rho}}
+\end{equation}
+%
+where the $\tilde\otimes$ operator represents a tensor product followed by a
+transpose over covariant tensor indeces; e.g.,  for matrices \JM{A} and \JM{B},
+\begin{equation}
+\left\{\spinorBilinear\JM{A}\JM{B}\right\}_{ik}^{jl}
+ \equiv 
+A_i^l B_k^j. \label{eqn:indexSpinorBilinear} 
+\end{equation}
+%
+
+\begin{proof}
+The tensor product \spinorBilinear\JM{A}\JM{B} has the
+following transformation property
+%
+\begin{align*}
+\left( \spinorBilinear\JM{A}\JM{B} \right) \dcbo\,\JM{C}
+&= 
+\JM{A}\JM{C}\JM{B}. & \text{\citep{car91}}
+\end{align*}
+% The right-hand side of \eqn{spinorBilinear} is the matrix product of \JM{A}, \JM{B}, and \JM{C}.
+Therefore, 
+\begin{align*}
+    {\JM{J}{\cohM{\rho}}\,\JM{J}}^\dagger
+    = \dc{ \left(\spinorBilinear{\JM{J}}{\JM{J}^\dagger}\right) }{\cohM{\rho}}
+\end{align*}
+%
+and the associated Mueller matrix
+%
+\begin{align*}
+  M_\irow^\icol = \frac{1}{2} \dc{\pauli{\irow}}{\dc{ \spinorBilinear{\JM{J}}{\JM{J}^\dagger} }{\pauli{\icol}}}.
+\end{align*}
+\end{proof}
+
+\fi 

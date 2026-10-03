@@ -1,0 +1,350 @@
+\section{ Calibration }
+\label{sec:calibration}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% possibly refer to psrchive help pages?
+
+% {\color{red} Maybe add a note about the fact that the way to connect the parametrization described here and the pcm parametrization is in the psrchive pcm documentation.  Maybe now is not there, but whenever there is the way to add it this will  be always valid.}
+
+The response of each element of the signal path may include an unknown component that must be determined experimentally.  
+%
+This section briefly reviews methods of calibrating
+each component in \Eqn{Stokes_chain} and \Fig{signal_path},
+%
+focusing primarily on the response of a single antenna (single dish or phased array).  
+%
+Where relevant, additional notes on interferometric calibration are included.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{ Phase Convention }
+\label{sec:calibration_phase_convention}
+
+For linearly-polarized receptors, $S_3$ equals Stokes~V, and complex conjugation
+negates the ellipticity angle.
+% , which also logically negates the interpretation of the phase
+% difference between $\epsilon'_x$ and $\epsilon'_y$ in \eqn{stokes_ellipse}.
+%
+For circularly-polarized receptors, $S_3$ equals Stokes U, and the position 
+angle is negated by conjugation.
+%
+% With reference to Table 1 of \cite{vmjr10}, the phase convention correction, $\MM{\Phi}$, is determined by the \emph{backend phase} and \emph{down-conversion} parameters.
+%
+Complex conjugation of the electric field vector
+also negates frequency in the spectral domain.
+%
+Therefore, the phase convention used to represent the electric field can be determined by incorporating information from other sources.
+%
+For example, owing to dispersion, frequency negation is immediately apparent during radio pulsar signal analysis,
+and the phase convention must be known to perform phase-coherent dispersion removal in radio pulsar observations \cite[e.g.,][]{vb11}.
+%
+Frequency negation can also be detected in continuum observations over regions of the radio spectrum that include strong, well-defined spectral lines.
+%
+In an interferometer, complex conjugation of the visibility matrix computed for each antenna pair results in a 180$\deg$ rotation of the image of the brightness distribution on the plane of the sky.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{ Receiver Gains }
+\label{sec:calibration_gains}
+
+The receiver gains matrix, \JM{G}, is often determined using observations of an artificial reference source with a well-defined polarization state.
+%
+For example, many receivers have a built-in source of broadband noise
+(e.g.,  a noise diode coupled to the receptors) that can be used to estimate gains as a function of radio frequency.
+%
+Determination of \JM{G} using only an artificial noise source is based on the \textit{ideal feed assumptions}, in which the receptors are orthogonal and there is no cross-coupling between them (i.e., \JM{D} is the identity matrix);
+and the artificial reference source illuminates the receptors equally (i.e., the receptors have identical responses to the reference source, in both amplitude and phase).
+%
+Although these assumptions are common, it is more accurate to experimentally determine both \JM{D} and the Stokes parameters intrinsic to the artificial reference source \citep[e.g.,][]{van04c}, as described in \Sec{calibration_deviation}.
+
+Even when fully modeling the deviations from an ideal feed and polarization of the artificial reference source, the ideal feed assumptions can provide a useful, and sometimes necessary, first guess for \JM{G}.
+%
+Therefore, they are an important part of polarimetric calibration for both single antennas \citep[e.g.,][]{hx97,nms+97,gl98,hdvl09} and interferometric arrays \citep[e.g.,][]{jkmg08,sjk+21}.
+%
+As shown in \Sec{gain}, the polar decomposition of the complex gains,
+\begin{equation}
+    \JM{G} = G \, \JM{B}_g(\gamma) \JM{R}_g(\phi),
+\end{equation}
+%
+has 3 dof: the absolute gain $G$, the differential gain $\gamma$, and the differential phase $\phi$.
+%
+To experimentally determine $G$ requires a \textit{standard candle}, i.e., a source with known flux density at the radio frequency of the observations.
+Absolute gain calibration (also known as flux calibration) is described in more detail in Section 7.2 of \cite{vdo12}.
+%
+In an interferometer, unique values of the complex gains must be determined for each element in the array.
+
+Differential gain mixes only $S_0$ and $S_1$, and differential phase mixes only $S_2$ and $S_3$.
+Therefore, given observations of an ideal artificial reference source with known polarization, 
+the two unknown values of $\gamma$ and $\phi$ can be solved independently. 
+% Consider adding an example of how to do this using psrchive.
+%
+The following two subsections derive solutions for 
+$\gamma$ and $\phi$ based on the assumption that
+a pure linearly polarized reference source
+induces identical signals in the orthogonal receptors
+of an ideal feed.
+%
+In the linear basis, the Stokes parameters intrinsic to such a source,
+\begin{equation}
+    \label{eqn:ideal_noise_diode}
+    \Sv{S}_\mathrm{ref} = I_\mathrm{ref} [1, 0, 1, 0]^T,
+\end{equation}
+%
+where $I_\mathrm{ref}$ is the intensity of the reference source.
+
+\subsubsection{ Differential Phase }
+\label{sec:ideal_differential_phase}
+
+As a rotation about the $S_1$ axis, differential phase mixes only $S_2$
+and $S_3$, and to determine $\phi$ requires observations of a polarized reference source with known intrinsic values of
+$S_2$ and $S_3$.  In the linear basis, $S_2$ and $S_3$ correspond to Stokes U and Stokes~V,
+respectively; in the circular basis, $S_2$ and $S_3$ correspond to Stokes Q and Stokes U.
+%
+Given the measured Stokes parameters of the reference source, with observed values of $S_2'$ and $S_3'$, \eqns{StokesU}{and}{StokesV} can be solved for the intrinsic and observed values of $\langle e_0^*(t)e_1(t)\rangle$; e.g.
+%
+\begin{equation}
+\langle e_0^*(t)e_1(t)\rangle = (S_2 + \Ci S_3) / 2.
+\end{equation}
+
+To relate the intrinsic values to their observed values, 
+consider the transformation of the intrinsic electric field vector \Jcol{e}(t)
+into the observed electric field vector as described by \eqn{diff_phase},
+%
+\begin{equation}
+\Jcol{e}'(t) =
+	\left( \begin{array}{cc}
+		e^{i \phi} & 0 \\
+		0   & e^{-i \phi}
+	\end{array} \right) \Jcol{e}(t).
+\end{equation}
+%
+The observed value of 
+\begin{equation}
+\langle e_0^{\prime*}(t)e'_1(t) \rangle = e^{-2\Ci\phi} \langle e_0^*(t)e_1(t)\rangle
+\end{equation}
+can then be used to solve for $\phi$; i.e.,
+\begin{equation}
+\phi = -\frac{1}{2} \arg\left(
+\frac{\langle e_0^{\prime*}(t)e'_1(t) \rangle}{\langle e_0^*(t)e_1(t)\rangle}\right),
+\end{equation}
+where $\arg(z)$ is the argument of complex number $z$.
+
+%
+If the reference source produces an in-phase signal in each receptor, 
+such that the differential phase between $e_0(t)$ and $e_1(t)$ equals zero,
+then $\langle e_0^*(t)e_1(t)\rangle$ is real-valued and
+\begin{equation}
+\phi = -\frac{1}{2} \arg\left(\langle e_0^{\prime*}(t)e'_1(t) \rangle\right)
+= -\frac{1}{2} \tan^{-1}(S_3'/S_2').
+\end{equation}
+
+\subsubsection{ Differential Gain }
+\label{sec:ideal_differential_gain}
+
+As a boost along the $S_1$ axis, differential gain mixes only $S_0$ and $S_1$;
+therefore, determination of $\gamma$ requires observations of a polarized reference source with
+known intrinsic values of $S_0$ and $S_1$, where $S_1$
+corresponds to Stokes Q in the linear basis and to Stokes~V in the circular basis.
+%
+Given the measured Stokes parameters of the reference source, with observed values of $S_0'$ and $S_1'$, \eqns{StokesI}{and}{StokesQ} can be solved
+for the intrinsic and observed values of $\langle|e_0(t)|^2\rangle$ and $\langle|e_1(t)|^2\rangle$; e.g.
+\begin{eqnarray}
+    \langle|e_0(t)|^2\rangle &=& (S_0 + S_1)/2 \\
+    \langle|e_1(t)|^2\rangle &=& (S_0 - S_1)/2.
+\end{eqnarray}
+%
+To relate the intrinsic values to their observed values, 
+consider the transformation of the intrinsic electric field vector \Jcol{e}(t)
+into the observed electric field vector as described by \eqn{boost_decomposed},
+%
+\begin{equation}
+\Jcol{e}'(t)
+ = G
+  \left( \begin{array}{cc}
+    \Gamma & 0 \\
+    0   & \Gamma^{-1}
+  \end{array} \right) \Jcol{e}(t).
+\end{equation}
+%
+The observed values of 
+\begin{equation}
+\begin{split}
+\langle|e'_0(t)|^2\rangle =& G^2 \Gamma^2 \langle|e_0(t)|^2\rangle \\ \langle|e'_1(t)|^2\rangle =& G^2 \Gamma^{-2} \langle|e_1(t)|^2\rangle
+\end{split}
+\end{equation}
+can be used to solve for $\Gamma$; i.e.,
+%
+\begin{equation}
+\Gamma = \left(
+\frac{\langle|e'_0(t)|^2\rangle}{\langle|e'_1(t)|^2\rangle} 
+\frac{\langle|e_1(t)|^2\rangle}{\langle|e_0(t)|^2\rangle} \right)^{1/4}
+\end{equation}
+%
+If the reference source produces a signal with equal power in each receptor, 
+then $\langle|e_1(t)|^2\rangle=\langle|e_0(t)|^2\rangle$ and
+\begin{equation}
+\Gamma = \left(
+\frac{\langle|e'_0(t)|^2\rangle}{\langle|e'_1(t)|^2\rangle} \right)^{1/4}
+=\left(
+\frac{S_0' + S_1'}{S_0' - S_1'} \right)^{1/4}.
+\end{equation}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{ Deviations from Ideal }
+\label{sec:calibration_deviation}
+
+For a single antenna, the deviations from an ideal feed, \JM{D}, can be 
+determined by modeling variations in the observed polarization of an astrophysical source as a function of parallactic angle \cite[e.g.,][]{scr+84,xil91,mck92,hpn+01,joh02,van04c}.
+%
+In some treatments, \JM{D} is estimated after the complex receiver gains, \JM{G}, have been calibrated; in others, \JM{D} and \JM{G} are jointly determined.
+%
+Some of the models used to describe $\JM{D}$ are discussed and compared in \Sec{selection}.
+%
+In an interferometer, unique values of $\JM{J}_i = \JM{G}_i \JM{D}_i$ must be determined
+for each element in the array, indexed by $i$.  When used as a phased-array, only the Jones matrix of the sum, $\JM{J} = \sum_i \JM{J}_i,$
+must be determined.
+
+More broadly, deviations from the ideal feed assumptions include the 
+unintended polarization intrinsic to the artificial reference source, $\mbf{\rho}_\mathrm{ref}$.
+%
+If observations of the reference source are available, then $\mbf{\rho}_\mathrm{ref}$ can be included in the model and jointly determined along with \JM{G} and \JM{D}.
+%
+When doing so, the reference source can be modeled
+as a free-space signal that is transmitted into the feed, or
+as a guided signal on a transmission line that is coupled after reception.
+
+A free-space signal may be transmitted into the feed using a dipole with known orientation.
+% that is oriented at known angle (nominally $45\deg$) with respect to the x axis (measured toward y).
+%
+Typically, the polarization of such an artificial reference signal is distorted by near-field effects, mutual coupling, resonances, and standing waves between the transmitting dipole, feed horn and antenna structure. 
+%
+% 1997PASA...14...37B describes standing waves
+%
+When modeled as a free-space signal, the artificial reference source
+is transformed by the product, \JM{GD}, as in \cite{van04c}.
+
+Alternatively, the artificial reference source may be coupled to the astronomical signal after reception, at which point the two polarizations propagate as a pair of guided signals on separate transmission lines.
+%
+This requires splitting the artificial reference source signal and coupling it identically to the two orthogonally-polarized signals, ideally before any amplification.
+%
+Typically, the polarization of such a reference signal is distorted by mismatched impedance, insertion losses, reflections, and standing waves.
+%
+When modeling an artificial reference source that is guided and coupled,
+$\mbf{\rho}_\mathrm{ref}$ is transformed by only
+\JM{G}, as in \cite{bja+20}.
+
+In either case (free-space or guided transmission), the instrumental response to an artificial noise source typically differs from its response to an astrophysical source.
+%
+However, in many experiments, the absolute polarization of the artificial reference source is irrelevant.
+%
+For example, techniques used to update the differential gain and phase given known values of $\mbf{\rho}_\mathrm{ref}$ and \JM{D} \citep[e.g.,][]{ovhb04} rely only on the temporal stability of these quantities.
+%
+Therefore, any differences in the instrumental response to astrophysical and artificial sources can be absorbed by redefinition of $\mbf{\rho}_\mathrm{ref}$.
+
+This distinction is particularly important when using an astrophysical source as a polarized reference source \citep[e.g.,][]{van13}.  In this case, $\JM{D}$ may be corrupted by unmodeled ionospheric Faraday rotation \cite[e.g.,][]{rvg+24}.
+%
+To avoid also corrupting $\mbf{\rho}_\mathrm{ref}$, it is necessary to model the artificial reference source as though it is coupled after $\JM{D}$, regardless of the actual receiver design.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{ Nominal Feed Configuration }
+\label{sec:calibration_configuration}
+
+Even the nominal feed configuration may require some reasoning, informed by observations, about the handedness and symmetry axis of the receiver.
+%
+For example, any linear transformation of the electric field that negates either the ellipticity or the position angle must negate both.
+%
+Therefore, regardless of the polarization of the receptors, if the sign of either the ellipticity or position angle of an observed source is known, then the handedness of the receptor basis can be unambiguously determined.
+%
+Even without an estimate of the absolute value of the position angle, its sign can be inferred from either the RM or the slope of the canonical S-shaped sweep of position angle described by the Rotating Vector Model \citep[RVM;][]{rc69a} in longitude-resolved observations of the polarized emission from radio pulsars.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{ Celestial Sphere Projection }
+\label{sec:calibration_projection}
+
+In principle, the projection between the celestial reference frame and the nominal receptor basis may be completely determined by known geometry; however, it may also require sophisticated modeling of direction-dependent effects.  
+%
+For example, gravitational deformation of an antenna (both the reflecting surface and the support structure) can cause the polarimetric response to vary with pointing direction
+\citep{rh21,2024SPIE13094E..3GI}.
+%
+Furthermore, the response of a dipole array varies with direction to the source in a manner that is not well-described by the first-order geometric effects of projection.
+%
+Therefore, the accuracy with which the instrumental response can be determined will be limited by the fidelity of the electromagnetic model used to describe direction-dependent effects specific to the antenna design \citep[e.g.,][]{wbv11,mwb+12,2015RaSc...50...52S}.
+
+% LOFAR: tvv+13
+% MWA: kvd+25
+
+On some radio telescopes, either the entire reflector can be mechanically rotated about the line of sight \cite[e.g.,][]{2021PASA...38....9H} or the receiver can be rotated about the line of sight with respect to the reflector \cite[e.g.,][]{swb+96}.
+%
+This feature is typically used to compensate for the parallactic rotation of the observatory with respect to the sky; however, it can also be used to simulate observation over a range of parallactic angles \citep[e.g.,][]{gcv+23}.
+%
+For such systems, the mechanical rotation can be included as a component of the projection matrix.
+%
+For example, if the feed horn is rotated with respect to the reflector, the projection matrix may be decomposed as
+%
+\begin{equation}
+\JM{P} = \vRotation[z](\theta_\mathrm{feed}) 
+\JM{J}(l,m) \vRotation[z](\theta_\mathrm{para}),
+\end{equation}
+%
+where $\theta_\mathrm{feed}$ is the feed horn rotation,
+$\JM{J}(l,m)$ models direction-dependent effects of the antenna (e.g., as a function of the direction cosines $l$ and $m$ that describe angular offsets from the primary axis), and $\theta_\mathrm{para}$ is the parallactic angle \citep[e.g.,][]{gvc+25}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{ Faraday Rotation }
+\label{sec:calibration_Faraday}
+
+%
+To calibrate Faraday rotation, it is necessary to first estimate the Faraday Rotation Measure (RM).  A wide variety of techniques have been developed for RM estimation, including 
+%
+directly modeling the variation in observed position angle $\Delta\Psi$ as a function of radio frequency \citep[e.g.,][]{njkk08};
+%
+iteratively computing the weighted
+mean position-angle difference between
+two radio frequency bands
+%, integrated over a selection of on-pulse pulsar longitudes 
+\citep{hml+06,cvk+19};
+%
+and searching for the peak in linearly-polarized flux after integrating over radio frequency as a function of trial RM \citep[e.g.,][]{hbo05,2005A&A...441.1217B}.
+
+In principle, Faraday rotation can be corrected by rotating the Stokes polarization vector $\Pv{S}(\nu)$ observed at each frequency by $-\Delta\Psi(\nu)$ about the Stokes V axis.
+%
+This effectively yields the position angle as though observed at infinite radio frequency.
+% (as $\nu \rightarrow \infty$, $\Delta\Psi(\nu) \rightarrow 0$).
+However, such a correction would later have to be inverted when refining the RM estimate, which requires a set of observations  made at finite radio frequencies.
+%
+Therefore, the Faraday rotation at each frequency $\nu$ is corrected with respect to the linear polarization state observed at some fiducial frequency $\nu_0$ (typically the centre frequency of the band); i.e.,
+\begin{equation}
+\label{eqn:constant_RM}
+    \Delta\Psi'(\nu) = \mathrm{RM} \, c^2 \left( \nu^{-2} - \nu_0^{-2} \right).
+\end{equation} 
+
+The RM may also vary as a function of time over the duration of the integration.
+For example, the ionosphere can cause the RM to vary by several rad m$^{-2}$ on timescales of hours.  These variations can be predicted using a model of the geomagnetic field and a map of ionospheric electron content \citep[e.g.,][]{pnt+19}.
+%
+Temporal variations in RM also cause the position angle observed at the fiducial frequency to vary with time; therefore, Faraday rotation at time $t$ is corrected by
+%
+\begin{equation}
+\label{eqn:variable_RM}
+\Delta\Psi(\nu,t) 
+  = \mathrm{RM}_0 \, c^2 \left( \nu^{-2} - \nu_0^{-2} \right)
+  + \Delta\mathrm{RM}(t) \, c^2 \nu^{-2}.
+\end{equation} 
+%
+where 
+% \mathrm{RM}(t)$ is the RM at time $t$, 
+$\mathrm{RM}_0$ is constant 
+and
+$\Delta\mathrm{RM}(t)=\mathrm{RM}(t) - \mathrm{RM}_0$.
