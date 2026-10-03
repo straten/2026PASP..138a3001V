@@ -1,6 +1,9 @@
 
 all: paper.pdf
 
+# keep intermediate *-raw.pdf files; do not remake them merely because they are missing
+.SECONDARY:
+
 FIGS := figures/dsb.pdf figures/usb.pdf figures/lsb.pdf figures/nyquist1.pdf figures/nyquist2.pdf \
 	figures/signal_path.pdf figures/polarization_cases.pdf \
 	figures/polarization_ellipse.pdf figures/polarization_sphere.pdf \
@@ -43,7 +46,7 @@ circuit.ps: circuit.tex
 	latex circuit
 	dvips circuit
 
-figures/%.pdf: %-raw.pdf figures
+figures/%.pdf: %-raw.pdf | figures
 	pdfcrop $< $@
 
 
