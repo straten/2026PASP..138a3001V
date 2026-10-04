@@ -63,7 +63,7 @@ $\{\pauli{i}, \pauli{0}\} = 2\pauli{i}$;
 therefore,
 %
 \begin{equation}
-    \pauli{\icol} = \pauli{\icol} + 2 \partial\beta \, ( \delta_{0\icol} \pauli{i} + \delta_{i\icol} \pauli{0} ).
+    \pauli{\icol}' = \pauli{\icol} + 2 \partial\beta \, ( \delta_{0\icol} \pauli{i} + \delta_{i\icol} \pauli{0} ).
 \end{equation}
 %
 Note that this representation of a boost doubles the infinitesimal diattenuation parameter 
@@ -277,6 +277,8 @@ Furthermore, in the following proof, note that $$\delta_{0i}=\delta_{0j}=\delta_
 \end{align*}
 \end{proof}
 
+\subsubsection{Similarity transformation: Rotations}
+
 Any ordered triple of generators that satisfy a commutation relation of the form that appears 
 in \Eqns{commutator_Boost}{and}{commutator_Rotation} transforms under similarity transformations 
 exactly as the components of a three-dimensional vector under ordinary rotations.  
@@ -402,11 +404,232 @@ That is
 where $\hat{\Pv{n}}' = \PM{R}^T \hat{\Pv{n}} = \PM{R}^{-1} \hat{\Pv{n}}$ is
 the unit vector obtained by rotating $\hat{\Pv{n}}$ by the inverse of the rotation associated with the similarity transformation.
 
-
 In summary, by applying similarity transformations and utilizing the matrix commutator 
-$[J_i, V_j] = \epsilon_{ijk} V_k$, it is shown that the algebraic properties of the operator 
+$[J_i, V_j] = -\epsilon_{ijk} V_k$, it is shown that the algebraic properties of the operator 
 space perfectly map onto classical three-dimensional vector geometry. 
 %
 When an exponential operator $M$ is \emph{actively} rotated using a similarity transformation, 
 its scalar magnitude $\theta$ (e.g., diattenuation or retardance) remains invariant, 
 and the transformation is equivalent to \emph{passively} rotating its axis.
+
+\subsubsection{Similarity transformation: Boosts}
+
+Now consider similarity transformations by the infinitesimal boost operator,
+$\partial B \approx I + \partial\beta K_j$.
+%
+\Eqn{commutator_mixed} yields
+%
+\begin{equation}
+\begin{split}
+    K_k' &= \partial B \, K_k \, \partial B^{-1} \\
+         &\approx (I + \partial\beta K_j) K_k (I - \partial\beta K_j) \\
+         &\approx K_k + \partial\beta \, [K_j, K_k] \\
+         &= K_k + \partial\beta \, \epsilon_{jkl} J_l,
+\end{split}
+\end{equation}
+%
+and \Eqn{commutator_Boost} yields
+%
+\begin{equation}
+\begin{split}
+    J_k' &= \partial B \, J_k \, \partial B^{-1} \\
+         &\approx J_k + \partial\beta \, [K_j, J_k] \\
+         &= J_k + \partial\beta \, \epsilon_{kjl} K_l \\
+         &= J_k - \partial\beta \, \epsilon_{jkl} K_l,
+\end{split}
+\end{equation}
+%
+Recalling that $(\hat{\Pv{e}}_j \times \Pv{v})_k = -\epsilon_{jkl} v_l$, these results can be expressed
+in vector form as
+\begin{align}
+    \Pv{K}' & \approx \Pv{K} - \partial\beta \, \hat{\Pv{e}}_j \times \Pv{J}, \label{eqn:small_boost_K} \\
+    \Pv{J}' & \approx \Pv{J} + \partial\beta \, \hat{\Pv{e}}_j \times \Pv{K}, \label{eqn:small_boost_J}
+\end{align}
+%
+where $\Pv{K}=(K_1, K_2, K_3)$ and $\Pv{J}=(J_1, J_2, J_3)$.
+%
+That is, the component of each generator along the boost axis, $K_j$ and $J_j$, is unchanged,
+and each perpendicular component acquires a small contribution from the other type of generator.
+
+To extend this result to a finite boost, let $B(\beta)=\exp(\beta K_j)$ denote a boost along axis $j$,
+where (as in \Eqn{boost_Mueller_exponential}) $\beta$ is twice the infinitesimal diattenuation parameter
+of the equivalent Jones matrix.
+%
+Noting that $dB(\beta) = K_j B(\beta) \, d\beta$ and following the same steps as in \Eqn{ode_op},
+the transformed generators, $K_k(\beta) = B(\beta) K_k B^{-1}(\beta)$ and $J_k(\beta) = B(\beta) J_k B^{-1}(\beta)$, satisfy
+\begin{align}
+\frac{d}{d\beta} K_k(\beta) &= [K_j, K_k(\beta)] = \epsilon_{jkl} J_l(\beta), \label{eqn:ode_boost_K} \\
+\frac{d}{d\beta} J_k(\beta) &= [K_j, J_k(\beta)] = -\epsilon_{jkl} K_l(\beta), \label{eqn:ode_boost_J}
+\end{align}
+%
+where the commutation relations apply to the transformed generators because $K_j$ commutes with $B(\beta)$; e.g.,
+\begin{equation*}
+\begin{split}
+[K_j, K_k(\beta)] &= B(\beta) [K_j, K_k] B^{-1}(\beta) \\
+                  &= \epsilon_{jkl} B(\beta) J_l B^{-1}(\beta) = \epsilon_{jkl} J_l(\beta).
+\end{split}
+\end{equation*}
+%
+In vector form, \Eqns{ode_boost_K}{and}{ode_boost_J} are
+\begin{align}
+\frac{d}{d\beta} \Pv{K}(\beta) &= - \hat{\Pv{e}}_j \times \Pv{J}(\beta), \\
+\frac{d}{d\beta} \Pv{J}(\beta) &= \hat{\Pv{e}}_j \times \Pv{K}(\beta).
+\end{align}
+%
+Let
+$\Pv{v}_\parallel = \hat{\Pv{e}}_j (\hat{\Pv{e}}_j \cdot \Pv{v})$ and $\Pv{v}_\perp = \Pv{v} - \Pv{v}_\parallel$
+denote the components of $\Pv{v}$ parallel and perpendicular to the boost axis.
+%
+Because $\hat{\Pv{e}}_j \times \Pv{v}$ is perpendicular to $\hat{\Pv{e}}_j$, the right-hand sides of the above
+equations have no parallel component; therefore, $\Pv{K}_\parallel(\beta) = \Pv{K}_\parallel$ and
+$\Pv{J}_\parallel(\beta) = \Pv{J}_\parallel$ are constant.
+%
+To solve for the perpendicular components of $\Pv{K}(\beta)$, define
+$\Pv{P}(\beta) = \Pv{K}_\perp(\beta)$ and $\Pv{Q}(\beta) = \hat{\Pv{e}}_j \times \Pv{J}(\beta)$.
+%
+Using $\hat{\Pv{e}}_j \times (\hat{\Pv{e}}_j \times \Pv{v}) = -\Pv{v}_\perp$,
+\begin{align}
+\frac{d}{d\beta} \Pv{P}(\beta) &= -\Pv{Q}(\beta), \\
+\frac{d}{d\beta} \Pv{Q}(\beta) &= \hat{\Pv{e}}_j \times \left( \hat{\Pv{e}}_j \times \Pv{K}(\beta) \right) = -\Pv{P}(\beta).
+\end{align}
+%
+These coupled equations are decoupled by their sum and difference,
+\begin{equation}
+\frac{d}{d\beta} \left( \Pv{P} \pm \Pv{Q} \right) = \mp \left( \Pv{P} \pm \Pv{Q} \right),
+\end{equation}
+%
+which have the unique solutions
+\begin{equation}
+\Pv{P}(\beta) \pm \Pv{Q}(\beta) = e^{\mp\beta} \left( \Pv{P}(0) \pm \Pv{Q}(0) \right).
+\end{equation}
+%
+Adding these two solutions yields
+\begin{equation}
+\Pv{P}(\beta) = \cosh\beta \, \Pv{P}(0) - \sinh\beta \, \Pv{Q}(0).
+\end{equation}
+%
+Similarly, defining $\Pv{P}'(\beta) = \Pv{J}_\perp(\beta)$ and $\Pv{Q}'(\beta) = \hat{\Pv{e}}_j \times \Pv{K}(\beta)$,
+\begin{equation}
+\frac{d}{d\beta} \Pv{P}'(\beta) = \Pv{Q}'(\beta)
+\quad \textrm{and} \quad
+\frac{d}{d\beta} \Pv{Q}'(\beta) = \Pv{P}'(\beta),
+\end{equation}
+%
+so that $\Pv{P}'(\beta) \pm \Pv{Q}'(\beta) = e^{\pm\beta} \left( \Pv{P}'(0) \pm \Pv{Q}'(0) \right)$ and
+\begin{equation}
+\Pv{P}'(\beta) = \cosh\beta \, \Pv{P}'(0) + \sinh\beta \, \Pv{Q}'(0).
+\end{equation}
+%
+Whereas the perpendicular components of the rotation generators are coupled antisymmetrically,
+which yields trigonometric solutions, those of the boost generators are coupled symmetrically,
+which yields exponentially growing and decaying solutions.
+%
+Adding the constant parallel components and applying the initial conditions
+$\Pv{K}(0)=\Pv{K}$ and $\Pv{J}(0)=\Pv{J}$ yields
+\begin{align}
+\Pv{K}(\beta) &= \Pv{K}_\parallel + \cosh\beta \, \Pv{K}_\perp - \sinh\beta \, \hat{\Pv{e}}_j \times \Pv{J},
+\label{eqn:generator_boost_K} \\
+\Pv{J}(\beta) &= \Pv{J}_\parallel + \cosh\beta \, \Pv{J}_\perp + \sinh\beta \, \hat{\Pv{e}}_j \times \Pv{K}.
+\label{eqn:generator_boost_J}
+\end{align}
+%
+\Eqns{generator_boost_K}{and}{generator_boost_J} have the same form as the Lorentz transformation of
+the electric and magnetic fields, $\Pv{E}$ and $\Pv{B}$, under a boost with velocity $\hat{\Pv{e}}_j \tanh\beta$ (in units where $c=1$),
+with $\Pv{K}$ in the role of $\Pv{E}$ and $\Pv{J}$ in the role of $-\Pv{B}$.
+%
+This is not a coincidence: the six generators together form the components of an antisymmetric tensor
+that transforms in the same way as the electromagnetic field tensor.
+
+Finally, consider a finite operator $M = \exp(X)$, where $X$ is a linear combination of both types of generator,
+\begin{equation}
+X = \Pv{a} \cdot \Pv{K} + \Pv{b} \cdot \Pv{J},
+\end{equation}
+%
+and $\Pv{a}$ and $\Pv{b}$ are real-valued three-dimensional vectors.
+%
+As for the rotation, $M' = B M B^{-1} = \exp(B X B^{-1})$ and,
+substituting \Eqns{generator_boost_K}{and}{generator_boost_J},
+\begin{equation}
+B X B^{-1} = \Pv{a} \cdot \Pv{K}(\beta) + \Pv{b} \cdot \Pv{J}(\beta) = \Pv{a}' \cdot \Pv{K} + \Pv{b}' \cdot \Pv{J},
+\end{equation}
+%
+where, using $\Pv{a} \cdot (\hat{\Pv{e}}_j \times \Pv{J}) = -(\hat{\Pv{e}}_j \times \Pv{a}) \cdot \Pv{J}$,
+\begin{align}
+\Pv{a}' &= \Pv{a}_\parallel + \cosh\beta \, \Pv{a}_\perp - \sinh\beta \, \hat{\Pv{e}}_j \times \Pv{b},
+\label{eqn:boost_axis_a} \\
+\Pv{b}' &= \Pv{b}_\parallel + \cosh\beta \, \Pv{b}_\perp + \sinh\beta \, \hat{\Pv{e}}_j \times \Pv{a}.
+\label{eqn:boost_axis_b}
+\end{align}
+%
+That is, the boost and rotation axis-angle vectors, $\Pv{a}$ and $\Pv{b}$, transform in the same way as the generators.
+
+In the special case of a pure boost, $M = \exp(\theta \, \hat{\Pv{n}} \cdot \Pv{K})$; i.e., $\Pv{a}=\theta\hat{\Pv{n}}$ and $\Pv{b}=0$, so
+\begin{equation}
+\begin{split}
+M' = \exp\big( \theta \big[ & (\hat{\Pv{n}}_\parallel + \cosh\beta \, \hat{\Pv{n}}_\perp) \cdot \Pv{K} \\
+   & + \sinh\beta \, (\hat{\Pv{e}}_j \times \hat{\Pv{n}}) \cdot \Pv{J} \big] \big).
+\end{split}
+\end{equation}
+%
+Unless $\hat{\Pv{n}}$ is parallel to the boost axis (in which case $M$ and $B$ commute and $M'=M$),
+the transformed operator is not a pure boost; it is generated by a combination of
+boost and rotation generators, and the rotation axis $\hat{\Pv{e}}_j \times \hat{\Pv{n}}$ is
+perpendicular to both the original boost axis and the axis of the similarity transformation.
+%
+Similarly, in the special case of a pure rotation, $M = \exp(\phi \, \hat{\Pv{n}} \cdot \Pv{J})$,
+\begin{equation}
+\begin{split}
+M' = \exp\big( \phi \big[ & (\hat{\Pv{n}}_\parallel + \cosh\beta \, \hat{\Pv{n}}_\perp) \cdot \Pv{J} \\
+   & - \sinh\beta \, (\hat{\Pv{e}}_j \times \hat{\Pv{n}}) \cdot \Pv{K} \big] \big),
+\end{split}
+\end{equation}
+%
+which is not a pure rotation unless $\hat{\Pv{n}}$ is parallel to the boost axis.
+
+In summary, by applying similarity transformations and utilizing the commutation relations
+in \Eqns{commutator_Boost}{and}{commutator_mixed}, it is shown that a boost mixes the boost and rotation generators
+in the same way that a Lorentz boost mixes the electric and magnetic fields.
+%
+Unlike a rotation, a boost does not preserve the magnitudes of $\Pv{a}$ and $\Pv{b}$; e.g., for a pure boost
+$|\Pv{a}'|^2 = \theta^2 (|\hat{\Pv{n}}_\parallel|^2 + \cosh^2\beta \, |\hat{\Pv{n}}_\perp|^2) \ge \theta^2$.
+%
+Instead, analogous to the Lorentz invariants of the electromagnetic field, $|\Pv{E}|^2-|\Pv{B}|^2$ and $\Pv{E}\cdot\Pv{B}$,
+it is straightforward to show using \Eqns{boost_axis_a}{and}{boost_axis_b} that
+\begin{equation}
+|\Pv{a}'|^2 - |\Pv{b}'|^2 = |\Pv{a}|^2 - |\Pv{b}|^2
+\quad \textrm{and} \quad
+\Pv{a}' \cdot \Pv{b}' = \Pv{a} \cdot \Pv{b}
+\end{equation}
+%
+are invariant under similarity transformations by a boost.
+%
+For example, a pure boost by $\theta$ is transformed into an operator with $|\Pv{a}'|^2 - |\Pv{b}'|^2 = \theta^2$
+and orthogonal boost and rotation axes ($\Pv{a}' \cdot \Pv{b}' = 0$).
+
+As for rotations, the similarity transformation of an operator by a boost can be described as either
+an \emph{active} or a \emph{passive} transformation, where a passive boost is equivalent to an active boost
+in the opposite direction ($\beta \rightarrow -\beta$).
+%
+However, the interpretation requires more care than for rotations.
+%
+In the case of a rotation, the axis $\hat{\Pv{n}}$ is transformed by the inverse rotation
+because rotation matrices are orthogonal; i.e., $\PM{R}^T = \PM{R}^{-1}$.
+%
+In the case of a boost, comparing \Eqns{boost_axis_a}{and}{boost_axis_b} with
+\Eqns{generator_boost_K}{and}{generator_boost_J} shows that the vectors $\Pv{a}$ and $\Pv{b}$ are transformed
+by the same boost as the generators, not by the inverse boost.
+%
+This is because the invariant $|\Pv{a}|^2 - |\Pv{b}|^2$ is defined by the indefinite metric
+$g = \mathrm{diag}(1,1,1,-1,-1,-1)$ instead of the Euclidean metric.
+%
+The passive interpretation applies instead to the covariant components $(\Pv{a}, -\Pv{b})$;
+i.e., replacing $\Pv{b}$ with $-\Pv{b}$ and $\beta$ with $-\beta$ in \Eqns{boost_axis_a}{and}{boost_axis_b}
+shows that $(\Pv{a}', -\Pv{b}')$ is obtained by applying the inverse boost to $(\Pv{a}, -\Pv{b})$.
+%
+That is, an active boost of the operator is equivalent to a passive boost of the covariant components of its axis-angle vectors.
+%
+This is analogous to the distinction between the contravariant and covariant components, $F^{\mu\nu}$ and $F_{\mu\nu}$,
+of the electromagnetic field tensor.
+%
+For rotations, the metric is Euclidean and the contravariant and covariant components are identical.
+
